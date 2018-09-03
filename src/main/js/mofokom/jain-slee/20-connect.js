@@ -1,19 +1,24 @@
 var mmConnection = null;
 //mobicents
+var debug = true
 try {
-    //jmxConnect("localhost:1090");
-    jmxConnect("localhost:1090", "jmxconnector");
-    //
-    //jmxConnect("10.199.7.13:1090","jmxconnector");
-    //RMI
+    var username=java.lang.System.getProperty("js.username");
+    var password=java.lang.System.getProperty("js.password");
+//old jboss
+    //jmxConnect("localhost:1090", "jmxconnector");
+    //jmxConnect("localhost:1090", "jmxconnector",username,password);
+//wildfly 10
+    jmxConnectURL("service:jmx:remote+http://localhost:9990",username,password);
+
+//opencloud
+    //jmxConnect("localhost:1199","opencloud/rhino",username,passsword);
+//test
+//https://stackoverflow.com/questions/22212693/wildfly-8-final-jconsole-cant-connect-remotely
+//RMI
     //jmxConnect("localhost:1090","jmxrmi");
     //jmxConnectURL("service:jmx:rmi://localhost:1090/jndi/jmx/invoker/RMIAdaptor");
     //jmxConnectURL("service:jmx:rmi://localhost:1090/jmxrmi");
-
-    //opencloud
-    //jmxConnect("localhost:1199","opencloud/rhino","admin","password");
-
 } catch (e) {
-    print(e);
+    print("exception" + e);
 }
 

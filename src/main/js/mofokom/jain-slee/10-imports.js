@@ -5,6 +5,7 @@ try {
     importPackage(java.util);
     importPackage(java.lang.reflect);
 
+    importPackage(javax.slee.service.ServiceID);
     importPackage(javax.slee);
     importPackage(javax.slee.profile);
     importPackage(javax.slee.management);

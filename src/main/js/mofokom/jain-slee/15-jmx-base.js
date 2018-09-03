@@ -20,26 +20,33 @@ function jmxConnectURL(urlPath, username, password) {
     if (password) {
         creds.push(password);
     }
-    map.put('jmx.remote.credentials', objectArray(creds));
+    map.put('jmx.remote.credentials', stringArray(creds));
+    //map.put('jmx.remote.protocol.provider.pkgs','org.jboss.remotingjmx');
+
     if (mmConnection != null) {
         // close the existing connection
         try {
             mmConnection.close();
         } catch (e) {
-            print(e)
+            print(e);
         }
     }
     var JMXServiceURL = javax.management.remote.JMXServiceURL;
     var url = new JMXServiceURL(urlPath);
-
-    var JMXConnectorFactory = javax.management.remote.JMXConnectorFactory;
     print("connecting to " + url.toString());
+
+    var factory = javax.management.remote.JMXConnectorFactory;
+    var jboss = new org.jboss.remotingjmx.RemotingConnectorProvider;
     try {
-        var jmxc = JMXConnectorFactory.connect(url, map);
+        var jmxc = jboss.newJMXConnector(url, map);
+        print("provider " + jmxc); 
+        jmxc.connect();
         // note that the "mmConnection" is a global variable!
         mmConnection = jmxc.getMBeanServerConnection();
+        print("connected to " + mmConnection);
     } catch (x) {
-        print(x);
+        x.printStackTrace();
+        print("error connecting " +x);
     }
 }
 jmxConnect.docString = "connects to the given host, port (specified as name:port)";
@@ -383,6 +390,7 @@ function mbean(objName, async) {
         }
     };
 }
+
 mbean.docString = "returns a conveninent script wrapper for a MBean of given ObjectName";
 
 if (this.application != undefined) {

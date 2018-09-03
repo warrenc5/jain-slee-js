@@ -26,6 +26,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.remotingjmx</groupId>
+            <artifactId>remoting-jmx</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
     </dependencies> 
 
     <build>
@@ -59,6 +71,12 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
+             
         </plugins>
     </build>
 
@@ -66,10 +84,19 @@
         <profile>
             <id>default</id>
             <activation>
+                <activeByDefault>true</activeByDefault>
+                <!--
                 <property>
                     <name>js.script</name>
                 </property>
+                -->
             </activation>
+
+            <properties>
+                <js.script>src/test/js/service-activate-deactivate.js</js.script>
+                <js.username>wozza</js.username>
+                <js.password>wozza</js.password>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -88,8 +115,17 @@
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <addOutputToClasspath>true</addOutputToClasspath>
                             <arguments>
+                                <!--
+                                <argument>-J-agentlib:jdwp=server=y,suspend=y,transport=dt_socket,address=8788</argument>
+                                -->
+                                <!--
+                                <argument>-J-Djmx.remote.protocol.provider.pkgs=happy</argument>
+                                -->
+                                <argument>-J-Xint</argument>
                                 <argument>-cp</argument>
                                 <classpath/>
+                                <argument>-Djs.username=${js.username}</argument>
+                                <argument>-Djs.password=${js.password}</argument>
                                 <argument>${js.script}</argument>
                             </arguments>
                         </configuration>
