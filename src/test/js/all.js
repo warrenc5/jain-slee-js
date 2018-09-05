@@ -3,9 +3,9 @@ load('classpath:jain-slee.js');
 //var deployBase = 'file:///tmp/';
 var deployBase = 'file:///opt/mobicents/server/default/deploy/mofokom/';
 
-var serviceID = new ServiceID('XmlRpc Service', 'MOFOKOM', '1.0');
+var serviceID = new javax.slee.management.ServiceID('XmlRpc Service', 'MOFOKOM', '1.0');
 
-var sbbID = new SbbID('XmlRpc Sbb', 'MOFOKOM', '1.0');
+var sbbID = new javax.slee.management.SbbID('XmlRpc Sbb', 'MOFOKOM', '1.0');
 
 /*
  //get sbb tracer names

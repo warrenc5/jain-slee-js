@@ -38,18 +38,34 @@
             <artifactId>remoting-jmx</artifactId>
             <version>2.0.1.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.remoting</groupId>
+            <artifactId>jboss-remoting</artifactId>
+            <version>4.0.21.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.3.0.Final</version>
+        </dependency>
     </dependencies> 
 
     <build>
         <defaultGoal>test</defaultGoal>
         <sourceDirectory>src/main/js</sourceDirectory>
         <scriptSourceDirectory>src/main/js</scriptSourceDirectory>
-        <testSourceDirectory>src/test/js</testSourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/js</directory>
             </resource>
         </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/js</directory>
+            </testResource>
+        </testResources>
+
         <plugins>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -93,6 +109,7 @@
             </activation>
 
             <properties>
+                <js.url>service:jmx:remote+http://localhost:9990</js.url>
                 <js.script>src/test/js/service-activate-deactivate.js</js.script>
                 <js.username>wozza</js.username>
                 <js.password>wozza</js.password>
@@ -124,6 +141,7 @@
                                 <argument>-J-Xint</argument>
                                 <argument>-cp</argument>
                                 <classpath/>
+                                <argument>-Djs.url=${js.url}</argument>
                                 <argument>-Djs.username=${js.username}</argument>
                                 <argument>-Djs.password=${js.password}</argument>
                                 <argument>${js.script}</argument>

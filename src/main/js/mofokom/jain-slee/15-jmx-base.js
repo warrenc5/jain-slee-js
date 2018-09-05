@@ -32,6 +32,10 @@ function jmxConnectURL(urlPath, username, password) {
         }
     }
     var JMXServiceURL = javax.management.remote.JMXServiceURL;
+
+    if(urlPath == null)
+        throw new Error("no url specified");
+    
     var url = new JMXServiceURL(urlPath);
     print("connecting to " + url.toString());
 

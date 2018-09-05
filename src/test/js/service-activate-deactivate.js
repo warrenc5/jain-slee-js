@@ -22,22 +22,28 @@ for (var s = 0; s < contexts.length; s++) {
 }
 
 //var services = java.lang.reflect.Array.newInstance(ServiceID, 100);
-var services = serviceMBean.getServices(ServiceState.ACTIVE);
-print(toString(services));
+var services = serviceMBean.getServices();
+print("all services",toString(services));
+for (var s = 0; s < services.length; s++) {
+    serviceMBean.deactivate(services);
+}
+
+services = serviceMBean.getServices(javax.slee.management.ServiceState.ACTIVE);
+print("active services",toString(services));
 for (var s = 0; s < services.length; s++) {
     serviceMBean.deactivate(services);
 }
 
 //var ralinks = java.lang.reflect.Array.newInstance(java.lang.String, 100);
 var ralinks = resourceAdaptorMBean.getLinkNames();
-print(toString(ralinks));
+print("ra links", toString(ralinks));
 for (var s = 0; s < ralinks.length; s++) {
     resourceAdaptorMBean.unbindLinkName(ralinks[s]);
 }
 
 //var raentities = java.lang.reflect.Array.newInstance(java.lang.String, 100);
 var raentities = resourceAdaptorMBean.getResourceAdaptorEntities();
-print(toString(raentities));
+print("ra entities",toString(raentities));
 for (var s = 0; s < raentities.length; s++) {
     resourceAdaptorMBean.deactivate(raentities[s]);
 }
@@ -48,11 +54,12 @@ try {
     print(toString(deployableUnits));
 } catch (e) {
     print(e);
+    e.printStackTrace();
 }
-deploymentMBean.uninstall(new DeployableUnitID("file:/opt/mobicents-2.3.0/jboss-5.1.0.GA/server/default/deploy/mofokom-du/ideal-services-du-1.0-SNAPSHOT.jar/"));
+deploymentMBean.uninstall(new javax.slee.management.DeployableUnitID("file:/opt/mobicents-2.3.0/jboss-5.1.0.GA/server/default/deploy/mofokom-du/ideal-services-du-1.0-SNAPSHOT.jar/"));
 
 
-deploymentMBean.uninstall(new DeployableUnitID("file:/opt/mobicents-2.3.0/jboss-5.1.0.GA/server/default/deploy/mofokom-du/smpp-ra-DU-2.0.1-MTN-SNAPSHOT.jar/"));
+deploymentMBean.uninstall(new javax.slee.management.DeployableUnitID("file:/opt/mobicents-2.3.0/jboss-5.1.0.GA/server/default/deploy/mofokom-du/smpp-ra-DU-2.0.1-MTN-SNAPSHOT.jar/"));
 //var a = java.lang.reflect.Array.newInstance(javax.slee.ServiceID, 1);
 var s = services[0];
 try {
