@@ -9,6 +9,7 @@ import java.rmi.registry.Registry;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.junit.Test;
 
 /**
  * Display names bound to RMI registry on provided host and port.
@@ -17,32 +18,11 @@ public class RmiPortNamesDisplay {
 
     private final static String NEW_LINE = System.getProperty("line.separator");
 
-    /**
-     * Main executable function for printing out RMI registry names on provided
-     * host and port.
-     *
-     * @param arguments Command-line arguments; Two expected: first is a String
-     * representing a host name ('localhost' works) and the second is an integer
-     * representing the port.
-     */
-    public static void main(final String[] arguments) {
-        if (arguments.length < 2) {
-            System.err.println(
-                    "A host name (String) and a port (Integer) must be provided.");
-            System.err.println(
-                    "\tExample: java dustin.examples.rmi.RmiPortNamesDisplay localhost 1099");
-            System.exit(-2);
-        }
+    @Test
+    public void listRmiTest() {
 
-        final String host = arguments[0];
+        final String host = "localhost";
         int port = 1099;
-        try {
-            port = Integer.valueOf(arguments[1]);
-        } catch (NumberFormatException numericFormatEx) {
-            System.err.println(
-                    "The provided port value [" + arguments[1] + "] is not an integer."
-                    + NEW_LINE + numericFormatEx.toString());
-        }
 
         try {
             final Registry registry = LocateRegistry.getRegistry(host, port);
