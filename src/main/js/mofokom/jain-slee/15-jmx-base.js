@@ -33,9 +33,9 @@ function jmxConnectURL(urlPath, username, password) {
     }
     var JMXServiceURL = javax.management.remote.JMXServiceURL;
 
-    if(urlPath == null)
+    if (urlPath == null)
         throw new Error("no url specified");
-    
+
     var url = new JMXServiceURL(urlPath);
     print("connecting to " + url.toString());
 
@@ -43,14 +43,14 @@ function jmxConnectURL(urlPath, username, password) {
     var jboss = new org.jboss.remotingjmx.RemotingConnectorProvider;
     try {
         var jmxc = jboss.newJMXConnector(url, map);
-        print("provider " + jmxc); 
+        print("provider " + jmxc);
         jmxc.connect();
         // note that the "mmConnection" is a global variable!
         mmConnection = jmxc.getMBeanServerConnection();
         print("connected to " + mmConnection);
     } catch (x) {
         x.printStackTrace();
-        print("error connecting " +x);
+        print("error connecting " + x);
     }
 }
 jmxConnect.docString = "connects to the given host, port (specified as name:port)";
@@ -148,12 +148,23 @@ queryMBeans.docString = "return MBeans using given ObjectName and optional query
 
 // wraps a script array as java.lang.Object[]
 function objectArray(array) {
-    to = Java.to(array, "java.lang.Object[]");
-    return to;
+    if (array === undefined) {
+        array = [];
+    }
+    try {
+        to = Java.to(array, "java.lang.Object[]");
+        return to;
+    } catch (e) {
+        print(e);
+        return Java.to([], "java.lang.Object[]");
+    }
 }
 
 // wraps a script (string) array as java.lang.String[]
 function stringArray(array) {
+    if (array === undefined) {
+        array = [];
+    }
     return Java.to(array, "java.lang.String[]");
 }
 
@@ -258,12 +269,13 @@ function mbean(objName, async) {
     var attrMap = new Object;
     for (var index in attrs) {
         if (debug)
-            print("attr " + attrs[index].name);
+            print("  attr " + attrs[index].name);
         attrMap[attrs[index].name] = attrs[index];
     }
     var opers = info.operations;
     var operMap = new Object;
     var operTypeMap = new Object;
+    var operMapNames = new Object;
 
     for (var index in opers) {
         var k = 0;
@@ -275,12 +287,13 @@ function mbean(objName, async) {
 
         var sig = new Array();
         var v = '';
+        var t ='';
         if (k != 0)
             for (var s = 0; s < opers[index].signature.length; s++) {
                 try {
                     sig[s] = opers[index].signature[s].type;
                     type = java.lang.Class.forName(sig[s]);
-
+                    t += type;
                     if (type.isArray())
                         v += 'true';
                     else
@@ -292,11 +305,12 @@ function mbean(objName, async) {
             }
 
         if (debug)
-            print("op " + opers[index].name + " " + k + " " + v + " ");// + ((k>0)? opers[index].signature[0].toString():null));
+            print("  op " + opers[index].name + " " + k + " " + t +" "+ v + " ");// + ((k>0)? opers[index].signature[0].toString():null));
 
         //arrayToString(sig);
 
-        operMap[opers[index].name] = opers[index];
+        operMapNames[opers[index].name] = true;
+        operMap[opers[index].name+ " " + k] = opers[index];
         operTypeMap[opers[index].name + k + " " + v] = sig;
     }
 
@@ -305,7 +319,7 @@ function mbean(objName, async) {
     }
 
     function isOperation(name) {
-        return name in operMap;
+        return name in operMapNames;
     }
 //https://blogs.oracle.com/sundararajan/encapsulation-in-javascript
 //https://blogs.oracle.com/sundararajan/self%2c-javascript-and-jsadapter
@@ -315,52 +329,6 @@ function mbean(objName, async) {
             if (debug)
                 print("has " + name);
             return isAttribute(name) || isOperation(name);
-        },
-        __call__: function (name) {
-
-            if (debug)
-                print("call " + name);
-            if (isOperation(name)) {
-                if (debug)
-                    print("operation " + name);
-                return function () {
-                    var params = objectArray(arguments);
-                    var k = 0;
-                    var v = '';
-                    try {
-                        k = arguments.length;
-                        for (var s = 0; s < arguments.length; s++) {
-                            try {
-                                type = argument[s].getClass();
-
-                                if (type.isArray())
-                                    v += 'true';
-                            } catch (x) {
-                                v += 'false';
-
-                            }
-                        }
-                    } catch (x) {
-                    }
-                    if (debug)
-                        print("**" + name + "::" + k + "::" + v);
-                    var oper = operMap[name];
-                    var sigNames = operTypeMap[name + k + " " + v];//.signature;
-                    //print ("***" + name + "::" + k + "::" );
-                    arrayToString(sigNames);
-
-                    if (async) {
-                        return invokeMBean.future(objName, name,
-                                params, sigNames);
-                    } else {
-                        return invokeMBean(objName, name, params, sigNames);
-                    }
-                }
-            } else {
-                if (debug)
-                    print(name + " " + k + " " + v + " not found");
-                return undefined;
-            }
         },
         __get__: function (name) {
             if (debug)
@@ -379,6 +347,69 @@ function mbean(objName, async) {
                 return undefined;
             }
         },
+        __call__: function () {
+
+            var args = Array.prototype.slice.call(arguments);
+            var name = args.shift();
+
+            var r = " " + args.length + " [";
+            for (var i = 0; i < args.length; i++) {
+                r += args[i] + ",";
+            }
+            r += "]";
+
+            if (debug)
+                print("call " + name + " " + r);
+
+            if (isOperation(name)) {
+                if (debug)
+                    print("operation " + name);
+
+                //var params = objectArray(args);
+                var k = 0;
+                var v = '';
+                try {
+                    k = args.length;
+                    for (var s = 0; s < args.length; s++) {
+                        try {
+                            type = args[s].getClass();
+
+                            if (type.isArray())
+                                v += 'true';
+                            else
+                                v += 'false';
+                        } catch (x) {
+                            v += 'false';
+                            print(x);
+                        }
+                    }
+                } catch (x) {
+                    print(x);
+                }
+
+                if (debug)
+                    print("**" + name + "::" + k + "::" + v);
+                var oper = operMap[name + ""+ k];
+                var sigNames = operTypeMap[name + k + " " + v];//.signature;
+                if (debug)
+                    print("***" + name + "::" + k + "::" + args + " " + sigNames);
+
+                if (sigNames === undefined)
+                    sigNames == "";
+                arrayToString(sigNames);
+
+                if (async) {
+                    return invokeMBean.future(objName, name, args, sigNames);
+                } else {
+                    return invokeMBean(objName, name, args, sigNames);
+                }
+            } else {
+                if (debug)
+                    print(name + " " + k + " " + v + " not found");
+                return undefined;
+            }
+        },
+
         __put__: function (name, value) {
             if (isAttribute(name)) {
                 if (async) {
@@ -415,8 +446,12 @@ if (this.application != undefined) {
 
 
 var pad = '';
+
 function arrayToString(o) {
     pad += '\t';
+    if (o === undefined)
+        return "[]";
+
     for (var s = 0; s < o.length; s++) {
         var type = typeof (o[s]);
 
@@ -442,5 +477,4 @@ function arrayToString(o) {
     }
     pad = pad.slice(0, pad.length - 1);
 }
-
 

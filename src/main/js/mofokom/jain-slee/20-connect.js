@@ -1,6 +1,7 @@
 var mmConnection = null;
 //mobicents
 var debug = java.lang.System.getProperty("js.debug");
+//debug = true;
 try {
     var username = java.lang.System.getProperty("js.username");
     var password = java.lang.System.getProperty("js.password");

@@ -8,28 +8,53 @@ try {
 try {
     activityMBean.endAllActivities();
 } catch (e) {
+    print(e);
 }
+debug = true
 
-var contexts = new Array();//java.lang.reflect.Array.newInstance(org.mobicents.slee.container.activity.ActivityContextHandle, 100);
-contexts = activityMBean.listActivityContexts(true);
-for (var s = 0; s < contexts.length; s++) {
-    print("context : " + contexts[s].getClass() + " " + toString(contexts[s]));
-    var achi = 1;
-    var ach = contexts[s][achi].getHandle();
-    print("ac " + ach);
+try {
+    var contexts = new Array();//java.lang.reflect.Array.newInstance(org.mobicents.slee.container.activity.ActivityContextHandle, 100);
+    contexts = activityMBean.listActivityContexts(true);
+    print("activities : " + contexts.length);
+    for (var s = 0; s < contexts.length; s++) {
+        print("context : " + contexts[s].getClass() + " " + toString(contexts[s]));
+        var achi = 2;
+        var ach = contexts[s][achi];
+        print("ac " + ach);
 
-    activityMBean.endActivity(ach);
+        try {
+            activityMBean.endActivity(ach);
+        } catch (e) {
+            print(e);
+        }
+    }
+} catch (e) {
+    print(e);
+}
+try {
+    var entities = sbbMBean.retrieveAllSbbEntities();
+    print("entities: ", entities.length + " " + toString(services));
+    for (var s = 0; s < entities.length; s++) {
+        sbbMBean.deactivate(entities[s]);
+    }
+} catch (e) {
+    print(e);
 }
 
 //var services = java.lang.reflect.Array.newInstance(ServiceID, 100);
-var services = serviceMBean.getServices();
-print("all services",toString(services));
-for (var s = 0; s < services.length; s++) {
-    serviceMBean.deactivate(services);
+try {
+    var services = serviceMBean.getServices();
+    print("all services", services.length);
+    print("all services", toString(services));
+    for (var s = 0; s < services.length; s++) {
+        serviceMBean.deactivate(services);
+    }
+} catch (e) {
+    print(e);
 }
 
 services = serviceMBean.getServices(javax.slee.management.ServiceState.ACTIVE);
-print("active services",toString(services));
+print("active services", toString(services));
 for (var s = 0; s < services.length; s++) {
     serviceMBean.deactivate(services);
 }
@@ -43,7 +68,7 @@ for (var s = 0; s < ralinks.length; s++) {
 
 //var raentities = java.lang.reflect.Array.newInstance(java.lang.String, 100);
 var raentities = resourceAdaptorMBean.getResourceAdaptorEntities();
-print("ra entities",toString(raentities));
+print("ra entities", toString(raentities));
 for (var s = 0; s < raentities.length; s++) {
     resourceAdaptorMBean.deactivate(raentities[s]);
 }

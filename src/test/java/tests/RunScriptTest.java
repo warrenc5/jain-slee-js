@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class RunScriptTest {
 
-    @Test
+    @Test //TODO launch from classpath
     public void testScript() throws ScriptException, IOException {
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine nashorn = scriptEngineManager.getEngineByName("nashorn");
