@@ -10,7 +10,7 @@ try {
 } catch (e) {
     print(e);
 }
-debug = true
+//debug = true
 
 try {
     var contexts = new Array();//java.lang.reflect.Array.newInstance(org.mobicents.slee.container.activity.ActivityContextHandle, 100);

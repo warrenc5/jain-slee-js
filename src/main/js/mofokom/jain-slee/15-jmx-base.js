@@ -309,7 +309,7 @@ function mbean(objName, async) {
 
         //arrayToString(sig);
 
-        operMapNames[opers[index].name] = true;
+        operMapNames[opers[index].name] = sig;
         operMap[opers[index].name+ " " + k] = opers[index];
         operTypeMap[opers[index].name + k + " " + v] = sig;
     }
@@ -361,7 +361,18 @@ function mbean(objName, async) {
             if (debug)
                 print("call " + name + " " + r);
 
-            if (isOperation(name)) {
+            if(name == "help") {
+                print("help: " + objName);
+                print("  attributes:");
+                for (var k in attrMap) {
+                    print("  - " +k);
+                }
+                print("  operations:");
+                for (var k in operMapNames) {
+                    print("  - " + k );
+                    print("      " + operMapNames[k]);
+                }
+            } else if (isOperation(name)) {
                 if (debug)
                     print("operation " + name);
 

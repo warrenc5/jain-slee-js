@@ -24,6 +24,5 @@ public class RunScriptTest {
         URL url = this.getClass().getResource("/service-activate-deactivate.js");
         Assert.assertNotNull(url);
         Object result = nashorn.eval(new InputStreamReader(url.openStream()));
-
     }
 }
