@@ -238,10 +238,11 @@ function invokeMBean(objName, operation, params, signature) {
             print(objName + " " + operation + " > " + res);
 
     } catch (x) {
-        if (debug)
+        if (debug) {
             print(objName + " " + operation + " < ");
-        arrayToString(params);
-        arrayToString(signature);
+            arrayToString(params);
+            arrayToString(signature);
+        }
         throw x;
     }
     return res;
@@ -287,7 +288,7 @@ function mbean(objName, async) {
 
         var sig = new Array();
         var v = '';
-        var t ='';
+        var t = '';
         if (k != 0)
             for (var s = 0; s < opers[index].signature.length; s++) {
                 try {
@@ -305,12 +306,12 @@ function mbean(objName, async) {
             }
 
         if (debug)
-            print("  op " + opers[index].name + " " + k + " " + t +" "+ v + " ");// + ((k>0)? opers[index].signature[0].toString():null));
+            print("  op " + opers[index].name + " " + k + " " + t + " " + v + " ");// + ((k>0)? opers[index].signature[0].toString():null));
 
         //arrayToString(sig);
 
         operMapNames[opers[index].name] = sig;
-        operMap[opers[index].name+ " " + k] = opers[index];
+        operMap[opers[index].name + " " + k] = opers[index];
         operTypeMap[opers[index].name + k + " " + v] = sig;
     }
 
@@ -361,15 +362,15 @@ function mbean(objName, async) {
             if (debug)
                 print("call " + name + " " + r);
 
-            if(name == "help") {
+            if (name == "help") {
                 print("help: " + objName);
                 print("  attributes:");
                 for (var k in attrMap) {
-                    print("  - " +k);
+                    print("  - " + k);
                 }
                 print("  operations:");
                 for (var k in operMapNames) {
-                    print("  - " + k );
+                    print("  - " + k);
                     print("      " + operMapNames[k]);
                 }
             } else if (isOperation(name)) {
@@ -400,14 +401,14 @@ function mbean(objName, async) {
 
                 if (debug)
                     print("**" + name + "::" + k + "::" + v);
-                var oper = operMap[name + ""+ k];
+                var oper = operMap[name + "" + k];
                 var sigNames = operTypeMap[name + k + " " + v];//.signature;
                 if (debug)
                     print("***" + name + "::" + k + "::" + args + " " + sigNames);
 
                 if (sigNames === undefined)
                     sigNames == "";
-                arrayToString(sigNames);
+                //arrayToString(sigNames);
 
                 if (async) {
                     return invokeMBean.future(objName, name, args, sigNames);

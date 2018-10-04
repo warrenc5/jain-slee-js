@@ -1,63 +1,60 @@
 function createProfileTable(spec, tableName, profileName) {
-    var v = mbean("javax.slee.management:name=ProfileProvisioning", false);
+
+    var profile = null;
+    var objectName = "javax.slee.profile:type=Profile,profileTableName=" + tableName + ",profileName=" + profileName;
 
     try {
-        var p = Packages.javax.management.ObjectName;
-        p = v.getProfile(tableName, profileName);
-        print("object: " + p);
-        if (p != undefined) {
-            return mbean(p.toString());
-        }
+        profile = profileMBean.getProfile(tableName, profileName);
     } catch (e) {
-        print("profile does not exist " + e.toString())
+        print("profile does not exist " + e);
     }
 
-    var a = toArray(v.ProfileTables);
-    print("profiles: " + a);
+    if (profile === undefined) {
+        var a = toArray(profileMBean.ProfileTables);
+        print("profileTables", a);
 
-    if (!match(a, "^" + tableName + "$")) {
-        try {
+        var k = a.filter(function (n) {
+            return n === tableName
+        }).shift();
+
+        if (k === undefined) {
             print("creating " + tableName + " " + spec.toString());
-            v.createProfileTable(spec, tableName);
+            profileMBean.createProfileTable(spec, tableName);
+            print("created table " + tableName);
+        }
 
-            print("created " + tableName);
+        try {
+            var p2 = toArray(profileMBean.getProfiles(tableName));
+            print('profiles ', p2);
+
+            profile = p2.filter(function (p) {
+                return p.getProfileName() == profileName;
+            }).shift();
+
         } catch (e) {
             print(e);
-            return null;
+            //e.printStackTrace();
         }
-    } else {
-        print("found " + tableName);
-    }
 
-    var p2 = Packages.java.util.Collection
-    var found = false
-
-    try {
-        p2 = toArray(v.getProfiles(tableName));
-        print("profile: " + p2);
-
-        for (var s = 0; s < p2.length; s++) {
-            print("profile: " + p2[s].getProfileName());
-            if (p2[s].getProfileName() == profileName) {
-                found = true;
+        if (profile === undefined) {
+            print("creating profile in table");
+            try {
+                profileMBean.createProfile(tableName, profileName);
+                profile = objectName;
+            } catch (e) {
+                print(e);
+                //e.printStackTrace();
             }
         }
-    } catch (e) {
-        print(e);
     }
 
-    if (!found) {
-        v.createProfile(tableName, profileName);
-    }
 
-    try {
-        var v2 = mbean("javax.slee.profile:type=Profile,profileTableName=" + tableName + ",profileName=" + profileName);
-        print(v2);
-    } catch (e) {
-        print(e);
+    if (profile != objectName) {
+        print("warn",profile, objectName);
+    } else {
+        print(profile);
+        return mbean(profile);
     }
-
-    return v2;
 
 }
 function toString(a) {

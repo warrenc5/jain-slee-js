@@ -11,6 +11,7 @@ try {
     //jmxConnect("localhost:1090", "jmxconnector",username,password);
 //wildfly 10
     //jmxConnectURL("service:jmx:remote+http://localhost:9990",username,password);
+
     jmxConnectURL(url, username, password);
 //opencloud
     //jmxConnect("localhost:1199","opencloud/rhino",username,passsword);

@@ -1,8 +1,14 @@
 load('classpath:jain-slee.js');
-var spec = Packages.javax.slee.profile.ProfileSpecificationID;
+
+var profileSpecs = deploymentMBean.ProfileSpecifications;
+profileMBean.help();
+
+for each (var profile in profileSpecs) {
+    print(profile);
+}
 
 {
-    spec = new ProfileSpecificationID('Mofokom URI Profile', 'mofokom', '1.0-SNAPSHOT')
+    spec = new javax.slee.profile.ProfileSpecificationID('Mofokom URI Profile', 'mofokom', '1.0-SNAPSHOT')
     tableName = 'Default Mofokom Application Profile Table'
     profileName = 'Default Mofokom Application Profile'
     var profile = createProfileTable(spec, tableName, profileName);
