@@ -6,10 +6,10 @@ function createProfileTable(spec, tableName, profileName) {
     try {
         profile = profileMBean.getProfile(tableName, profileName);
     } catch (e) {
-        print("profile does not exist " + e);
+        print("profile does not exist ", e, profile);
     }
 
-    if (profile === undefined) {
+    if (profile === undefined || profile == null) {
         var a = toArray(profileMBean.ProfileTables);
         print("profileTables", a);
 
@@ -50,7 +50,7 @@ function createProfileTable(spec, tableName, profileName) {
 
 
     if (profile != objectName) {
-        print("warn",profile, objectName);
+        print("warn", profile, objectName);
     } else {
         print(profile);
         return mbean(profile);

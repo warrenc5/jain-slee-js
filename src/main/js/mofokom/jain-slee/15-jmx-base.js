@@ -408,6 +408,7 @@ function mbean(objName, async) {
 
                 if (sigNames === undefined)
                     sigNames == "";
+
                 //arrayToString(sigNames);
 
                 if (async) {
