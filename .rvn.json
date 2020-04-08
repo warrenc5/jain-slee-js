@@ -1,0 +1,8 @@
+config = {
+	"timeout": 180,
+	"javaHome":  "/usr/local/java/graalvm-ce-19.1.0",
+	"mvnArgs": "-Dmaven.surefire.debug -DforkMode=never -DtrimStackTrace=false",
+    "buildCommands": [
+        "mvn -Pgraal -Dmaven.test.skip=true"
+    ]
+}
