@@ -55,3 +55,5 @@ Create Profiles
             profile.commitProfile();
         }
     }
+
+    https://stackoverflow.com/questions/1751130/calling-jmx-mbean-method-from-a-shell-script?rq=1

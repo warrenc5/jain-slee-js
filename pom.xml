@@ -68,6 +68,9 @@
             <resource>
                 <directory>src/main/js</directory>
             </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
         </resources>
 
         <testResources>
@@ -180,5 +183,122 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>graal</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+                <rvn.config>${settings.localRepository}</rvn.config>
+            </properties>
+            <build>
+                <defaultGoal>clean install integration-test</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>3.0.0-M2</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-versions</id>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <bannedPlugins>
+                                            <!-- will only display a warning but does not fail the build. -->
+                                            <level>WARN</level>
+                                            <excludes>
+                                                <exclude>org.apache.maven.plugins:maven-verifier-plugin</exclude>
+                                            </excludes>
+                                            <message>Please consider using the maven-invoker-plugin
+                                                (http://maven.apache.org/plugins/maven-invoker-plugin/)!</message>
+                                        </bannedPlugins>
+                                        <requireMavenVersion>
+                                            <version>2.0.6</version>
+                                        </requireMavenVersion>
+                                        <requireJavaVersion>
+                                            <version>1.8</version>
+                                        </requireJavaVersion>
+                                        <!-- <requireOS> <family>unix</family> </requireOS> -->
+                                    </rules>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>animal-sniffer-maven-plugin</artifactId>
+                        <version>1.18</version>
+                        <configuration>
+                            <signature>
+                                <groupId>org.codehaus.mojo.signature</groupId>
+                                <artifactId>java18</artifactId>
+                                <version>1.0</version>
+                            </signature>
+                            <includeClasses>
+                                <includeClass>
+                                    jdk.nashorn.api.scripting.ScriptObjectMirror
+                                </includeClass>
+                            </includeClasses>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>animal-sniffer</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.oracle.substratevm</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <!--
+                        <version>19.2.0-dev-b01</version>
+                        -->
+                        <version>19.1.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <buildArgs>--report-unsupported-elements-at-runtime -H:+ReportExceptionStackTraces -H:ResourceConfigurationResources=resources.json</buildArgs>
+                            <imageName>${artifactId}</imageName>
+                        </configuration>
+                    </plugin>
+<plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>target/${artifactId}</executable>
+                            <systemProperties>
+                                <systemProperty>
+                                    <key>rvn.config</key>
+                                    <value>${rvn.config}</value>
+                                </systemProperty>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 </project>
