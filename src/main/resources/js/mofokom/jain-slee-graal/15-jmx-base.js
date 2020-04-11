@@ -1,5 +1,9 @@
-const debug = true;
+import * as util from '/resource:js/mofokom/jain-slee-graal/40-slee-util.js'
+
+export const debug = false;
+
 var mmConnection;
+
 export function jmxConnect(hostport, name, username, password) {
 
     var urlPath = "/jndi/rmi://" + hostport + "/jmxconnector";
@@ -22,7 +26,7 @@ export function jmxConnectURL(urlPath, username, password) {
     if (password) {
         creds.push(password);
     }
-    map.put('jmx.remote.credentials', stringArray(creds));
+    map.put('jmx.remote.credentials', util.stringArray(creds));
     //map.put('jmx.remote.protocol.provider.pkgs','org.jboss.remotingjmx');
 
     if (mmConnection != null) {
@@ -149,29 +153,7 @@ function queryMBeans(objName, query) {
 }
 queryMBeans.docString = "return MBeans using given ObjectName and optional query";
 
-// wraps a script array as java.lang.Object[]
-//FIXME:
-function objectArray(array) {
-    if (array === undefined) {
-        array = [];
-    }
-    try {
-        to = Java.to(array, "java.lang.Object[]");
-        return to;
-    } catch (e) {
-        print("**" + e);
-        return Java.to([], "java.lang.Object[]");
-    }
-}
 
-// wraps a script (string) array as java.lang.String[]
-//FIXME:
-function stringArray(array) {
-    if (array === undefined) {
-        array = [];
-    }
-    return Java.to(array, "java.lang.String[]");
-}
 
 // script array to Java List
 function toAttrList(array) {
@@ -186,23 +168,10 @@ function toAttrList(array) {
     return list;
 }
 
-// Java Collection (Iterable) to script array
-function toArray(collection) {
-    if (collection instanceof Array) {
-        return collection;
-    }
-    var itr = collection.iterator();
-    var array = new Array();
-    while (itr.hasNext()) {
-        array[array.length] = itr.next();
-    }
-    return array;
-}
-
 // gets MBean attributes
 function getMBeanAttributes(objName, attributeNames) {
     objName = objectName(objName);
-    return mbeanConnection().getAttributes(objName, stringArray(attributeNames));
+    return mbeanConnection().getAttributes(objName, util.stringArray(attributeNames));
 }
 getMBeanAttributes.docString = "returns specified Attributes of given ObjectName";
 
@@ -234,8 +203,8 @@ setMBeanAttribute.docString = "sets a single Attribute of given ObjectName";
 // invokes an operation on given MBean
 function invokeMBean(objName, operation, params, signature) {
     objName = objectName(objName);
-    params = objectArray(params);
-    signature = stringArray(signature);
+    params = util.objectArray(params);
+    signature = util.stringArray(signature);
     var res;
     try {
         res = mbeanConnection().invoke(objName, operation, params, signature);
@@ -304,7 +273,7 @@ export function mbean(objName, async) {
             for (var s = 0; s < opers[index].signature.length; s++) {
                 try {
                     sig[s] = opers[index].signature[s].type;
-                    type = java.lang.Class.forName(sig[s]);
+                    var type = Java.type(java.lang.Class).forName(sig[s]);
                     t += type;
                     if (type.isArray())
                         v += 'true';
@@ -388,16 +357,17 @@ export function mbean(objName, async) {
                 if (debug)
                     print("operation " + name);
 
-                //var params = objectArray(args);
+                //var params = util.objectArray(args);
                 var k = 0;
                 var v = '';
                 try {
                     k = args.length;
                     for (var s = 0; s < args.length; s++) {
                         try {
-                            type = args[s].getClass();
+                            //var type = args[s].getClass();
+                            var type = typeof args[s]
 
-                            if (type.isArray())
+                            if (Array.isArray(type))
                                 v += 'true';
                             else
                                 v += 'false';

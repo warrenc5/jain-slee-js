@@ -1,4 +1,3 @@
-import jmx from '/resource:js/mofokom/jain-slee-graal/15-jmx-base.js'
 import {profileMBean} from '/resource:js/mofokom/jain-slee-graal/30-mbeans.js'
 
 export function createProfileTable(spec, tableName, profileName) {
@@ -60,13 +59,58 @@ export function createProfileTable(spec, tableName, profileName) {
     }
 
 }
-function toString(a) {
+
+export function toString(a) {
     var k = "["
     for (var s = 0;
     s < a.length; s++) {
-        k += a[s] + ", "
+        k += a[s]
+        if (s < a.length - 1) {
+            k += ', '
+        }
     }
 
     return k += "]"
 }
 
+// Java Collection (Iterable) to script array
+export function toArray(collection) {
+    if (collection instanceof Array) {
+        return collection;
+    }
+    var itr = collection.iterator();
+    var array = new Array();
+    while (itr.hasNext()) {
+        array[array.length] = itr.next();
+    }
+    return array;
+}
+
+// wraps a script array as java.lang.Object[]
+//FIXME:
+export function objectArray(array) {
+    if (array === undefined) {
+        array = [];
+    }
+    try {
+        var to = Java.to(array, "java.lang.Object[]");
+        return to;
+    } catch (e) {
+        print("e1**" + e);
+        return Java.to([], "java.lang.Object[]");
+    }
+}
+
+// wraps a script (string) array as java.lang.String[]
+//FIXME:
+export function stringArray(array) {
+    if (array === undefined) {
+        array = [];
+    }
+    try {
+        return Java.to(array, "java.lang.String[]");
+    } catch (e) {
+        print("e2**" + e);
+        return Java.to([], "java.lang.String[]");
+    }
+}

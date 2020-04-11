@@ -1,4 +1,5 @@
 
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -99,7 +100,7 @@ public class RunScript {
              * Paths.get(resource.toURI()); return path; } }
              *
              * return method.invoke(delegate, args); } });
-            *
+             *
              */
 
             System.err.println("using file " + f.getAbsolutePath());
@@ -134,5 +135,10 @@ public class RunScript {
             }
         }
 
+    }
+
+    @HostAccess.Export
+    public static String getProperty(String name) {
+        return System.getProperty(name);
     }
 }

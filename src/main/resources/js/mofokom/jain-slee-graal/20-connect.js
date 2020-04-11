@@ -5,7 +5,7 @@ export function connect() {
     var mmConnection = null
 //mobicents
     var sys = Java.type('java.lang.System')
-    var debug = sys.getProperty("js.debug")
+    var debug = sys.getProperty("js.debug") || jmx.debug
 //debug = true
     try {
         var username = sys.getProperty("js.username")
