@@ -7,6 +7,8 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -36,12 +38,18 @@
         <dependency>
             <groupId>org.jboss.remotingjmx</groupId>
             <artifactId>remoting-jmx</artifactId>
-            <version>2.0.1.Final</version>
+            <!--
+            <version>2.1.0.Final</version>
+            -->
+            <version>3.0.4.Final</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.remoting</groupId>
             <artifactId>jboss-remoting</artifactId>
-            <version>4.0.21.Final</version>
+            <!--
+        <version>5.0.18.Final</version>
+            -->
+            <version>5.0.18.Final</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
@@ -51,13 +59,25 @@
         <dependency>
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling-river</artifactId>
-            <version>1.4.11.Final</version>
+            <!--
+        <version>1.4.11.Final</version>
+            -->
+            <version>2.0.9.Final</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling</artifactId>
-            <version>1.4.11.Final</version>
+            <!--
+        <version>1.4.11.Final</version>
+            -->
+            <version>2.0.9.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.graalvm.truffle</groupId>
+            <artifactId>truffle-api</artifactId>
+            <version>20.0.0</version>
+        </dependency>
+
     </dependencies> 
 
     <build>
@@ -116,6 +136,9 @@
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
+                        <configuration>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -126,11 +149,13 @@
             </plugin>
              
         </plugins>
+        
     </build>
 
     <profiles>
+
         <profile>
-            <id>default</id>
+            <id>run</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
                 <!--
@@ -145,6 +170,56 @@
                 <js.script>src/test/js/service-activate-deactivate.js</js.script>
                 <js.username>wozza</js.username>
                 <js.password>wozza</js.password>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <fork>false</fork>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <addResourcesToClasspath>true</addResourcesToClasspath>
+                            <addOutputToClasspath>true</addOutputToClasspath>
+                            <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                            <mainClass>RunScript</mainClass>
+
+                            <arguments>
+                                <argument>--js.username=${js.username}</argument>
+                                <argument>--js.password=${js.password}</argument>
+                                <argument>--js.url=${js.url}</argument>
+                                <argument>${js.script}</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>connect-jjs</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <!--
+                <property>
+                    <name>js.script</name>
+                </property>
+                -->
+            </activation>
+
+            <properties>
+                <js.url>service:jmx:remote+http://localhost:9990</js.url>
+                <js.script>src/test/js/service-activate-deactivate.js</js.script>
+                <js.username>admin</js.username>
+                <js.password>admin</js.password>
             </properties>
             <build>
                 <plugins>
@@ -193,7 +268,7 @@
                 <rvn.config>${settings.localRepository}</rvn.config>
             </properties>
             <build>
-                <defaultGoal>clean install integration-test</defaultGoal>
+                <defaultGoal>install</defaultGoal>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -251,7 +326,6 @@
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
-
                             </execution>
                         </executions>
                     </plugin>
@@ -261,21 +335,21 @@
                         <!--
                         <version>19.2.0-dev-b01</version>
                         -->
-                        <version>19.1.0</version>
+                        <version>19.2.1</version>
                         <executions>
                             <execution>
                                 <goals>
                                     <goal>native-image</goal>
                                 </goals>
-                                <phase>package</phase>
                             </execution>
                         </executions>
                         <configuration>
-                            <buildArgs>--report-unsupported-elements-at-runtime -H:+ReportExceptionStackTraces -H:ResourceConfigurationResources=resources.json</buildArgs>
+                            <buildArgs>--report-unsupported-elements-at-runtime -H:+ReportExceptionStackTraces -H:ResourceConfigurationResources=resources.json --language:js --allow-incomplete-classpath -H:Log=registerResource:basic</buildArgs>
                             <imageName>${artifactId}</imageName>
+                            <verbose>true</verbose>
                         </configuration>
                     </plugin>
-<plugin>
+                    <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
@@ -288,12 +362,17 @@
                         </executions>
                         <configuration>
                             <executable>target/${artifactId}</executable>
-                            <systemProperties>
-                                <systemProperty>
-                                    <key>rvn.config</key>
-                                    <value>${rvn.config}</value>
-                                </systemProperty>
-                            </systemProperties>
+                            <arguments>
+                                <argument>-v</argument>
+                            </arguments>
+                            <!--
+<systemProperties>
+    <systemProperty>
+        <key>rvn.config</key>
+        <value>${rvn.config}</value>
+    </systemProperty>
+</systemProperties>
+                            -->
                         </configuration>
                     </plugin>
                 </plugins>

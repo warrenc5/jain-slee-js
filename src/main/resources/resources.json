@@ -1,5 +1,5 @@
 {
     "resources": [
-        {"pattern": "mofokom/.*"}
+        {"pattern": ".*.js$"}
     ]
 }

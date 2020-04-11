@@ -1,11 +1,12 @@
 var mmConnection = null;
 //mobicents
-var debug = java.lang.System.getProperty("js.debug");
+var sys = Java.type(java.lang.System);
+//var debug = sys.getProperty("js.debug");
 //debug = true;
 try {
-    var username = java.lang.System.getProperty("js.username");
-    var password = java.lang.System.getProperty("js.password");
-    var url = java.lang.System.getProperty("js.url");
+    var username = sys.getProperty("js.username");
+    var password = sys.getProperty("js.password");
+    var url = sys.getProperty("js.url");
 //old jboss
     //jmxConnect("localhost:1090", "jmxconnector");
     //jmxConnect("localhost:1090", "jmxconnector",username,password);

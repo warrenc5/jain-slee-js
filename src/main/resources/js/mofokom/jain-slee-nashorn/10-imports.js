@@ -1,7 +1,8 @@
-Packages.javax.slee;
+//Packages.javax.slee;
 print("JAIN SLEE JMX Javascript Routines");
 try {
     var CollectionsAndFiles = new JavaImporter(
+            java.lang,
             java.util,
             java.lang.reflect,
             javax.slee.service.ServiceID,
