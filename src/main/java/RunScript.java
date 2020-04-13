@@ -1,5 +1,4 @@
 
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import javax.script.ScriptException;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.FileSystem;
 
 public class RunScript {
@@ -22,9 +22,14 @@ public class RunScript {
     public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 
-        System.err.println("available " + scriptEngineManager.getEngineFactories().stream().map(f -> f.getEngineName() + " " + f.getEngineVersion()).collect(toList()).toString());
+        System.err.println("available " + scriptEngineManager.getEngineFactories().stream().map(f -> f.getLanguageName() + " " + f.getEngineName() + " " + f.getEngineVersion()).collect(toList()).toString());
 
         ScriptEngine engine = scriptEngineManager.getEngineByName("Graal.js");
+
+        if (engine == null) {
+            System.err.println("fallback to default");
+            engine = scriptEngineManager.getEngineByName("js");
+        }
 
         if (engine == null) {
             System.err.println("fallback to nashorn");
@@ -75,34 +80,11 @@ public class RunScript {
         }
 
         if (f == null) {
-            System.err.println("usage jslee-js --js.username=wozza --js.password=wozza --js.url=service:jmx:remote+http://localhost:9990 myfile.js");
+            System.err.println("usage jslee-js --js.debug=true --js.username=wozza --js.password=wozza --js.url=service:jmx:remote+http://localhost:9990 myfile.js");
 
         } else {
 
             FileSystem delegate = new MyFileSystem();
-            /**
-             * FileSystem fileSystem = (FileSystem)
-             * Proxy.newProxyInstance(RunScript.class.getClassLoader(), new
-             * Class[]{FileSystem.class}, new InvocationHandler() {
-             *
-             * @Override public Object invoke(Object proxy, Method method,
-             * Object[] args) throws Throwable { System.err.println("++" +
-             * method.getName() + " " + Arrays.asList(args)); if
-             * ("toRealPath".equals(method.getName()) && ((Path)
-             * args[0]).toString().startsWith("classpath:")) {
-             * System.err.println("**" + method.getName() + " " +
-             * Arrays.asList(args)); String name =
-             * args[0].toString().substring(10); URL resource =
-             * RunScript.class.getClassLoader().getResource(name);
-             * System.err.println(resource.toURI().getScheme() + " " +
-             * resource.toURI()); if
-             * (!resource.toURI().getScheme().equals("resource")) { Path path =
-             * Paths.get(resource.toURI()); return path; } }
-             *
-             * return method.invoke(delegate, args); } });
-             *
-             */
-
             System.err.println("using file " + f.getAbsolutePath());
             //TODO use graal
             try (Context context = Context.newBuilder()
@@ -113,9 +95,14 @@ public class RunScript {
                     .allowHostAccess(HostAccess.ALL)
                     .allowIO(true)
                     .allowExperimentalOptions(true)
-                    .option("js.nashorn-compat", "true")
+                    //.option("js.nashorn-compat", "true")
                     .fileSystem(delegate)
                     .build()) {
+                Value bindings = context.getBindings("js");
+                bindings.putMember("js_username", System.getProperty("js.username"));
+                bindings.putMember("js_password", System.getProperty("js.password"));
+                bindings.putMember("js_url", System.getProperty("js.url"));
+                bindings.putMember("js_debug", Boolean.getBoolean("js.debug"));
 
                 Source source = Source.newBuilder("js", new FileReader(f.getAbsolutePath()), "main").mimeType("application/javascript+module").build();
                 System.err.println("loaded source" + source.toString());

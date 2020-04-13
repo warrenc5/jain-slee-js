@@ -1,4 +1,5 @@
 import {profileMBean} from '/resource:js/mofokom/jain-slee-graal/30-mbeans.js'
+        var trace = false
 
 export function createProfileTable(spec, tableName, profileName) {
 
@@ -93,7 +94,11 @@ export function objectArray(array) {
         array = [];
     }
     try {
+        if (trace)
+            print("1!", arrayToString(array))
         var to = Java.to(array, "java.lang.Object[]");
+        if (trace)
+            print("!!", arrayToString(to))
         return to;
     } catch (e) {
         print("e1**" + e);
@@ -113,4 +118,51 @@ export function stringArray(array) {
         print("e2**" + e);
         return Java.to([], "java.lang.String[]");
     }
+}
+
+export function arrayToStringShort(o) {
+    var result = "[";
+
+    for (var s = 0; s < o.length; s++) {
+        result += o[s]
+    }
+    result += "]"
+    return result
+}
+export function arrayToString(o, pad) {
+    if (pad === undefined)
+        pad = '';
+
+    if (o === undefined)
+        return "[]";
+    pad += '\t' + "[" + o.length + "]";
+
+    for (var s = 0; s < o.length; s++) {
+        var type = typeof (o[s]);
+
+        var v = o[s];
+
+        try {
+            type = o[s].getClass();
+
+
+            if (type.isArray())
+                v = o[s].length;
+
+        } catch (e) {
+        }
+
+        print(pad + " " + s + " " + type + " " + v);
+
+        if (o[s] == null)
+            continue;
+
+        try {
+            if (type.isArray()) {
+                arrayToString(o[s], pad);
+            }
+        } catch (e) {
+        }
+    }
+    pad = pad.slice(0, pad.length - 1);
 }

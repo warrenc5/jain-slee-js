@@ -4,13 +4,13 @@ export function connect() {
     print("connecting")
     var mmConnection = null
 //mobicents
-    var sys = Java.type('java.lang.System')
-    var debug = sys.getProperty("js.debug") || jmx.debug
+    var debug = js_debug
 //debug = true
     try {
-        var username = sys.getProperty("js.username")
-        var password = sys.getProperty("js.password")
-        var url = sys.getProperty("js.url")
+        var username = js_username
+        var password = js_password
+        var url = js_url
+
         print("connecting to " + url + " as " + username)
         print("password " + password)
 //old jboss

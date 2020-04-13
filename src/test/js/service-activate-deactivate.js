@@ -121,10 +121,9 @@ if ('resourceAdaptorMBean' in js) {
     try {
         var ralinks = js.resourceAdaptorMBean.getLinkNames();
         print("ra links", util.toString(ralinks));
-        for (var s = 0; s < ralinks.length; s++) {
-            js.resourceAdaptorMBean.unbindLinkName(ralinks[s]);
+        for (s in ralinks) {
+            js.resourceAdaptorMBean.unbindLinkName(s);
         }
-
     } catch (e) {
         print("10. " + e);
     }
@@ -134,10 +133,10 @@ if ('resourceAdaptorMBean' in js) {
         var raentities = js.resourceAdaptorMBean.getResourceAdaptorEntities();
         print("ra entities", util.toString(raentities));
         for (var s = 0; s < raentities.length; s++) {
-            js.resourceAdaptorMBean.deactivate(raentities[s]);
+            js.resourceAdaptorMBean.deactivateResourceAdaptorEntity(raentities[s]);
         }
         for (var s = 0; s < raentities.length; s++) {
-            js.resourceAdaptorMBean.activate(raentities[s]);
+            js.resourceAdaptorMBean.activateResourceAdaptorEntity(raentities[s]);
         }
 
     } catch (e) {

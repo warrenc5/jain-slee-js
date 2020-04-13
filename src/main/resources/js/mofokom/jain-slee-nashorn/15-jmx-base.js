@@ -460,7 +460,18 @@ if (this.application != undefined) {
 
 var pad = '';
 
-function arrayToString(o) {
+export function arrayToStringShort(o) {
+    var result = "[";
+    for (var s = 0; s < o.length; s++) {
+        result += o[s].getClass()
+        if(s<o.length-1)
+            result +=","
+    }
+    result = "]";
+    return result;
+}
+
+export function arrayToString(o) {
     pad += '\t';
     if (o === undefined)
         return "[]";
