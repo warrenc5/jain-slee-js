@@ -75,7 +75,9 @@
         <dependency>
             <groupId>org.graalvm.truffle</groupId>
             <artifactId>truffle-api</artifactId>
-            <version>20.0.0</version>
+            <version>20.1.0</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/truffle/truffle-api.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
@@ -217,7 +219,7 @@
                             <addResourcesToClasspath>true</addResourcesToClasspath>
                             <addOutputToClasspath>true</addOutputToClasspath>
                             <cleanupDaemonThreads>false</cleanupDaemonThreads>
-                            <executable>/usr/local/java/graalvm-ce-java11-20.0.0/bin/java</executable>
+                            <executable>/usr/local/java/graalvm-ce-java11/bin/java</executable>
                             <arguments>
                                 <argument>-agentlib:native-image-agent=config-output-dir=${basedir}/target/native/</argument>
                                 <argument>-cp</argument>
@@ -335,32 +337,34 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>animal-sniffer-maven-plugin</artifactId>
-                        <version>1.18</version>
-                        <configuration>
-                            <signature>
-                                <groupId>org.codehaus.mojo.signature</groupId>
-                                <artifactId>java18</artifactId>
-                                <version>1.0</version>
-                            </signature>
-                            <includeClasses>
-                                <includeClass>
-                                    jdk.nashorn.api.scripting.ScriptObjectMirror
-                                </includeClass>
-                            </includeClasses>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>animal-sniffer</id>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+                    <!--
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>animal-sniffer-maven-plugin</artifactId>
+                            <version>1.18</version>
+                            <configuration>
+                                <signature>
+                                    <groupId>org.codehaus.mojo.signature</groupId>
+                                    <artifactId>java18</artifactId>
+                                    <version>1.0</version>
+                                </signature>
+                                <includeClasses>
+                                    <includeClass>
+                                        jdk.nashorn.api.scripting.ScriptObjectMirror
+                                    </includeClass>
+                                </includeClasses>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>animal-sniffer</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>check</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    -->
                     <plugin>
                         <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
@@ -389,23 +393,32 @@
                                 --initialize-at-run-time=org.wildfly.security.ssl.DelegatingSSLContext
                             </buildArgs>
                             <!--
-                                -allow-incomplete-classpath
-                                -H:ClassInitialization=:build_time
-                                -initialize-at-run-time=java.io.FilePermission
-                                -->
+                            -allow-incomplete-classpath
+                            -H:ClassInitialization=:build_time
+                            -initialize-at-run-time=java.io.FilePermission
+                            -->
                             <imageName>${artifactId}</imageName>
                             <verbose>true</verbose>
                         </configuration>
+                        
                         <dependencies>
                             <dependency>
-                                <groupId>org.graalvm.js</groupId>
-                                <artifactId>js</artifactId>
-                                <version>20.0.0</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.graalvm.js</groupId>
-                                <artifactId>js-scriptengine</artifactId>
-                                <version>20.0.0</version>
+                                <groupId>org.graalvm.nativeimage</groupId>
+                                <artifactId>native-image-maven-plugin</artifactId>
+                                <!--
+                                <version>19.2.0-dev-b01</version>
+                                -->
+                                <version>20.1.0</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>org.graalvm.sdk</groupId>
+                                        <artifactId>graal-sdk</artifactId>
+                                    </exclusion>
+                                    <exclusion>
+                                        <groupId>org.graalvm.truffle</groupId>
+                                        <artifactId>truffle-api</artifactId>
+                                    </exclusion>
+                                </exclusions>
                             </dependency>
                         </dependencies>
                     </plugin>
