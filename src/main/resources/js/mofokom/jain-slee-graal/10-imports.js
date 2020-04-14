@@ -1,4 +1,4 @@
-//Packages.javax.slee;
+Packages.javax.slee;
 try {
     var CollectionsAndFiles = new JavaImporter(
             java.lang,

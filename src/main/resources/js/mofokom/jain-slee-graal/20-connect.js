@@ -50,6 +50,10 @@ export function connect() {
         //jmxConnectURL("service:jmx:rmi://localhost:1090/jndi/jmx/invoker/RMIAdaptor")
         //jmxConnectURL("service:jmx:rmi://localhost:1090/jmxrmi")
     } catch (e) {
-        print("connection exception", e)
+        if (typeof e == 'object') {
+            print("connection exception", e)
+        } else {
+            print("connection exception", e)
+        }
     }
 }

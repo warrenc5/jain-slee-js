@@ -39,9 +39,10 @@ function jmxConnectURL(urlPath, username, password) {
     var url = new JMXServiceURL(urlPath);
     print("connecting to " + url.toString());
 
-    var factory = javax.management.remote.JMXConnectorFactory;
-    var jboss = new org.jboss.remotingjmx.RemotingConnectorProvider;
     try {
+
+        var factory = javax.management.remote.JMXConnectorFactory;
+        var jboss = new org.jboss.remotingjmx.RemotingConnectorProvider;
         var jmxc = jboss.newJMXConnector(url, map);
         print("provider " + jmxc);
         jmxc.connect();
@@ -464,8 +465,8 @@ export function arrayToStringShort(o) {
     var result = "[";
     for (var s = 0; s < o.length; s++) {
         result += o[s].getClass()
-        if(s<o.length-1)
-            result +=","
+        if (s < o.length - 1)
+            result += ","
     }
     result = "]";
     return result;

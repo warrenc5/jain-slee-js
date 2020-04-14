@@ -94,7 +94,7 @@ public class RunScript {
                     .allowHostClassLookup(s -> true)
                     .allowHostAccess(HostAccess.ALL)
                     .allowIO(true)
-                    .allowExperimentalOptions(true)
+                    //.allowExperimentalOptions(true)
                     //.option("js.nashorn-compat", "true")
                     .fileSystem(delegate)
                     .build()) {
@@ -104,6 +104,12 @@ public class RunScript {
                 bindings.putMember("js_url", System.getProperty("js.url"));
                 bindings.putMember("js_debug", Boolean.getBoolean("js.debug"));
 
+                Value eval = context.eval("js", "Java.type('javax.management.ObjectName')");
+                if (eval.isNull()) {
+                    throw new Exception("failed");
+                } else {
+                    System.out.println("have ObjectName " + eval.asHostObject());
+                }
                 Source source = Source.newBuilder("js", new FileReader(f.getAbsolutePath()), "main").mimeType("application/javascript+module").build();
                 System.err.println("loaded source" + source.toString());
                 context.eval(source);

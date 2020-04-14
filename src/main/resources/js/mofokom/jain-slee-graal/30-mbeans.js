@@ -3,9 +3,8 @@ import * as connect from '/resource:js/mofokom/jain-slee-graal/20-connect.js'
 
 connect.connect();
 
-
 export const sleeMBean = jmx.mbean("javax.slee.management:name=SleeManagement", false)
-
+//sleeMBean.stop()
 //Mobicents specific
 export const sbbMBean = jmx.mbean("org.mobicents.slee:name=SbbEntitiesMBean", false)
 export const activityMBean = jmx.mbean("org.mobicents.slee:name=ActivityManagementMBean", false)

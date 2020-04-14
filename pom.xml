@@ -39,7 +39,7 @@
             <groupId>org.jboss.remotingjmx</groupId>
             <artifactId>remoting-jmx</artifactId>
             <!--
-            <version>2.1.0.Final</version>
+            <version>2.0.1.Final</version>
             -->
             <version>3.0.4.Final</version>
         </dependency>
@@ -47,7 +47,7 @@
             <groupId>org.jboss.remoting</groupId>
             <artifactId>jboss-remoting</artifactId>
             <!--
-        <version>5.0.18.Final</version>
+            <version>4.0.21.Final</version>
             -->
             <version>5.0.18.Final</version>
         </dependency>
@@ -60,7 +60,7 @@
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling-river</artifactId>
             <!--
-        <version>1.4.11.Final</version>
+            <version>1.4.11.Final</version>
             -->
             <version>2.0.9.Final</version>
         </dependency>
@@ -68,7 +68,7 @@
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling</artifactId>
             <!--
-        <version>1.4.11.Final</version>
+            <version>1.4.11.Final</version>
             -->
             <version>2.0.9.Final</version>
         </dependency>
@@ -77,7 +77,11 @@
             <artifactId>truffle-api</artifactId>
             <version>20.0.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+        </dependency>
     </dependencies> 
 
     <build>
@@ -107,24 +111,17 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>RunScript</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>false</addClasspath>
+                            <mainClass>RunScript</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -153,16 +150,42 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>shade</id>
 
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <mainClass>RunScript</mainClass>
+                                        </transformer>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
         <profile>
             <id>run</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
-                <!--
-                <property>
-                    <name>js.script</name>
-                </property>
-                -->
             </activation>
 
             <properties>
@@ -173,6 +196,7 @@
                 -->
                 <js.username>wozza</js.username>
                 <js.password>wozza</js.password>
+                <js.debug>true</js.debug>
             </properties>
             <build>
                 <plugins>
@@ -184,19 +208,24 @@
                             <execution>
                                 <phase>test</phase>
                                 <goals>
-                                    <goal>java</goal>
+                                    <goal>exec</goal>
                                 </goals>
                             </execution>
                         </executions>
                         <configuration>
-                            <fork>false</fork>
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <addResourcesToClasspath>true</addResourcesToClasspath>
                             <addOutputToClasspath>true</addOutputToClasspath>
                             <cleanupDaemonThreads>false</cleanupDaemonThreads>
-                            <mainClass>RunScript</mainClass>
-
+                            <executable>/usr/local/java/graalvm-ce-java11-20.0.0/bin/java</executable>
                             <arguments>
+                                <argument>-agentlib:native-image-agent=config-output-dir=${basedir}/target/native/</argument>
+                                <argument>-cp</argument>
+                                <classpath/>
+                                <argument>
+                                    RunScript
+                                </argument>
+                                
                                 <argument>--js.username=${js.username}</argument>
                                 <argument>--js.password=${js.password}</argument>
                                 <argument>--js.url=${js.url}</argument>
@@ -333,12 +362,12 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>com.oracle.substratevm</groupId>
+                        <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
                         <!--
                         <version>19.2.0-dev-b01</version>
                         -->
-                        <version>19.2.1</version>
+                        <version>20.0.0</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -347,10 +376,38 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <buildArgs>--report-unsupported-elements-at-runtime -H:+ReportExceptionStackTraces -H:ResourceConfigurationResources=resources.json --language:js --allow-incomplete-classpath -H:Log=registerResource:basic</buildArgs>
+                           
+                            <buildArgs>--report-unsupported-elements-at-runtime 
+                                -H:+ReportExceptionStackTraces 
+                                --language:js
+                                -H:Log=registerResource:basic
+                                -H:+PrintClassInitialization
+                                -H:+TraceClassInitialization
+                                --allow-incomplete-classpath
+                                --initialize-at-build-time=org.jboss.logging.JDKLevel
+                                --initialize-at-run-time=Proxy.newProxyInstance
+                                --initialize-at-run-time=org.wildfly.security.ssl.DelegatingSSLContext
+                            </buildArgs>
+                            <!--
+                                -allow-incomplete-classpath
+                                -H:ClassInitialization=:build_time
+                                -initialize-at-run-time=java.io.FilePermission
+                                -->
                             <imageName>${artifactId}</imageName>
                             <verbose>true</verbose>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.graalvm.js</groupId>
+                                <artifactId>js</artifactId>
+                                <version>20.0.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.graalvm.js</groupId>
+                                <artifactId>js-scriptengine</artifactId>
+                                <version>20.0.0</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
