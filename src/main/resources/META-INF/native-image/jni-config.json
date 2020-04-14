@@ -1,2 +1,30 @@
 [
+{
+  "name":"java.lang.ClassLoader",
+  "methods":[
+    {"name":"getPlatformClassLoader","parameterTypes":[] }, 
+    {"name":"loadClass","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"java.lang.ClassNotFoundException"
+},
+{
+  "name":"java.lang.NoSuchMethodError"
+},
+{
+  "name":"jdk.vm.ci.hotspot.HotSpotJVMCIRuntime",
+  "methods":[{"name":"runtime","parameterTypes":[] }]
+},
+{
+  "name":"org.graalvm.compiler.hotspot.management.SVMToHotSpotEntryPoints",
+  "methods":[
+    {"name":"getFactory","parameterTypes":[] }, 
+    {"name":"signal","parameterTypes":["org.graalvm.compiler.hotspot.management.SVMMBean$Factory","long"] }
+  ]
+},
+{
+  "name":"org.graalvm.libgraal.LibGraal",
+  "methods":[{"name":"registerNativeMethods","parameterTypes":["jdk.vm.ci.hotspot.HotSpotJVMCIRuntime","java.lang.Class"] }]
+}
 ]
