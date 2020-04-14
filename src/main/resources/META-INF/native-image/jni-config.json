@@ -17,13 +17,6 @@
   "methods":[{"name":"runtime","parameterTypes":[] }]
 },
 {
-  "name":"org.graalvm.compiler.hotspot.management.SVMToHotSpotEntryPoints",
-  "methods":[
-    {"name":"getFactory","parameterTypes":[] }, 
-    {"name":"signal","parameterTypes":["org.graalvm.compiler.hotspot.management.SVMMBean$Factory","long"] }
-  ]
-},
-{
   "name":"org.graalvm.libgraal.LibGraal",
   "methods":[{"name":"registerNativeMethods","parameterTypes":["jdk.vm.ci.hotspot.HotSpotJVMCIRuntime","java.lang.Class"] }]
 }

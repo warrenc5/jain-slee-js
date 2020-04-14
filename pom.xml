@@ -75,10 +75,17 @@
         <dependency>
             <groupId>org.graalvm.truffle</groupId>
             <artifactId>truffle-api</artifactId>
-            <version>20.1.0</version>
-            <scope>system</scope>
-            <systemPath>${java.home}/lib/truffle/truffle-api.jar</systemPath>
+            <version>20.0.0</version>
         </dependency>
+        <!--
+                <dependency>
+                    <groupId>org.graalvm.truffle</groupId>
+                    <artifactId>truffle-api</artifactId>
+                    <version>20.1.0</version>
+                    <scope>system</scope>
+                    <systemPath>${java.home}/lib/truffle/truffle-api.jar</systemPath>
+                </dependency>
+        -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -380,8 +387,12 @@
                             </execution>
                         </executions>
                         <configuration>
-                           
-                            <buildArgs>--report-unsupported-elements-at-runtime 
+                          <!-- 
+                                -native-image-info
+                                -->
+                            <buildArgs>
+                                --verbose
+                                --report-unsupported-elements-at-runtime 
                                 -H:+ReportExceptionStackTraces 
                                 --language:js
                                 -H:Log=registerResource:basic
@@ -405,20 +416,19 @@
                             <dependency>
                                 <groupId>org.graalvm.nativeimage</groupId>
                                 <artifactId>native-image-maven-plugin</artifactId>
+                                <version>20.0.0</version>
                                 <!--
-                                <version>19.2.0-dev-b01</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>org.graalvm.sdk</groupId>
+                                    <artifactId>graal-sdk</artifactId>
+                                </exclusion>
+                                <exclusion>
+                                    <groupId>org.graalvm.truffle</groupId>
+                                    <artifactId>truffle-api</artifactId>
+                                </exclusion>
+                            </exclusions>
                                 -->
-                                <version>20.1.0</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>org.graalvm.sdk</groupId>
-                                        <artifactId>graal-sdk</artifactId>
-                                    </exclusion>
-                                    <exclusion>
-                                        <groupId>org.graalvm.truffle</groupId>
-                                        <artifactId>truffle-api</artifactId>
-                                    </exclusion>
-                                </exclusions>
                             </dependency>
                         </dependencies>
                     </plugin>
