@@ -400,6 +400,8 @@
                                 -H:+TraceClassInitialization
                                 --allow-incomplete-classpath
                                 --initialize-at-build-time=org.jboss.logging.JDKLevel
+                                --initialize-at-build-time=java.lang.ref.SoftReference
+                                --initialize-at-build-time=java.lang.invoke.MethodHandleImpl
                                 --initialize-at-run-time=Proxy.newProxyInstance
                                 --initialize-at-run-time=org.wildfly.security.ssl.DelegatingSSLContext
                             </buildArgs>
@@ -413,23 +415,6 @@
                         </configuration>
                         
                         <dependencies>
-                            <dependency>
-                                <groupId>org.graalvm.nativeimage</groupId>
-                                <artifactId>native-image-maven-plugin</artifactId>
-                                <version>20.0.0</version>
-                                <!--
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>org.graalvm.sdk</groupId>
-                                    <artifactId>graal-sdk</artifactId>
-                                </exclusion>
-                                <exclusion>
-                                    <groupId>org.graalvm.truffle</groupId>
-                                    <artifactId>truffle-api</artifactId>
-                                </exclusion>
-                            </exclusions>
-                                -->
-                            </dependency>
                         </dependencies>
                     </plugin>
                     <plugin>

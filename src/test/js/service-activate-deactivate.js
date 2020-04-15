@@ -153,7 +153,6 @@ if ('deploymentMBean' in js) {
         print(util.toString(deployableUnits));
     } catch (e) {
         print("12. " + e);
-        e.printStackTrace();
     }
     try {
         js.deploymentMBean.uninstall(new javax.slee.management.DeployableUnitID("file:/opt/mobicents-2.3.0/jboss-5.1.0.GA/server/default/deploy/mofokom-du/ideal-services-du-1.0-SNAPSHOT.jar/"));

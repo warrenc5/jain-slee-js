@@ -56,7 +56,6 @@ export function jmxConnectURL(urlPath, username, password) {
         mmConnection = jmxc.getMBeanServerConnection();
         print("connected to " + mmConnection);
     } catch (x) {
-        x.printStackTrace();
         print("error connecting " + x);
     }
 }
@@ -225,9 +224,6 @@ function invokeMBean(objName, operation, params, signature) {
             util.arrayToString(signature);
         }
         print(x, x.getMessage(), typeof x)
-        if (typeof x == "object") {
-            //x.printStackTrace()
-        }
 
         throw x;
     }
@@ -251,6 +247,8 @@ function Info(objName) {
         for (var index in attrs) {
             if (debug)
                 print("  attr " + attrs[index].getName());
+            
+            Java.type(attrs[index].getType().replace(/^\[L/,""))
             this.attrMap[attrs[index].getName()] = attrs[index].getName();
         }
 
@@ -276,6 +274,7 @@ function Info(objName) {
                 for (var s in opers[index].getSignature()) {
                     try {
                         sig[s] = opers[index].getSignature()[s].getType();
+                        Java.type(sig[s].replace(/^\[L/,""))
                         if (trace)
                             print("#", s, sig[s])
                         var type = Java.type('java.lang.Class').forName(sig[s]);
