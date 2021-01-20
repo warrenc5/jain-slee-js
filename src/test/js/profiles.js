@@ -1,9 +1,9 @@
-load('classpath:jain-slee.js');
+import * as js from '/resource:js/jain-slee.js';
 
-var profileSpecs = deploymentMBean.ProfileSpecifications;
-profileMBean.help();
+var profileSpecs = js.deploymentMBean.ProfileSpecifications;
+//js.profileMBean.help
 
-for each (var profile in profileSpecs) {
+for (var profile in profileSpecs) {
     print(profile);
 }
 

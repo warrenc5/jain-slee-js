@@ -1,5 +1,8 @@
-import {profileMBean} from '/resource:js/mofokom/jain-slee-graal/30-mbeans.js'
-        var trace = false
+import {profileProvMBean} from '/resource:js/mofokom/jain-slee-graal/30-mbeans.js'
+import {mbean} from '/resource:js/mofokom/jain-slee-graal/15-jmx-base.js'
+
+export const debug = js_debug || false
+export const trace = js_trace || false
 
 export function createProfileTable(spec, tableName, profileName) {
 
@@ -7,14 +10,16 @@ export function createProfileTable(spec, tableName, profileName) {
     var objectName = "javax.slee.profile:type=Profile,profileTableName=" + tableName + ",profileName=" + profileName;
 
     try {
-        profile = profileMBean.getProfile(tableName, profileName);
+        profile = profileProvMBean.getProfile(tableName, profileName);
     } catch (e) {
-        print("profile does not exist ", e, profile);
+        print("profile does not exist ", e, ", objectName:", objectName, ", tableName:", tableName, ", profileName:", profileName);
     }
 
-    if (profile === undefined || profile == null) {
-        var a = toArray(profileMBean.ProfileTables);
-        print("profileTables", a);
+    if (profile === undefined || profile === null) {
+        var a2 = profileProvMBean.ProfileTables
+        //if(debug)
+        print("profileTables:", a2);
+        var a = toArray(a2);
 
         var k = a.filter(function (n) {
             return n === tableName
@@ -22,43 +27,74 @@ export function createProfileTable(spec, tableName, profileName) {
 
         if (k === undefined) {
             print("creating " + tableName + " " + spec.toString());
-            profileMBean.createProfileTable(spec, tableName);
-            print("created table " + tableName);
+            try {
+                profileProvMBean.createProfileTable(spec, tableName);
+                print("created table " + tableName);
+            } catch (e) {
+                console.log("error creating table: ", spec, tableName, e)
+                throw e;
+            }
+        } else {
+            console.log("found ", tableName)
+        }
+
+        if (debug) {
+            try {
+                var p3 = profileProvMBean.getProfiles(tableName) //deprecated
+                print('profiles ', p3);
+
+                var p2 = toArray(p3);
+                p2.filter(function (p) {
+                    return p.getProfileName() == profileName;
+                }).shift();
+
+            } catch (e) {
+                print(e);
+            }
         }
 
         try {
-            var p2 = toArray(profileMBean.getProfiles(tableName));
-            print('profiles ', p2);
-
-            profile = p2.filter(function (p) {
-                return p.getProfileName() == profileName;
-            }).shift();
-
+            profile = profileProvMBean.getProfile(tableName, profileName)
         } catch (e) {
-            print(e);
-            //e.printStackTrace();
+            print("can't get profile", e);
         }
-
-        if (profile === undefined) {
+        if (profile == null || profile === undefined) {
             print("creating profile in table");
             try {
-                profileMBean.createProfile(tableName, profileName);
-                profile = objectName;
+                profile = profileProvMBean.createProfile(tableName, profileName);
             } catch (e) {
-                print(e);
-                //e.printStackTrace();
+                console.log("error creating profile in table ", tableName, profileName, e);
+                e.printStackTrace();
+                throw e;
             }
         }
     }
 
+    if (profile === undefined) {
+        print("no profile, sorry", tableName, profileName);
+        return;
+    }
+    var profileMBean;
 
-    if (profile != objectName) {
-        print("warn", profile, objectName);
+    if (profile !== objectName) {
+        print("profile doesnt match objectName profile: ", profile, ", objectName: ", objectName);
+        profileMBean = mbean(profile);
     } else {
         print(profile);
-        return mbean(profile);
+        profileMBean = mbean(profile);
     }
 
+//FIXME - augment proxy
+/*
+    if (profileMBean !== null && profileMBean !== undefined) {
+        profileMBean.deleteProfile = function () {
+            console.log("removing ", tableName, profileName);
+            profileProvMBean.removeProfile(tableName, profileName);
+        };
+    }
+*/
+
+    return profileMBean;
 }
 
 export function toString(a) {

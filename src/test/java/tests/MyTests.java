@@ -26,7 +26,7 @@ public class MyTests {
     public void myTestRun() throws MalformedURLException, IOException {
        
         Map<String, Object> map = new HashMap();
-        //map.put("jmx.remote.credentials", new String[]{"wozza", "wozza"});
+        map.put("jmx.remote.credentials", new String[]{"admin", "admin"});
         JMXServiceURL url = new JMXServiceURL("service:jmx:remote+http://localhost:9990");
         System.out.println("1 " +url);
         JMXConnector connect = JMXConnectorFactory.newJMXConnector(url, map);   

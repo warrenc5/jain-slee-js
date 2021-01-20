@@ -48,10 +48,12 @@ function jmxConnectURL(urlPath, username, password) {
         jmxc.connect();
         // note that the "mmConnection" is a global variable!
         mmConnection = jmxc.getMBeanServerConnection();
-        print("connected to " + mmConnection);
+        if(debug)
+        print("connected to " , mmConnection);
+        return mmConnection
     } catch (x) {
-        x.printStackTrace();
-        print("error connecting " + x);
+        print("error connecting ", x);
+        throw x
     }
 }
 jmxConnect.docString = "connects to the given host, port (specified as name:port)";

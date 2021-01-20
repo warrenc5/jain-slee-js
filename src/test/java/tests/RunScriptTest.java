@@ -3,18 +3,16 @@ package tests;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.slee.management.ServiceState;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RunScriptTest {
 
     @Test //TODO launch from classpath
-    @Ignore 
     public void testScript() throws ScriptException, IOException {
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine nashorn = scriptEngineManager.getEngineByName("nashorn");

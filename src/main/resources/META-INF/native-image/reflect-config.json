@@ -1,6 +1,6 @@
 [
 {
-  "name":"com.oracle.truffle.api.TruffleLanguage"
+  "name":"javax.management.MBeanNotificationInfo"
 },
 {
   "name":"com.oracle.truffle.api.TruffleStackTrace"

@@ -1,7 +1,12 @@
 import * as util from '/resource:js/mofokom/jain-slee-graal/40-slee-util.js'
 
-export const debug = true;
-export const trace = false;
+export const debug = js_debug || false
+export const trace = js_trace || false
+
+if(debug) 
+    console.log("debug enabled")
+if(trace) 
+    console.log("trace enabled")
 
 var mmConnection;
 
@@ -35,7 +40,7 @@ export function jmxConnectURL(urlPath, username, password) {
         try {
             mmConnection.close();
         } catch (e) {
-            print(e);
+            console.log(e);
         }
     }
     var JMXServiceURL = javax.management.remote.JMXServiceURL;
@@ -44,19 +49,22 @@ export function jmxConnectURL(urlPath, username, password) {
         throw new Error("no url specified");
 
     var url = new JMXServiceURL(urlPath);
-    print("connecting to " + url.toString());
+    console.log("connecting to " + url.toString());
 
     var factory = javax.management.remote.JMXConnectorFactory;
     var jboss = new org.jboss.remotingjmx.RemotingConnectorProvider;
     try {
         var jmxc = jboss.newJMXConnector(url, map);
-        print("provider " + jmxc);
+        console.log("provider " + jmxc);
         jmxc.connect();
         // note that the "mmConnection" is a global variable!
         mmConnection = jmxc.getMBeanServerConnection();
-        print("connected to " + mmConnection);
+        if (debug)
+            console.log("connection is " + mmConnection);
+        return mmConnection;
     } catch (x) {
-        print("error connecting " + x);
+        console.log("error connecting " + x);
+        throw x
     }
 }
 
@@ -196,7 +204,11 @@ setMBeanAttributes.docString = "sets specified Attributes of given ObjectName";
 function setMBeanAttribute(objName, attrName, attrValue) {
     var Attribute = Packages.javax.management.Attribute;
     objName = objectName(objName);
+    if(debug)
+    console.log(objName,attrName,attrValue)
     mbeanConnection().setAttribute(objName, new Attribute(attrName, attrValue));
+    if(debug)
+    console.log("setted" ,objName,attrName,attrValue)
 }
 setMBeanAttribute.docString = "sets a single Attribute of given ObjectName";
 
@@ -210,20 +222,20 @@ function invokeMBean(objName, operation, params, signature) {
     try {
 
         if (debug) {
-            print(objName, operation, params, util.arrayToStringShort(params), util.arrayToStringShort(signature), " > ");
+            console.log(objName, operation, params, util.arrayToStringShort(params), util.arrayToStringShort(signature), " > ");
         }
 
         res = mbeanConnection().invoke(objName, operation, params, signature);
         if (debug)
-            print(objName, operation, util.arrayToStringShort(params), " = ", res);
+            console.log(objName, operation, util.arrayToStringShort(params), " => result:", res);
 
     } catch (x) {
         if (debug) {
-            print(x, objName, operation, " < ");
+            console.log(x, objName, operation, " < ");
             util.arrayToString(params);
             util.arrayToString(signature);
         }
-        print(x, x.getMessage(), typeof x)
+        console.log(x, x.getMessage(), typeof x)
 
         throw x;
     }
@@ -239,25 +251,27 @@ function Info(objName) {
         this.info = mbeanInfo(objName);
 
         if (debug)
-            print("constructor called " + objName);
+            console.log("constructor called " + objName);
 
         this.attrMap = new Object()
 
         var attrs = this.info.getAttributes();
         for (var index in attrs) {
             if (debug)
-                print("  attr " + attrs[index].getName());
-            
-            Java.type(attrs[index].getType().replace(/^\[L/,""))
+                console.log("  attr " + attrs[index].getName());
+
+            Java.type(stripArray(attrs[index].getType()))
             this.attrMap[attrs[index].getName()] = attrs[index].getName();
         }
 
-        print("operations ")
+        if(debug)
+            console.log("operations ")
         var opers = this.info.getOperations();
 
         this.operMap = {}
         this.operTypeMap = {}
         this.operMapNames = {}
+        this.operResMap = {}
 
         for (var index in opers) {
             var k = 0;
@@ -274,9 +288,9 @@ function Info(objName) {
                 for (var s in opers[index].getSignature()) {
                     try {
                         sig[s] = opers[index].getSignature()[s].getType();
-                        Java.type(sig[s].replace(/^\[L/,""))
+                        Java.type(stripArray(sig[s]))
                         if (trace)
-                            print("#", s, sig[s])
+                            console.log("#", s, sig[s])
                         var type = Java.type('java.lang.Class').forName(sig[s]);
                         t += type;
                         if (type.isArray())
@@ -289,17 +303,19 @@ function Info(objName) {
                     }
                 }
 
-            if (debug)
-                print("  op ", opers[index].getName(), k, t, v, util.arrayToString(sig));// + ((k>0)? opers[index].signature[0].toString():null));
+            if (trace)
+                console.log("  op ", opers[index].getName(), k, t, v, util.arrayToString(sig));// + ((k>0)? opers[index].signature[0].toString():null));
 
             //arrayToString(sig);
 
+//FIXME: return types for overloaded methods 
+            this.operResMap[opers[index].getName()] = opers[index].getReturnType();
             this.operMapNames[opers[index].getName()] = sig;
             this.operMap[opers[index].getName() + " " + k] = opers[index];
             this.operTypeMap[opers[index].getName() + k + " " + v] = sig;
         }
     } catch (e) {
-        print(e)
+        console.log(e)
     }
 
 }
@@ -326,22 +342,22 @@ Info.prototype.isOperation = function (name) {
  */
 export function mbean(objNameString, async) {
     if (debug)
-        print("creating mbean for " + objNameString)
+        console.log("creating mbean for " + objNameString)
 
     if (objNameString === undefined) {
-        print("was null")
+        console.log("was null")
         return null
     }
 
     var objName = objectName(objNameString);
 
     if (debug)
-        print("object " + objName);
+        console.log("object " + objName);
 
     try {
         var info = mbeanInfo(objName);
     } catch (e) {
-        print(e);
+        console.log("getting info", e);
         return null;
     }
 
@@ -355,27 +371,44 @@ export function mbean(objNameString, async) {
         },
         get: function (target, name, receiver) {
             if (debug)
-                print("get " + name);
-            if (target.isAttribute(name)) {
+                console.log("get" , name);
+            var m = target.isAttribute(name.replace(/^is/,""))
+
+            if (name !== "toString" && (target.isAttribute(name) || m)) {
+                if(m){
+                    name = name.replace(/^is/,"")
+                }
                 if (debug)
-                    print("attribute " + name);
+                    console.log("attribute " + name);
+                
                 if (async) {
                     return getMBeanAttribute.future(target.objName, name);
                 } else {
                     if (debug)
-                        print(target.objName)
+                        console.log(target.objName)
                     return getMBeanAttribute(target.objName, name);
                 }
-            } else if (target.isOperation(name)) {
+            } else if (name==="info" ){
+                return info
+            } else if (name==="objName" ){
+                return objName
+            } else if (name ==="toJSON" || name ==="toString" || name==="help" || target.isOperation(name)) {
+                if(debug)
+                    console.log("op" , name);
                 var blank = function () {
                     return {name: name, info: target}
                 }
 
+                if (name === "toString") {
+                    return objName;
+                }
+
+//TODO reuse proxies
                 return new Proxy(blank, {
 
                     apply: function (target, thisArg, argumentList) {
                         if (debug)
-                            print("calling " + target().name)
+                            console.log("calling " + target().name)
 
                         var args = argumentList
                         var name = target().name
@@ -387,23 +420,38 @@ export function mbean(objNameString, async) {
                         r += "]";
 
                         if (debug)
-                            print("call " + name + " " + r);
+                            console.log("call " + name + " " + r);
 
-                        if (name == "help") {
-                            print("help: " + objName);
-                            print("  attributes:");
-                            for (var k in target.attrMap) {
-                                print("  - " + k);
+                        //TODO move out of proxy - like toString
+                        if (name === "toJSON") {
+                            try {
+                                var k = Object.keys(target().info.attrMap).sort()
+                                var o = {}
+                                for (const e of k) {
+                                    v = getMBeanAttribute(target().info.objName, e);
+                                    o[e] = v
+                                }
+                                
+                                return o;
+                            } catch(e){
+                                console.log(e)
                             }
-                            print("  operations:");
-                            if (trace)
-                                for (var k in target.operMapNames) {
-                                    print("  - " + k);
-                                    print("      " + target.operMapNames[k]);
+                        }
+                        if (name === "help") {
+                            console.log("help: " + objName);
+                            console.log("  attributes:");
+                            for (const k of Object.keys(target().info.attrMap).sort()) {
+                                console.log("  - " + k);
+                            }
+                            console.log("  operations:");
+                                for (const k of Object.keys(target().info.operMapNames).sort()) {
+                                    console.log("  - " + k + " = " + target().info.operResMap[k]);
+                                    if(target().info.operMapNames[k].length >0)
+                                        console.log("      " + target().info.operMapNames[k]);
                                 }
                         } else if (target().info.isOperation(name)) {
                             if (debug)
-                                print("operation " + name);
+                                console.log("operation " + name);
 
                             //var params = util.objectArray(args);
                             var k = 0;
@@ -426,19 +474,19 @@ export function mbean(objNameString, async) {
                                     } catch (x) {
                                         v += 'false';
                                         if (debug)
-                                            print(x);
+                                            console.log(x);
                                     }
                                 }
                             } catch (x) {
-                                print(x);
+                                console.log(x);
                             }
 
                             if (trace)
-                                print("**" + name + "::" + k + "::" + v);
+                                console.log("**" + name + "::" + k + "::" + v);
                             var oper = target().info.operMap[name + "" + k];
                             var sigNames = target().info.operTypeMap[name + k + " " + v];//.signature;
                             if (trace)
-                                print("***" + name + "::" + k + "::" + args + " " + sigNames);
+                                console.log("***" + name + "::" + k + "::" + args + " " + sigNames);
 
                             if (sigNames === undefined)
                                 sigNames == "";
@@ -450,33 +498,38 @@ export function mbean(objNameString, async) {
                             }
                         } else {
                             if (debug)
-                                print(name + " " + k + " " + v + " not found");
+                                console.log(name + " " + k + " " + v + " not found");
                             return undefined;
                         }
                     }
                 })
             } else {
                 if (debug)
-                    print(name, "not found");
-                //print(name + " " + k + " " + v + " not found");
+                console.log(name , "not found");
+                    //throw new Error("not found " + name);
                 return undefined;
             }
         },
 
         set: function (target, name, value, receiver) {
-            print("set")
+            console.log("set",name)
             if (target.isAttribute(name)) {
                 if (async) {
                     setMBeanAttribute.future(objName, name, value);
                 } else {
                     setMBeanAttribute(objName, name, value);
                 }
+                return true;
             } else {
                 if (debug)
-                    print(name + "not found");
+                    console.log(name + "not found");
                 return undefined;
             }
         }
     });
 
+}
+
+function stripArray(v) {
+    return v.replace(/^\[L/, "").replace(/;/, "")
 }

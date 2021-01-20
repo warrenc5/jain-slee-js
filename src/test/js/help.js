@@ -1,4 +1,4 @@
-load('classpath:jain-slee.js');
+load('resource:jain-slee.js');
 
 try {
     resourceAdaptorMBean.help();

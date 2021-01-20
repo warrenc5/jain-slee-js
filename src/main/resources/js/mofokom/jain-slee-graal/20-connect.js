@@ -1,18 +1,23 @@
 import * as jmx from '/resource:js/mofokom/jain-slee-graal/15-jmx-base.js'
 
+const debug = js_debug || false
+const trace = js_trace || false
+
 export function connect() {
     print("connecting")
     var mmConnection = null
 //mobicents
-    var debug = js_debug
 //debug = true
     try {
         var username = js_username
         var password = js_password
         var url = js_url
 
-        print("connecting to " + url + " as " + username)
-        print("password " + password)
+
+        if (debug)
+            print("connecting to " + url + " as " + username)
+        if (trace)
+            print("password " + password)
 //old jboss
         //jmxConnect("localhost:1090", "jmxconnector")
         //jmxConnect("localhost:1090", "jmxconnector",username,password)
@@ -38,8 +43,9 @@ export function connect() {
         }
 
         if (r == false)
-            return;
-        jmx.jmxConnectURL(url, username, password)
+            return false;
+
+        var connection = jmx.jmxConnectURL(url, username, password)
         //jmx.jmxConnectURL(url, username, password)
 //opencloud
         //jmxConnect("localhost:1199","opencloud/rhino",username,passsword)
@@ -49,11 +55,15 @@ export function connect() {
         //jmxConnect("localhost:1090","jmxrmi")
         //jmxConnectURL("service:jmx:rmi://localhost:1090/jndi/jmx/invoker/RMIAdaptor")
         //jmxConnectURL("service:jmx:rmi://localhost:1090/jmxrmi")
+
+        return connection != null;
     } catch (e) {
         if (typeof e == 'object') {
             print("connection exception", e)
         } else {
             print("connection exception", e)
         }
+        return false;
     }
+    return false;
 }

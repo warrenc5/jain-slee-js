@@ -1,7 +1,9 @@
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
@@ -19,9 +21,15 @@ import org.graalvm.polyglot.io.FileSystem;
 
 public class RunScript {
 
+    static {
+        javax.management.MBeanNotificationInfo.class.getClass();
+        javax.transaction.RollbackException.class.getClass();
+    }
+
     public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 
+        System.err.println(Arrays.asList(args).toString());
         System.err.println("available " + scriptEngineManager.getEngineFactories().stream().map(f -> f.getLanguageName() + " " + f.getEngineName() + " " + f.getEngineVersion()).collect(toList()).toString());
 
         ScriptEngine engine = scriptEngineManager.getEngineByName("Graal.js");
@@ -37,6 +45,7 @@ public class RunScript {
         }
 
         if (engine != null && engine.getFactory() != null) {
+            System.err.println(engine.ENGINE + " " + engine.toString());
             ScriptEngineFactory factory = engine.getFactory();
             System.err.println("using " + factory.getEngineName() + " " + factory.getLanguageName());
             System.err.println(factory.getExtensions().toString());
@@ -78,14 +87,25 @@ public class RunScript {
                 f = new File(arg);
             }
         }
+        InputStream fin = null;
+        if (f != null) {
+            System.err.println("using file " + f.getAbsolutePath());
+            fin = new FileInputStream(f);
+        } else if (System.in.available() > 0) {
+            System.err.println("got old stream");
 
-        if (f == null) {
+            fin = System.in;
+        } else if (System.inheritedChannel() != null) {
+            System.err.println("got stream");
+            return;
+        }
+
+        if (fin == null) {
             System.err.println("usage jslee-js --js.debug=true --js.username=wozza --js.password=wozza --js.url=service:jmx:remote+http://localhost:9990 myfile.js");
 
         } else {
 
             FileSystem delegate = new MyFileSystem();
-            System.err.println("using file " + f.getAbsolutePath());
             //TODO use graal
             try (Context context = Context.newBuilder()
                     .allowNativeAccess(true)
@@ -103,6 +123,7 @@ public class RunScript {
                 bindings.putMember("js_password", System.getProperty("js.password"));
                 bindings.putMember("js_url", System.getProperty("js.url"));
                 bindings.putMember("js_debug", Boolean.getBoolean("js.debug"));
+                bindings.putMember("js_trace", Boolean.getBoolean("js.trace/J"));
 
                 Value eval = context.eval("js", "Java.type('javax.management.ObjectName')");
                 if (eval.isNull()) {
@@ -110,7 +131,7 @@ public class RunScript {
                 } else {
                     System.out.println("have ObjectName " + eval.asHostObject());
                 }
-                Source source = Source.newBuilder("js", new FileReader(f.getAbsolutePath()), "main").mimeType("application/javascript+module").build();
+                Source source = Source.newBuilder("js", new InputStreamReader(fin), "main").mimeType("application/javascript+module").build();
                 System.err.println("loaded source" + source.toString());
                 context.eval(source);
                 /**
