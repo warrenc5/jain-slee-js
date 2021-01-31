@@ -12,13 +12,13 @@ export function createProfileTable(spec, tableName, profileName) {
     try {
         profile = profileProvMBean.getProfile(tableName, profileName);
     } catch (e) {
-        print("profile does not exist ", e, ", objectName:", objectName, ", tableName:", tableName, ", profileName:", profileName);
+        console.log("profile does not exist ", e, ", objectName:", objectName, ", tableName:", tableName, ", profileName:", profileName);
     }
 
     if (profile === undefined || profile === null) {
         var a2 = profileProvMBean.ProfileTables
-        //if(debug)
-        print("profileTables:", a2);
+        if (debug)
+            console.log("profileTables:", a2);
         var a = toArray(a2);
 
         var k = a.filter(function (n) {
@@ -26,10 +26,10 @@ export function createProfileTable(spec, tableName, profileName) {
         }).shift();
 
         if (k === undefined) {
-            print("creating " + tableName + " " + spec.toString());
+            console.log("creating " + tableName + " " + spec.toString());
             try {
                 profileProvMBean.createProfileTable(spec, tableName);
-                print("created table " + tableName);
+                console.log("created table " + tableName);
             } catch (e) {
                 console.log("error creating table: ", spec, tableName, e)
                 throw e;
@@ -41,7 +41,7 @@ export function createProfileTable(spec, tableName, profileName) {
         if (debug) {
             try {
                 var p3 = profileProvMBean.getProfiles(tableName) //deprecated
-                print('profiles ', p3);
+                console.log('profiles ', p3);
 
                 var p2 = toArray(p3);
                 p2.filter(function (p) {
@@ -49,58 +49,63 @@ export function createProfileTable(spec, tableName, profileName) {
                 }).shift();
 
             } catch (e) {
-                print(e);
+                console.log(e);
             }
         }
 
         try {
             profile = profileProvMBean.getProfile(tableName, profileName)
         } catch (e) {
-            print("can't get profile", e);
+            console.log("can't get profile", e);
         }
         if (profile == null || profile === undefined) {
-            print("creating profile in table");
+            console.log("creating profile in table");
             try {
                 profile = profileProvMBean.createProfile(tableName, profileName);
             } catch (e) {
                 console.log("error creating profile in table ", tableName, profileName, e);
-                e.printStackTrace();
+                e.console.logStackTrace();
                 throw e;
             }
         }
     }
 
     if (profile === undefined) {
-        print("no profile, sorry", tableName, profileName);
+        if (debug)
+            console.log("no profile, sorry", tableName, profileName);
         return;
     }
     var profileMBean;
 
-    if (profile !== objectName) {
-        print("profile doesnt match objectName profile: ", profile, ", objectName: ", objectName);
+    if (profile.toString() !== objectName.toString()) {
+        if (debug)
+            console.log("profile doesnt match objectName\nprofile:", profile, "\nobjectName:", objectName);
         profileMBean = mbean(profile);
     } else {
-        print(profile);
+        if (debug)
+            console.log(profile);
         profileMBean = mbean(profile);
     }
 
 //FIXME - augment proxy
-/*
-    if (profileMBean !== null && profileMBean !== undefined) {
-        profileMBean.deleteProfile = function () {
-            console.log("removing ", tableName, profileName);
-            profileProvMBean.removeProfile(tableName, profileName);
-        };
-    }
-*/
+    /*
+     if (profileMBean !== null && profileMBean !== undefined) {
+     profileMBean.deleteProfile = function () {
+     console.log("removing ", tableName, profileName);
+     profileProvMBean.removeProfile(tableName, profileName);
+     };
+     }
+     */
 
     return profileMBean;
 }
 
 export function toString(a) {
-    var k = "["
-    for (var s = 0;
-    s < a.length; s++) {
+    if(!Arrays.isArray(a))
+        return a;
+
+    var k = "[";
+    for (var s = 0; s < a.length; s++) {
         k += a[s]
         if (s < a.length - 1) {
             k += ', '
@@ -131,13 +136,13 @@ export function objectArray(array) {
     }
     try {
         if (trace)
-            print("1!", arrayToString(array))
+            console.log("1!", arrayToString(array))
         var to = Java.to(array, "java.lang.Object[]");
         if (trace)
-            print("!!", arrayToString(to))
+            console.log("!!", arrayToString(to))
         return to;
     } catch (e) {
-        print("e1**" + e);
+        console.log("e1**" + e);
         return Java.to([], "java.lang.Object[]");
     }
 }
@@ -151,7 +156,7 @@ export function stringArray(array) {
     try {
         return Java.to(array, "java.lang.String[]");
     } catch (e) {
-        print("e2**" + e);
+        console.log("e2**" + e);
         return Java.to([], "java.lang.String[]");
     }
 }
@@ -188,7 +193,7 @@ export function arrayToString(o, pad) {
         } catch (e) {
         }
 
-        print(pad + " " + s + " " + type + " " + v);
+        console.log(pad + " " + s + " " + type + " " + v);
 
         if (o[s] == null)
             continue;

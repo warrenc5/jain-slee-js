@@ -4,7 +4,6 @@ const debug = js_debug || false
 const trace = js_trace || false
 
 export function connect() {
-    print("connecting")
     var mmConnection = null
 //mobicents
 //debug = true
@@ -59,11 +58,11 @@ export function connect() {
         return connection != null;
     } catch (e) {
         if (typeof e == 'object') {
-            print("connection exception", e)
+            console.log("connection exception", e)
         } else {
             print("connection exception", e)
         }
-        return false;
+        throw e;
     }
     return false;
 }

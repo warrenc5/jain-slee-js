@@ -1,16 +1,14 @@
 package org.jboss.marshalling.reflect;
 
-import com.oracle.svm.core.annotate.Substitute;
-import com.oracle.svm.core.annotate.TargetClass;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.AbstractSet;
 import java.util.HashSet;
 
-@TargetClass(value = org.jboss.marshalling.reflect.JDKSpecific.class)
+//@TargetClass(value = org.jboss.marshalling.reflect.JDKSpecific.class)
 final class Target_org_jboss_marshalling_reflect_JDKSpecific {
 
-    @Substitute(polymorphicSignature = false)
+    //@Substitute(polymorphicSignature = false)
     static Constructor<?> newConstructorForSerialization(Class<?> classToInstantiate, Constructor<?> constructorToCall) {
 
         System.out.println(classToInstantiate.getName() + " " + constructorToCall.toGenericString());

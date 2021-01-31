@@ -1,7 +1,7 @@
 import * as jmx from '/resource:js/mofokom/jain-slee-graal/15-jmx-base.js'
-import * as connect from '/resource:js/mofokom/jain-slee-graal/20-connect.js'
+import * as connect from '/resource:js/mofokom/jain-slee-graal/20-connect.js';
 
-        var _sleeMBean
+var _sleeMBean
 var _sbbMBean
 var _activityMBean
 
@@ -31,17 +31,23 @@ try {
             _sbbMBean = jmx.mbean("org.mobicents.slee:name=SbbEntitiesMBean", false)
             _activityMBean = jmx.mbean("org.mobicents.slee:name=ActivityManagementMBean", false)
         } catch (e) {
-            print("not mobicents")
+            if (debug) {
+                print("not mobicents")
+            }
         }
 
 //Opencloud Rhino specific
         try {
             _houseKeepingMBean = jmx.mbean("com.opencloud.rhino:type=Housekeeping")
             _node = java.lang.Integer.valueOf(101)
-            print("returned " + houseKeepingMBean)
+            if (debug) {
+                print("returned " + houseKeepingMBean)
+            }
             _nodeHouseKeepingMBean = (houseKeepingMBean == null) ? null : jmx.mbean(houseKeepingMBean.getNodeHousekeeping(node))
         } catch (e) {
-            print("not opencloud")
+            if (debug) {
+                print("not opencloud")
+            }
         }
 
         _alarmMBean = jmx.mbean(_sleeMBean.AlarmMBean, false)
@@ -72,7 +78,7 @@ export const activityMBean = _activityMBean
 //Opencloud Rhino specific
 export const houseKeepingMBean = _houseKeepingMBean == null ? {} : _houseKeepingMBean
 export const houseKeepingNode = _node
-export const nodeHouseKeepingMBean = _nodeHouseKeepingMBean == null ? {}: _nodeHouseKeepingMBean
+export const nodeHouseKeepingMBean = _nodeHouseKeepingMBean == null ? {} : _nodeHouseKeepingMBean
 
 export const alarmMBean = _alarmMBean
 export const deploymentMBean = _deploymentMBean

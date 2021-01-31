@@ -15,6 +15,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.FileSystem;
@@ -22,46 +23,58 @@ import org.graalvm.polyglot.io.FileSystem;
 public class RunScript {
 
     static {
+        System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
     }
+    private static ScriptEngine engine;
+    static boolean debug;
+    static boolean trace;
 
-    public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
-        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    public static void init() {
+        //TestThis.main(args);
+        ScriptEngineManager scriptEngineManager;
+        scriptEngineManager = new ScriptEngineManager();
 
-        System.err.println(Arrays.asList(args).toString());
-        System.err.println("available " + scriptEngineManager.getEngineFactories().stream().map(f -> f.getLanguageName() + " " + f.getEngineName() + " " + f.getEngineVersion()).collect(toList()).toString());
+        if (debug) {
 
-        ScriptEngine engine = scriptEngineManager.getEngineByName("Graal.js");
+            System.err.println("available " + scriptEngineManager.getEngineFactories().stream().map(f -> f.getLanguageName() + " " + f.getEngineName() + " " + f.getEngineVersion()).collect(toList()).toString());
+        }
+
+        engine = scriptEngineManager.getEngineByName("Graal.js");
 
         if (engine == null) {
-            System.err.println("fallback to default");
+            if (debug) {
+                System.err.println("fallback to default");
+            }
             engine = scriptEngineManager.getEngineByName("js");
         }
 
         if (engine == null) {
-            System.err.println("fallback to nashorn");
+            if (debug) {
+                System.err.println("fallback to nashorn");
+            }
             engine = scriptEngineManager.getEngineByName("nashorn");
         }
 
         if (engine != null && engine.getFactory() != null) {
-            System.err.println(engine.ENGINE + " " + engine.toString());
+            if (debug) {
+                System.err.println(engine.ENGINE + " " + engine.toString());
+            }
             ScriptEngineFactory factory = engine.getFactory();
-            System.err.println("using " + factory.getEngineName() + " " + factory.getLanguageName());
-            System.err.println(factory.getExtensions().toString());
+            if (debug) {
+                System.err.println("using " + factory.getEngineName() + " " + factory.getLanguageName());
+                System.err.println(factory.getExtensions().toString());
+            }
+        }
+    }
+
+    public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
+
+        if (Boolean.getBoolean("js.debug")) {
+            System.err.println(Arrays.asList(args).toString());
         }
 
-        /**
-         * ServiceState ACTIVE = javax.slee.management.ServiceState.ACTIVE;
-         *
-         * System.setProperty("js.url", System.getProperty("js.url",
-         * "service:jmx:remote+http://localhost:9990"));
-         * System.setProperty("js.username", System.getProperty("js.username",
-         * "wozza")); System.setProperty("js.password",
-         * System.getProperty("js.password", "wozza"));
-         *
-         */
-        System.err.println(Arrays.asList(args).toString());
         Iterator<String> i = Arrays.asList(args).iterator();
         File f = null;
         while (i.hasNext()) {
@@ -71,9 +84,23 @@ public class RunScript {
             if (arg.startsWith("--")) {
                 String[] c = arg.substring(2).split("=");
                 String name = c[0].trim();
-                String value = c[1].trim();
-                System.setProperty(name, value);
-                System.err.println(name + " " + value);
+                String value = null;
+                if (name.equals("debug")) {
+                    debug = true;
+                    value = "true";
+                } else if (name.equals("trace")) {
+                    trace = true;
+                    value = "true";
+                } else if (c.length > 1) {
+                    value = c[1].trim();
+                }
+                System.setProperty("js." + name, value);
+                if (!name.equals("password")) {
+
+                    if (debug) {
+                        System.err.println(name + " " + value);
+                    }
+                }
             } else if (arg.startsWith("-")) {
                 if ("-v".equals(arg)) {
                     System.err.println("version 1.0");
@@ -88,20 +115,34 @@ public class RunScript {
             }
         }
         InputStream fin = null;
+        debug = debug || Boolean.getBoolean("js.debug");
+
+        String newName = null;
         if (f != null) {
-            System.err.println("using file " + f.getAbsolutePath());
+            if (debug) {
+                System.err.println("using file " + f.getAbsolutePath());
+            }
+            newName = f.getAbsolutePath();
             fin = new FileInputStream(f);
-        } else if (System.in.available() > 0) {
-            System.err.println("got old stream");
+        }
+        if (System.in.available() > 0) {
+            if (debug) {
+                System.err.println("got old stream");
+            }
+            newName = "stdin";
 
             fin = System.in;
-        } else if (System.inheritedChannel() != null) {
-            System.err.println("got stream");
+        }
+        if (System.inheritedChannel() != null) {
+            if (debug) {
+                System.err.println("got stream");
+            }
+            newName = "stdin";
             return;
         }
 
         if (fin == null) {
-            System.err.println("usage jslee-js --js.debug=true --js.username=wozza --js.password=wozza --js.url=service:jmx:remote+http://localhost:9990 myfile.js");
+            System.err.println("usage jslee-js --debug --trace --username=wozza --password=wozza --url=service:jmx:remote+http://localhost:9990 < myfile.js");
 
         } else {
 
@@ -123,29 +164,32 @@ public class RunScript {
                 bindings.putMember("js_password", System.getProperty("js.password"));
                 bindings.putMember("js_url", System.getProperty("js.url"));
                 bindings.putMember("js_debug", Boolean.getBoolean("js.debug"));
-                bindings.putMember("js_trace", Boolean.getBoolean("js.trace/J"));
+                bindings.putMember("js_trace", Boolean.getBoolean("js.trace"));
 
                 Value eval = context.eval("js", "Java.type('javax.management.ObjectName')");
                 if (eval.isNull()) {
-                    throw new Exception("failed");
+                    throw new Exception("failed eval objectName");
                 } else {
-                    System.out.println("have ObjectName " + eval.asHostObject());
+                    if (debug) {
+                        System.err.println("have ObjectName " + eval.asHostObject());
+                    }
                 }
-                Source source = Source.newBuilder("js", new InputStreamReader(fin), "main").mimeType("application/javascript+module").build();
-                System.err.println("loaded source" + source.toString());
+                Source source = Source.newBuilder("js", new InputStreamReader(fin), "main").mimeType("application/javascript+module").name(newName).build();
+                if (debug) {
+                    System.err.println("loaded source" + source.toString());
+                }
                 context.eval(source);
-                /**
-                 * } catch (PolyglotException x) { System.err.println("failed :"
-                 * + x.getMessage() + " source: " + x.getSourceLocation()); * }
-                 * catch (Exception x) { System.err.println("failed :" +
-                 * x.getMessage() + x.getClass().getName());
-                 * x.printStackTrace();
-                 *
-                 */
-
-            } catch (Exception x) {
+            } catch (PolyglotException x) {
+                System.err.println("failed :" + x.getMessage() + " source: " + x.getSourceLocation());
                 x.printStackTrace();
+            } catch (Exception x) {
+                System.err.println(x.getMessage());
+                if (debug) {
+                    x.printStackTrace();
+                }
+
             } finally {
+
             }
         }
 

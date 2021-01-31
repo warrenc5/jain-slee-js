@@ -70,8 +70,11 @@
   "name":"java.util.Collections$ReverseComparator"
   },
   {
+  "name":"java.io.IOException"
+  },
+  {
   "name":"java.lang.Exception",
-  "customTargetConstructorClass":"java.lang.Object"
+  "customTargetConstructorClass":"java.lang.Throwable"
   },
   {
   "name":"javax.management.MBeanNotificationInfo"

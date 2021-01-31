@@ -3,13 +3,12 @@ import * as util from '/resource:js/mofokom/jain-slee-graal/40-slee-util.js'
 export const debug = js_debug || false
 export const trace = js_trace || false
 
-if(debug) 
+if (debug)
     console.log("debug enabled")
-if(trace) 
+if (trace)
     console.log("trace enabled")
 
 var mmConnection;
-
 export function jmxConnect(hostport, name, username, password) {
 
     var urlPath = "/jndi/rmi://" + hostport + "/jmxconnector";
@@ -49,13 +48,15 @@ export function jmxConnectURL(urlPath, username, password) {
         throw new Error("no url specified");
 
     var url = new JMXServiceURL(urlPath);
-    console.log("connecting to " + url.toString());
+    if (debug)
+        console.log("connecting to " + url.toString());
 
     var factory = javax.management.remote.JMXConnectorFactory;
     var jboss = new org.jboss.remotingjmx.RemotingConnectorProvider;
     try {
         var jmxc = jboss.newJMXConnector(url, map);
-        console.log("provider " + jmxc);
+        if (debug)
+            console.log("provider " + jmxc);
         jmxc.connect();
         // note that the "mmConnection" is a global variable!
         mmConnection = jmxc.getMBeanServerConnection();
@@ -119,6 +120,7 @@ attribute.docString = "returns a new JMX Attribute using name and value given";
  * Returns MBeanInfo for given ObjectName. Strings are accepted.
  */
 function mbeanInfo(objName) {
+
     objName = objectName(objName);
     return mbeanConnection().getMBeanInfo(objName);
 }
@@ -204,11 +206,11 @@ setMBeanAttributes.docString = "sets specified Attributes of given ObjectName";
 function setMBeanAttribute(objName, attrName, attrValue) {
     var Attribute = Packages.javax.management.Attribute;
     objName = objectName(objName);
-    if(debug)
-    console.log(objName,attrName,attrValue)
+    if (debug)
+        console.log(objName, attrName, attrValue)
     mbeanConnection().setAttribute(objName, new Attribute(attrName, attrValue));
-    if(debug)
-    console.log("setted" ,objName,attrName,attrValue)
+    if (debug)
+        console.log("setted", objName, attrName, attrValue)
 }
 setMBeanAttribute.docString = "sets a single Attribute of given ObjectName";
 
@@ -248,14 +250,23 @@ function Info(objName) {
 
     try {
         this.objName = objName
-        this.info = mbeanInfo(objName);
 
         if (debug)
-            console.log("constructor called " + objName);
+            console.log("getting info", objName);
+
+        this.info = mbeanInfo(objName);
+
+        if (trace)
+            console.log("info ", this.info);
+
 
         this.attrMap = new Object()
 
         var attrs = this.info.getAttributes();
+
+        if (trace)
+            console.log("attrs ", attrs);
+
         for (var index in attrs) {
             if (debug)
                 console.log("  attr " + attrs[index].getName());
@@ -264,9 +275,12 @@ function Info(objName) {
             this.attrMap[attrs[index].getName()] = attrs[index].getName();
         }
 
-        if(debug)
-            console.log("operations ")
+        if (debug)
+            console.log("get operations")
         var opers = this.info.getOperations();
+
+        if (trace)
+            console.log("operations ", opers)
 
         this.operMap = {}
         this.operTypeMap = {}
@@ -316,6 +330,7 @@ function Info(objName) {
         }
     } catch (e) {
         console.log(e)
+        throw e
     }
 
 }
@@ -352,12 +367,18 @@ export function mbean(objNameString, async) {
     var objName = objectName(objNameString);
 
     if (debug)
-        console.log("object " + objName);
+        console.log("object-name " + objName);
 
     try {
         var info = mbeanInfo(objName);
     } catch (e) {
-        console.log("getting info", e);
+        if (debug)
+            console.log("error getting info", e);
+        throw e
+    }
+
+    if (info == null) {
+        console.log("no info ", objName);
         return null;
     }
 
@@ -370,17 +391,30 @@ export function mbean(objNameString, async) {
             return target.isAttribute(name) || target.isOperation(name);
         },
         get: function (target, name, receiver) {
+
+            if (name === Symbol.toPrimitive) {
+                return (hint) => {
+                    if (hint === "string")
+                        return objName.toString();
+                    else if (hint === "number")
+                        return 0;
+                    else
+                        return null;
+                };
+            }
+
             if (debug)
-                console.log("get" , name);
-            var m = target.isAttribute(name.replace(/^is/,""))
+                console.log("get", name);
+
+            var m = target.isAttribute(name.replace(/^is/, ""))
 
             if (name !== "toString" && (target.isAttribute(name) || m)) {
-                if(m){
-                    name = name.replace(/^is/,"")
+                if (m) {
+                    name = name.replace(/^is/, "")
                 }
                 if (debug)
                     console.log("attribute " + name);
-                
+
                 if (async) {
                     return getMBeanAttribute.future(target.objName, name);
                 } else {
@@ -388,13 +422,13 @@ export function mbean(objNameString, async) {
                         console.log(target.objName)
                     return getMBeanAttribute(target.objName, name);
                 }
-            } else if (name==="info" ){
+            } else if (name === "info") {
                 return info
-            } else if (name==="objName" ){
+            } else if (name === "objName") {
                 return objName
-            } else if (name ==="toJSON" || name ==="toString" || name==="help" || target.isOperation(name)) {
-                if(debug)
-                    console.log("op" , name);
+            } else if (name === "toJSON" || name === "toString" || name === "help" || target.isOperation(name)) {
+                if (debug)
+                    console.log("op", name);
                 var blank = function () {
                     return {name: name, info: target}
                 }
@@ -431,9 +465,9 @@ export function mbean(objNameString, async) {
                                     v = getMBeanAttribute(target().info.objName, e);
                                     o[e] = v
                                 }
-                                
+
                                 return o;
-                            } catch(e){
+                            } catch (e) {
                                 console.log(e)
                             }
                         }
@@ -444,11 +478,11 @@ export function mbean(objNameString, async) {
                                 console.log("  - " + k);
                             }
                             console.log("  operations:");
-                                for (const k of Object.keys(target().info.operMapNames).sort()) {
-                                    console.log("  - " + k + " = " + target().info.operResMap[k]);
-                                    if(target().info.operMapNames[k].length >0)
-                                        console.log("      " + target().info.operMapNames[k]);
-                                }
+                            for (const k of Object.keys(target().info.operMapNames).sort()) {
+                                console.log("  - " + k + " = " + target().info.operResMap[k]);
+                                if (target().info.operMapNames[k].length > 0)
+                                    console.log("      " + target().info.operMapNames[k]);
+                            }
                         } else if (target().info.isOperation(name)) {
                             if (debug)
                                 console.log("operation " + name);
@@ -505,14 +539,15 @@ export function mbean(objNameString, async) {
                 })
             } else {
                 if (debug)
-                console.log(name , "not found");
-                    //throw new Error("not found " + name);
+                    console.log(name, "not found");
+                //throw new Error("not found " + name);
                 return undefined;
             }
         },
 
         set: function (target, name, value, receiver) {
-            console.log("set",name)
+            if (trace)
+                console.log("set", name)
             if (target.isAttribute(name)) {
                 if (async) {
                     setMBeanAttribute.future(objName, name, value);

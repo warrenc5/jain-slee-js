@@ -13,23 +13,19 @@ import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
-import java.nio.file.spi.FileSystemProvider;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 import org.graalvm.polyglot.io.FileSystem;
 
 //Copied from Graal.
 public class MyFileSystem implements FileSystem {
 
-    private static final AtomicReference<FileSystemProvider> DEFAULT_FILE_SYSTEM_PROVIDER = new AtomicReference<>();
-    private static final String TMP_FILE = System.getProperty("java.io.tmpdir");
-    static final String FILE_SCHEME = "file";
+    static final String RESOURCE_SCHEME = "/resource:";
+    static final String RESOURCE = "resource";
+    static final String RESOURCE2 = "resource:";
 
     private volatile Path userDir;
-    private volatile Path tmpDir;
     private FileSystem delegate;
 
     MyFileSystem() {
@@ -52,7 +48,8 @@ public class MyFileSystem implements FileSystem {
 
     @Override
     public SeekableByteChannel newByteChannel(Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs) throws IOException {
-        if (path.toString().startsWith("/resource:")) {
+        //System.err.println("nbc " + path.toString());
+        if (path.toString().startsWith(RESOURCE_SCHEME)) {
             String name = path.toString().substring(10);
             URL resource = RunScript.class.getClassLoader().getResource(name);
             if (resource != null) {
@@ -61,35 +58,32 @@ public class MyFileSystem implements FileSystem {
         }
 
         final Path resolved = resolveRelative(path);
+        //System.err.println("nbc " + resolved.toString());
         return delegate.newByteChannel(resolved, options, attrs);
     }
 
     @Override
     public Path toRealPath(Path path, LinkOption... linkOptions) throws IOException {
-        //System.err.println(path.toString());
+        //System.err.println("toRealPath" + path.toString());
 
-        try {
-            if (path.toString().startsWith("/resource:")) {
-                //Thread.dumpStack();
+        if (path.toString().startsWith(RESOURCE_SCHEME)) {
+            try {
                 String name = path.toString().substring(10);
                 URL resource = RunScript.class.getClassLoader().getResource(name);
                 if (resource != null) {
                     //System.err.println(resource.toURI().getScheme() + " " + resource.toURI() + " " + resource.toExternalForm() + " " + resource.toURI().toURL().toExternalForm());
-                    if (resource.toURI().getScheme().equals("resource")) {
-                        //path = Paths.get(resource.toURI().toString().toString());
+                    if (resource.toURI().getScheme().equals(RESOURCE)) {
                         return path;
-                    } else if (resource.toURI().getScheme().equals("file")) {
-                        path = Paths.get(resource.toURI());
+                    } else {
                         return path;
                     }
                 }
-
-            } else if (path.toString().startsWith("resource:")) {
-                //Thread.dumpStack();
-                return path;
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+        } else if (path.toString().startsWith(RESOURCE)) {
+            return path;
         }
 
         final Path resolvedPath = resolveRelative(path);

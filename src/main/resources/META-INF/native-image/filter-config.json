@@ -1,5 +1,7 @@
 { "rules": [
     {"includeClasses": "javax.slee.**"},
-    {"includeClasses": "org.jboss.**"}
+    {"includeClasses": "org.jboss.**"},
+    {"includeClasses": "javax.management.**"}
+    
   ]
 }
