@@ -114,13 +114,18 @@ public class RunScript {
                 f = new File(arg);
             }
         }
+
         InputStream fin = null;
         debug = debug || Boolean.getBoolean("js.debug");
 
         String newName = null;
         if (f != null) {
             if (debug) {
-                System.err.println("using file " + f.getAbsolutePath());
+                System.err.println("using file " + f.getAbsolutePath() + " exists: " + f.exists());
+            }
+            if (!f.exists()) {
+                System.err.println("file not exists: " + f.getAbsolutePath());
+                System.exit(1);
             }
             newName = f.getAbsolutePath();
             fin = new FileInputStream(f);
