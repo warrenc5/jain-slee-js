@@ -19,6 +19,7 @@ import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.FileSystem;
+import org.jboss.marshalling.reflect.TestThis;
 
 public class RunScript {
 
@@ -32,7 +33,6 @@ public class RunScript {
     static boolean trace;
 
     public static void init() {
-        //TestThis.main(args);
         ScriptEngineManager scriptEngineManager;
         scriptEngineManager = new ScriptEngineManager();
 
@@ -71,6 +71,11 @@ public class RunScript {
 
     public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
 
+        TestThis.main(args);
+    }
+
+    public static void eval(String[] args) throws ScriptException, IOException, URISyntaxException {
+
         if (Boolean.getBoolean("js.debug")) {
             System.err.println(Arrays.asList(args).toString());
         }
@@ -85,16 +90,21 @@ public class RunScript {
                 String[] c = arg.substring(2).split("=");
                 String name = c[0].trim();
                 String value = null;
-                if (name.equals("debug")) {
+                if (c.length > 1) {
+                    value = c[1].trim();
+                } else if (name.equals("debug")) {
                     debug = true;
                     value = "true";
                 } else if (name.equals("trace")) {
                     trace = true;
                     value = "true";
-                } else if (c.length > 1) {
-                    value = c[1].trim();
                 }
+
                 System.setProperty("js." + name, value);
+
+                debug = Boolean.getBoolean("js.debug");
+                trace = Boolean.getBoolean("js.trace");
+
                 if (!name.equals("password")) {
 
                     if (debug) {

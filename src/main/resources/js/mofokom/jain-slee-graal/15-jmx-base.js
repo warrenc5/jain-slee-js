@@ -193,7 +193,6 @@ function getMBeanAttribute(objName, attrName) {
 }
 getMBeanAttribute.docString = "returns a single Attribute of given ObjectName";
 
-
 // sets MBean attributes
 function setMBeanAttributes(objName, attrList) {
     objName = objectName(objName);
@@ -237,7 +236,7 @@ function invokeMBean(objName, operation, params, signature) {
             util.arrayToString(params);
             util.arrayToString(signature);
         }
-        console.log(x, x.getMessage(), typeof x)
+        console.log(x, typeof x)
 
         throw x;
     }

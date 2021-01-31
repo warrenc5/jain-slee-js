@@ -32,7 +32,9 @@ try {
             _activityMBean = jmx.mbean("org.mobicents.slee:name=ActivityManagementMBean", false)
         } catch (e) {
             if (debug) {
-                print("not mobicents")
+                console.log("not mobicents")
+                if (trace)
+                    console.log(e);
             }
         }
 
@@ -46,7 +48,9 @@ try {
             _nodeHouseKeepingMBean = (houseKeepingMBean == null) ? null : jmx.mbean(houseKeepingMBean.getNodeHousekeeping(node))
         } catch (e) {
             if (debug) {
-                print("not opencloud")
+                console.log("not opencloud")
+                if (trace)
+                    console.log(e);
             }
         }
 
@@ -57,7 +61,9 @@ try {
         _serviceMBean = jmx.mbean(_sleeMBean.ServiceManagementMBean, false)
         _traceMBean = jmx.mbean(_sleeMBean.TraceMBean, false)
     } else {
-        print("no mbean server connection ")
+        if (debug) {
+            print("no mbean server connection ");
+        }
         throw "not connected to mbean server"
     }
 

@@ -28,7 +28,7 @@ public class MyFileSystem implements FileSystem {
     private volatile Path userDir;
     private FileSystem delegate;
 
-    MyFileSystem() {
+    public MyFileSystem() {
         delegate = FileSystem.newDefaultFileSystem();
     }
 
