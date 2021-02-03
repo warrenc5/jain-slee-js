@@ -47,6 +47,6 @@ try {
     console.log(e)
 }
 
-load('data.js');
+load('data.json');
 updateServiceProfile(service)
 data.forEach((item)=>updateHniProfile(item))

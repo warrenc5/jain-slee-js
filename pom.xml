@@ -203,33 +203,33 @@
                 </configuration>
             </plugin>
             <!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>animal-sniffer-maven-plugin</artifactId>
-                <version>1.18</version>
-                <configuration>
-                    <signature>
-                        <groupId>org.codehaus.mojo.signature</groupId>
-                        <artifactId>java18</artifactId>
-                        <version>1.0</version>
-                    </signature>
-                    <includeClasses>
-                        <includeClass>
-                            jdk.nashorn.api.scripting.ScriptObjectMirror
-                        </includeClass>
-                    </includeClasses>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>animal-sniffer</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
--->
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>animal-sniffer-maven-plugin</artifactId>
+                            <version>1.18</version>
+                            <configuration>
+                                <signature>
+                                    <groupId>org.codehaus.mojo.signature</groupId>
+                                    <artifactId>java18</artifactId>
+                                    <version>1.0</version>
+                                </signature>
+                                <includeClasses>
+                                    <includeClass>
+                                        jdk.nashorn.api.scripting.ScriptObjectMirror
+                                    </includeClass>
+                                </includeClasses>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>animal-sniffer</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>check</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+            -->
         </plugins>
         
     </build>
@@ -466,7 +466,30 @@
         </profile>
 
     </profiles>
+    <repositories>
+        <repository>
+            <id>jboss</id>
+            <name>Jboss</name>
+            <url>https://repository.jboss.org/ </url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+
+    </repositories>
 </project>
+
+
+
+
+
+
+
 
 
 

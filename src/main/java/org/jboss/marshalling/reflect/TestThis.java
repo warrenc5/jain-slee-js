@@ -31,19 +31,19 @@ public class TestThis {
         try {
             ObjectStreamClass.lookup(java.util.AbstractSet.class);
             System.err.println("AbstractSet WORKS");
-        } catch (Exception x) {
+        } catch (Throwable x) {
             x.printStackTrace();
         }
         try {
             ObjectStreamClass.lookup(EnumSet.class);
             System.err.println("EnumSet WORKS");
-        } catch (Exception x) {
+        } catch (Throwable x) {
             x.printStackTrace();
         }
         try {
             ObjectStreamClass.lookup(HashSet.class);
             System.err.println("HashSet WORKS");
-        } catch (Exception x) {
+        } catch (Throwable x) {
             x.printStackTrace();
         }
     }

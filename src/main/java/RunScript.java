@@ -72,6 +72,7 @@ public class RunScript {
     public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
 
         TestThis.main(args);
+        //eval(args);
     }
 
     public static void eval(String[] args) throws ScriptException, IOException, URISyntaxException {
