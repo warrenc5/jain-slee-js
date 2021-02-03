@@ -1,24 +1,120 @@
 [
-  {
-  "name":"java.lang.Throwable"
-  },
-  {
-  "name":"java.util.HashSet"
-  },
-  {
-  "name":"javax.management.OperationsException"
-  },
-  {
-  "name":"javax.management.JMException"
-  },
-  {
-  "name":"javax.management.InstanceNotFoundException"
-  },
-  {
-  "name":"java.lang.Exception"
-  },
-  {
-  "name":"java.util.EnumSet"
-  ,"customTargetConstructorClass":"java.util.AbstractSet"
-  }
+
+    {
+        "name": "javax.management.InstanceNotFoundException"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    }, 
+    {
+        "name": "javax.management.InstanceNotFoundException"
+        ,
+        "customTargetConstructorClass": "javax.management.OperationsException"
+    },{
+        "name": "javax.management.InstanceNotFoundException"
+        ,
+        "customTargetConstructorClass": "javax.management.JMException"
+    }, 
+    {
+        "name": "javax.management.InstanceNotFoundException"
+        ,
+        "customTargetConstructorClass": "java.lang.Exception"
+    }, {
+        "name": "javax.management.InstanceNotFoundException"
+        ,
+        "customTargetConstructorClass": "java.lang.Throwable"
+    }, {
+        "name": "javax.management.InstanceNotFoundException"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "javax.management.OperationsException"
+        ,
+        "customTargetConstructorClass": "java.lang.Throwable"
+    },
+
+    {
+        "name": "javax.management.OperationsException"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+
+    {
+        "name": "javax.management.OperationsException"
+        ,
+        "customTargetConstructorClass": "java.lang.Exception"
+    },
+
+    {
+        "name": "javax.management.OperationsException"
+        ,
+        "customTargetConstructorClass": "javax.management.JMException"
+    },
+    {
+        "name": "javax.management.JMException"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "javax.management.JMException"
+        ,
+        "customTargetConstructorClass": "java.lang.Throwable"
+    },
+    {
+        "name": "javax.management.JMException"
+        ,
+        "customTargetConstructorClass": "java.lang.Exception"
+    },
+    {
+        "name": "java.lang.Throwable"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "java.util.HashSet"
+    },
+    {
+        "name": "javax.management.OperationsException"
+    },
+    {
+        "name": "javax.management.JMException"
+    },
+    {
+        "name": "javax.management.InstanceNotFoundException"
+    },
+    {
+        "name": "java.lang.Exception"
+        ,
+        "customTargetConstructorClass": "java.lang.Throwable"
+    },
+    {
+        "name": "java.lang.Exception"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "java.util.EnumSet"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "java.util.EnumSet"
+        ,
+        "customTargetConstructorClass": "java.util.AbstractSet"
+    },
+    {
+        "name": "java.util.EnumSet"
+        ,
+        "customTargetConstructorClass": "java.util.AbstractCollection"
+    },
+    {
+        "name": "java.util.AbstractSet"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "java.util.AbstractSet"
+        ,
+        "customTargetConstructorClass": "java.util.AbstractCollection"
+    }
 ]

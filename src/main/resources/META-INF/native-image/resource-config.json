@@ -1,5 +1,31 @@
 {
   "resources":{
-  "includes":[]},
+  "includes":[
+    {"pattern":"\\QMETA-INF/services/com.oracle.truffle.api.TruffleLanguage$Provider\\E"}, 
+    {"pattern":"\\QMETA-INF/services/com.oracle.truffle.api.instrumentation.TruffleInstrument$Provider\\E"}, 
+    {"pattern":"\\QMETA-INF/services/com.oracle.truffle.api.library.DefaultExportProvider\\E"}, 
+    {"pattern":"\\QMETA-INF/services/com.oracle.truffle.api.object.LayoutFactory\\E"}, 
+    {"pattern":"\\QMETA-INF/services/com.oracle.truffle.js.runtime.Evaluator\\E"}, 
+    {"pattern":"\\QMETA-INF/services/java.nio.file.spi.FileSystemProvider\\E"}, 
+    {"pattern":"\\QMETA-INF/services/java.security.Provider\\E"}, 
+    {"pattern":"\\QMETA-INF/services/javax.security.sasl.SaslClientFactory\\E"}, 
+    {"pattern":"\\QMETA-INF/services/javax.security.sasl.SaslServerFactory\\E"}, 
+    {"pattern":"\\QMETA-INF/services/org.graalvm.polyglot.impl.AbstractPolyglotImpl\\E"}, 
+    {"pattern":"\\QMETA-INF/services/org.jboss.marshalling.ProviderDescriptor\\E"}, 
+    {"pattern":"\\QMETA-INF/services/org.xnio.XnioProvider\\E"}, 
+    {"pattern":"\\Qcom/oracle/truffle/nfi/impl/NFILanguageImpl.class\\E"}, 
+    {"pattern":"\\Qjs/jain-slee.js\\E"}, 
+    {"pattern":"\\Qjs/mofokom/jain-slee-graal/10-imports.js\\E"}, 
+    {"pattern":"\\Qjs/mofokom/jain-slee-graal/15-jmx-base.js\\E"}, 
+    {"pattern":"\\Qjs/mofokom/jain-slee-graal/20-connect.js\\E"}, 
+    {"pattern":"\\Qjs/mofokom/jain-slee-graal/30-mbeans.js\\E"}, 
+    {"pattern":"\\Qjs/mofokom/jain-slee-graal/40-slee-util.js\\E"}, 
+    {"pattern":"\\Qjs/mofokom/jain-slee-graal/index.js\\E"}, 
+    {"pattern":"\\Qjs/util/profile.js\\E"}, 
+    {"pattern":"\\Qorg/jboss/remoting3/Version.properties\\E"}, 
+    {"pattern":"\\Qorg/wildfly/security/Version.properties\\E"}, 
+    {"pattern":"\\Qorg/xnio/Version.properties\\E"}, 
+    {"pattern":"\\Qorg/xnio/nio/Version.properties\\E"}
+  ]},
   "bundles":[]
 }
