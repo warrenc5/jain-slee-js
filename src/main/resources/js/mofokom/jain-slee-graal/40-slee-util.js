@@ -64,7 +64,7 @@ export function createProfileTable(spec, tableName, profileName) {
                 profile = profileProvMBean.createProfile(tableName, profileName);
             } catch (e) {
                 console.log("error creating profile in table ", tableName, profileName, e);
-                e.console.logStackTrace();
+                console.log(e.StackTrace());
                 throw e;
             }
         }
