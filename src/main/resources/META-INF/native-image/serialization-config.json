@@ -246,7 +246,7 @@
   },
   {
   "name":"javax.management.MBeanException"
-        ,  "customTargetConstructorClass": "java.management.JmxException"
+        ,  "customTargetConstructorClass": "java.management.JMException"
   },
   {
   "name":"javax.management.MBeanException"

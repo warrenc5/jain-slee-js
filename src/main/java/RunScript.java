@@ -28,6 +28,7 @@ public class RunScript {
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
         ObjectStreamClass.lookup(javax.management.InstanceNotFoundException.class);
+        ObjectStreamClass.lookup(javax.management.MBeanException.class);
         ObjectStreamClass.lookup(javax.slee.management.SleeState.class);
         ObjectStreamClass.lookup(javax.slee.ServiceID.class);
         ObjectStreamClass.lookup(javax.slee.ServiceID[].class);

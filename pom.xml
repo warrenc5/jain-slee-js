@@ -25,7 +25,7 @@
             <groupId>javax.slee</groupId>
             <artifactId>jainslee-api</artifactId>
             <version>1.1</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <groupId>javax.resource</groupId>
@@ -483,30 +483,6 @@
 
     </repositories>
 </project>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
