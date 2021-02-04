@@ -24,7 +24,6 @@ final class Target_org_jboss_marshalling_reflect_SerializableClass {
 
     @Substitute
     public static <T> T invokeConstructorNoException(Constructor<T> constructor, Object... args) {
-        System.err.println("this is mine " + constructor.toGenericString());
         if (constructor == null) {
             throw new IllegalArgumentException("No matching constructor");
         }
@@ -33,15 +32,20 @@ final class Target_org_jboss_marshalling_reflect_SerializableClass {
         } catch (InvocationTargetException e) {
             final Throwable te = e.getTargetException();
             if (te instanceof RuntimeException) {
+                System.err.println("this is mine " + constructor.toGenericString());
                 throw (RuntimeException) te;
             } else if (te instanceof Error) {
+                System.err.println("this is mine " + constructor.toGenericString());
                 throw (Error) te;
             } else {
+                System.err.println("this is mine " + constructor.toGenericString());
                 throw new IllegalStateException("Unexpected exception", te);
             }
         } catch (InstantiationException e) {
+            System.err.println("this is mine " + constructor.toGenericString());
             throw new IllegalStateException("Instantiation failed unexpectedly", e);
         } catch (IllegalAccessException e) {
+            System.err.println("this is mine " + constructor.toGenericString());
             throw new IllegalStateException("Constructor is unexpectedly inaccessible", e);
         }
     }

@@ -27,6 +27,7 @@ public class RunScript {
         System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
+        ObjectStreamClass.lookup(java.util.HashSet.class);
         ObjectStreamClass.lookup(javax.management.InstanceNotFoundException.class);
         ObjectStreamClass.lookup(javax.management.MBeanException.class);
         ObjectStreamClass.lookup(javax.slee.management.SleeState.class);
@@ -34,7 +35,7 @@ public class RunScript {
         ObjectStreamClass.lookup(javax.slee.ServiceID[].class);
         ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
         ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
-
+        ObjectStreamClass.lookup(java.util.Collections.class);
     }
     private static ScriptEngine engine;
     static boolean debug;
@@ -205,7 +206,9 @@ public class RunScript {
                 context.eval(source);
             } catch (PolyglotException x) {
                 System.err.println("failed :" + x.getMessage() + " source: " + x.getSourceLocation());
-                x.printStackTrace();
+                if (trace) {
+                    x.printStackTrace();
+                }
             } catch (Exception x) {
                 System.err.println(x.getMessage());
                 if (debug) {
