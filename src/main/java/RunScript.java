@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectStreamClass;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
@@ -19,7 +20,6 @@ import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.FileSystem;
-import org.jboss.marshalling.reflect.TestThis;
 
 public class RunScript {
 
@@ -27,6 +27,12 @@ public class RunScript {
         System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
+        ObjectStreamClass.lookup(javax.management.InstanceNotFoundException.class);
+        ObjectStreamClass.lookup(javax.slee.management.SleeState.class);
+        ObjectStreamClass.lookup(javax.slee.ServiceID.class);
+        ObjectStreamClass.lookup(javax.slee.ServiceID[].class);
+        ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
+
     }
     private static ScriptEngine engine;
     static boolean debug;
@@ -71,8 +77,8 @@ public class RunScript {
 
     public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
 
-        TestThis.main(args);
-        //eval(args);
+        //TestThis.main(args);
+        eval(args);
     }
 
     public static void eval(String[] args) throws ScriptException, IOException, URISyntaxException {

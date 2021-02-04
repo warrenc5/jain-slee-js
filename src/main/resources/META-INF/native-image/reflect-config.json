@@ -6383,6 +6383,7 @@
   "fields":[{"name":"accessOrder", "allowUnsafeAccess":true}],
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
+
 {
   "name":"java.util.LinkedHashSet",
   "allDeclaredFields":true,
@@ -6635,6 +6636,9 @@
 },
 {
   "name":"javax.slee.SbbID"
+},
+{
+  "name":"javax.slee.ServiceID[]"
 },
 {
   "name":"javax.slee.ServiceID"
