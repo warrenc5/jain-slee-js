@@ -32,6 +32,7 @@ public class RunScript {
         ObjectStreamClass.lookup(javax.slee.ServiceID.class);
         ObjectStreamClass.lookup(javax.slee.ServiceID[].class);
         ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
+        ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
 
     }
     private static ScriptEngine engine;

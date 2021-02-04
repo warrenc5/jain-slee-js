@@ -246,6 +246,10 @@
   },
   {
   "name":"javax.management.MBeanException"
+        ,  "customTargetConstructorClass": "java.management.JmxException"
+  },
+  {
+  "name":"javax.management.MBeanException"
         ,  "customTargetConstructorClass": "java.lang.Exception"
   },
   {
@@ -254,6 +258,17 @@
   },
   {
   "name":"javax.management.MBeanException"
+        ,  "customTargetConstructorClass": "java.lang.Object"
+  },{
+  "name":"javax.slee.InvalidArgumentException"
+        ,  "customTargetConstructorClass": "java.lang.Exception"
+  },
+  {
+  "name":"javax.slee.InvalidArgumentException"
+        ,  "customTargetConstructorClass": "java.lang.Throwable"
+  },
+  {
+  "name":"javax.slee.InvalidArgumentException"
         ,  "customTargetConstructorClass": "java.lang.Object"
   },
   {
