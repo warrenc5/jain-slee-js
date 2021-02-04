@@ -1,5 +1,13 @@
 [
 {
+  "name":"java.util.Collections$UnmodifiableCollection",
+  "allDeclaredFields":true,
+  "allPublicFields":true,
+  "allPublicMethods":true,
+  "allPublicConstructors":true,
+  "fields":[{"name":"type", "allowUnsafeAccess":true}]
+},
+{
   "name":"boolean[]"
 },
 {
@@ -6633,6 +6641,9 @@
 },
 {
   "name":"javax.slee.EventTypeID"
+},
+{
+  "name":"javax.slee.SbbID[]"
 },
 {
   "name":"javax.slee.SbbID"

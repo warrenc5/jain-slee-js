@@ -94,6 +94,9 @@
         "name": "javax.slee.management.SleeState"
     },
     {
+        "name": "javax.slee.SbbID"
+    },
+    {
         "name": "javax.slee.ServiceID"
     },
     {
