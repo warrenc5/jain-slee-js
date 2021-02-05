@@ -6,6 +6,8 @@ import java.io.ObjectStreamClass;
 import java.io.ObjectStreamField;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.HashSet;
 
 @TargetClass(org.jboss.marshalling.reflect.SerializableClass.class)
 @SuppressWarnings({"unused"})
@@ -28,6 +30,10 @@ final class Target_org_jboss_marshalling_reflect_SerializableClass {
             throw new IllegalArgumentException("No matching constructor");
         }
         try {
+            if (Modifier.isAbstract(constructor.getDeclaringClass().getModifiers())) {
+                System.err.println("this is mine " + constructor.toGenericString());
+                return (T) HashSet.class.getConstructor(new Class[]{}).newInstance(args);
+            } else
             return constructor.newInstance(args);
         } catch (InvocationTargetException e) {
             final Throwable te = e.getTargetException();
@@ -47,6 +53,13 @@ final class Target_org_jboss_marshalling_reflect_SerializableClass {
         } catch (IllegalAccessException e) {
             System.err.println("this is mine " + constructor.toGenericString());
             throw new IllegalStateException("Constructor is unexpectedly inaccessible", e);
+        } catch (NoSuchMethodException e) {
+
+            System.err.println("this is mine " + constructor.toGenericString());
+            throw new IllegalStateException("Nosuch method", e);
+        } catch (SecurityException e) {
+            System.err.println("this is mine " + constructor.toGenericString());
+            throw new IllegalStateException("security ", e);
         }
     }
 

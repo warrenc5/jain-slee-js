@@ -16,16 +16,10 @@ export function createProfileTable(spec, tableName, profileName) {
     }
 
     if (profile === undefined || profile === null) {
-        var a2 = profileProvMBean.ProfileTables
+        var profileTables = profileProvMBean.ProfileTables;
         if (debug)
-            console.log("profileTables:", a2);
-        var a = toArray(a2);
-
-        var k = a.filter(function (n) {
-            return n === tableName
-        }).shift();
-
-        if (k === undefined) {
+            console.log("profileTables:", profileTables);
+        if(!toArray(profileTables).includes(tableName)) {
             console.log("creating " + tableName + " " + spec.toString());
             try {
                 profileProvMBean.createProfileTable(spec, tableName);
@@ -40,13 +34,12 @@ export function createProfileTable(spec, tableName, profileName) {
 
         if (debug) {
             try {
-                var p3 = profileProvMBean.getProfiles(tableName) //deprecated
-                console.log('profiles ', p3);
+                var profile = profileProvMBean.getProfiles(tableName) //deprecated
+                console.log('profiles ', profile);
 
-                var p2 = toArray(p3);
-                p2.filter(function (p) {
+                profile = toArray(profile).filter(function (p) {
                     return p.getProfileName() == profileName;
-                }).shift();
+                });
 
             } catch (e) {
                 console.log(e);

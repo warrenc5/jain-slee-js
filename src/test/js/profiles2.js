@@ -39,8 +39,6 @@ function updateHniProfile(newObject) {
 }
 //removeServiceProfile()
 
-console.log(js.profileProvMBean)
-
 try {
     js.profileProvMBean.removeProfileTable('HNI Profile Table')
 } catch (e) {
