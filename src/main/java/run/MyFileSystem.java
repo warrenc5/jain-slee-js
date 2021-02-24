@@ -1,3 +1,5 @@
+package run;
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -77,6 +79,8 @@ public class MyFileSystem implements FileSystem {
                     } else {
                         return path;
                     }
+                } else {
+                    System.err.println("can't find path " + path.toString() + " with " + name + " in classloader ");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

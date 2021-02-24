@@ -1,12 +1,14 @@
-#!/bin/bash 
+#!/bin/bash  -x
 BASE=`dirname $0`
 
 CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*
 
 CLASSPATH=$BASE/src/main/js:$BASE/src/test/js:$BASE/target/classes/:$BASE/target/test-classes/:$CLASSPATH
+#JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
 let native=0 
 
 ARGV=""
+ARG=""
 NATIVEBASE=""
 while [[ $# > 0 ]] ; do
   case "$1" in
@@ -46,8 +48,6 @@ while [[ $# > 0 ]] ; do
       ;;
     *)
       ARG="$ARG ${1}"
-      shift
-
   esac
   shift
 done
@@ -85,7 +85,7 @@ ARGV="$ARGV --username=${js_username} --password=${js_password} --url=${js_url}"
 echo $NATIVEBASE $native 
 if [ $native -eq 0 ] ; then
 echo "java"
-java $JAVA_OPTS -classpath $CLASSPATH RunScript $ARGV $ARG
+java $JAVA_OPTS -classpath $CLASSPATH run.RunScript $ARGV $ARG
 fi
 if [ $native -eq 1 ] ; then
 echo "native"

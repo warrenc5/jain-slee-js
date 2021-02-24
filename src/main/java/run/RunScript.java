@@ -1,3 +1,4 @@
+package run;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +8,11 @@ import java.io.InputStreamReader;
 import java.io.ObjectStreamClass;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import static java.util.stream.Collectors.toList;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
@@ -16,6 +20,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.PolyglotAccess;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
@@ -40,6 +45,8 @@ public class RunScript {
     private static ScriptEngine engine;
     static boolean debug;
     static boolean trace;
+
+    static List<File> files = null;
 
     public static void init() {
         ScriptEngineManager scriptEngineManager;
@@ -84,6 +91,8 @@ public class RunScript {
         eval(args);
     }
 
+    static ThreadLocal<Context> contextLocal;
+
     public static void eval(String[] args) throws ScriptException, IOException, URISyntaxException {
 
         if (Boolean.getBoolean("js.debug")) {
@@ -91,6 +100,7 @@ public class RunScript {
         }
 
         Iterator<String> i = Arrays.asList(args).iterator();
+        files = new ArrayList<>();
         File f = null;
         while (i.hasNext()) {
             //TODO: add help
@@ -130,8 +140,17 @@ public class RunScript {
                 System.err.println("looking in classpath for " + u);
                 URL url = RunScript.class.getResource(u);
                 f = new File(url.toURI());
+                files.add(f);
             } else {
                 f = new File(arg);
+                files.add(f);
+                if (debug) {
+                    System.err.println("using file " + f.getAbsolutePath() + " exists: " + f.exists());
+                }
+                if (!f.exists()) {
+                    System.err.println("file not exists: " + f.getAbsolutePath());
+                    System.exit(1);
+                }
             }
         }
 
@@ -139,17 +158,6 @@ public class RunScript {
         debug = debug || Boolean.getBoolean("js.debug");
 
         String newName = null;
-        if (f != null) {
-            if (debug) {
-                System.err.println("using file " + f.getAbsolutePath() + " exists: " + f.exists());
-            }
-            if (!f.exists()) {
-                System.err.println("file not exists: " + f.getAbsolutePath());
-                System.exit(1);
-            }
-            newName = f.getAbsolutePath();
-            fin = new FileInputStream(f);
-        }
         if (System.in.available() > 0) {
             if (debug) {
                 System.err.println("got old stream");
@@ -163,27 +171,31 @@ public class RunScript {
                 System.err.println("got stream");
             }
             newName = "stdin";
-            return;
         }
 
-        if (fin == null) {
-            System.err.println("usage jslee-js --debug --trace --username=wozza --password=wozza --url=service:jmx:remote+http://localhost:9990 < myfile.js");
+        if (files.isEmpty() && fin == null) {
+            System.err.println("no input file\nusage jslee-js --debug --trace --username=wozza --password=wozza --url=service:jmx:remote+http://localhost:9990 somefile.js < myfile.js");
 
         } else {
-
             FileSystem delegate = new MyFileSystem();
             //TODO use graal
-            try (Context context = Context.newBuilder()
+            contextLocal = ThreadLocal.withInitial(() -> Context.newBuilder()
                     .allowNativeAccess(true)
                     .allowAllAccess(true)
                     .allowHostClassLoading(true)
                     .allowHostClassLookup(s -> true)
                     .allowHostAccess(HostAccess.ALL)
                     .allowIO(true)
-                    //.allowExperimentalOptions(true)
+                    .allowExperimentalOptions(true)
+                    .allowPolyglotAccess(PolyglotAccess.ALL)
                     //.option("js.nashorn-compat", "true")
+                    .logHandler(System.out)
+                    //.currentWorkingDirectory(Paths.get(System.getProperty("js.dir", ".")).toAbsolutePath())
+                    .err(System.err)
                     .fileSystem(delegate)
-                    .build()) {
+                    .build());
+
+            try (Context context = contextLocal.get()) {
                 Value bindings = context.getBindings("js");
                 bindings.putMember("js_username", System.getProperty("js.username"));
                 bindings.putMember("js_password", System.getProperty("js.password"));
@@ -199,13 +211,28 @@ public class RunScript {
                         System.err.println("have ObjectName " + eval.asHostObject());
                     }
                 }
-                Source source = Source.newBuilder("js", new InputStreamReader(fin), "main").mimeType("application/javascript+module").name(newName).build();
-                if (debug) {
-                    System.err.println("loaded source" + source.toString());
+
+                String mime = "application/javascript";
+                if (fin != null) {
+                    newName = "stdin";
+
+                    processSource(newName, fin, context, mime);
                 }
-                context.eval(source);
+
+                for (File f2 : files) {
+                    mime = Source.findMimeType(f2);
+
+                    newName = f2.getAbsolutePath();
+                    if (debug) {
+                        System.err.println(newName);
+                    }
+                    fin = new FileInputStream(f2);
+                    processSource(newName, fin, context, mime);
+                }
+
             } catch (PolyglotException x) {
                 System.err.println("failed :" + x.getMessage() + " source: " + x.getSourceLocation());
+                System.err.println(Arrays.asList(x.getPolyglotStackTrace()).toString());
                 if (trace) {
                     x.printStackTrace();
                 }
@@ -225,5 +252,29 @@ public class RunScript {
     @HostAccess.Export
     public static String getProperty(String name) {
         return System.getProperty(name);
+    }
+
+    private static void processSource(String newName, InputStream fin, Context context, String mime) throws IOException {
+        Source source = Source.newBuilder("js", new InputStreamReader(fin), newName).mimeType(mime).name(newName).cached(true).build();
+
+        if (debug) {
+            System.err.println("loaded source" + source.toString());
+        }
+        Value result = context.eval(source);
+
+        if (result.hasMembers()) {
+            Set<String> members = result.getMemberKeys();
+            for (String member : members) {
+                if (trace) {
+                    System.err.println("copy bindings " + member);
+                }
+                context.getBindings("js").putMember(member, result.getMember(member));
+            }
+        }
+
+
+        if (trace) {
+            System.err.println("bindings " + context.getBindings("js").getMemberKeys().toString());
+        }
     }
 }
