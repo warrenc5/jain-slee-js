@@ -207,8 +207,13 @@ function setMBeanAttribute(objName, attrName, attrValue) {
     objName = objectName(objName);
     if (debug)
         console.log(objName, attrName, attrValue)
+    try{
     mbeanConnection().setAttribute(objName, new Attribute(attrName, attrValue));
-    if (debug)
+    }catch(e){
+        if (trace)
+            console.log("failed set", objName, attrName, attrValue,e)
+    }
+    if (trace)
         console.log("setted", objName, attrName, attrValue)
 }
 setMBeanAttribute.docString = "sets a single Attribute of given ObjectName";
@@ -405,14 +410,17 @@ export function mbean(objNameString, async) {
             if (debug)
                 console.log("get", name);
 
-            var m = target.isAttribute(name.replace(/^is/, ""))
+            var m = target.isAttribute(name.replace(/^is/, ""));
 
+            
             if (name !== "toString" && (target.isAttribute(name) || m)) {
                 if (m) {
-                    name = name.replace(/^is/, "")
+                    name = name.replace(/^is/, "");
                 }
-                if (debug)
+
+                if (debug) {
                     console.log("attribute " + name);
+                }
 
                 if (async) {
                     return getMBeanAttribute.future(target.objName, name);
@@ -423,6 +431,8 @@ export function mbean(objNameString, async) {
                 }
             } else if (name === "info") {
                 return info
+            } else if (name === "_ALL_") {
+                return Object.keys(target.attrMap).map(n=>n);
             } else if (name === "objName") {
                 return objName
             } else if (name === "toJSON" || name === "toString" || name === "help" || target.isOperation(name)) {
@@ -545,8 +555,8 @@ export function mbean(objNameString, async) {
         },
 
         set: function (target, name, value, receiver) {
-            if (trace)
-                console.log("set", name)
+            if (debug)
+                console.log("set", name, value,async)
             if (target.isAttribute(name)) {
                 if (async) {
                     setMBeanAttribute.future(objName, name, value);
@@ -555,10 +565,9 @@ export function mbean(objNameString, async) {
                 }
                 return true;
             } else {
-                if (debug)
-                    console.log(name + "not found");
-                return undefined;
+                console.log("warning " + name + "not found");
             }
+            return false;
         }
     });
 

@@ -11,7 +11,7 @@ var debug = js_debug
 export function updateProfile(spec, tableName, profileName, newObject) {
     var profile = js.createProfileTable(spec, tableName, profileName)
     if (profile) {
-        if (debug)
+        //if (debug)
             console.log("before", JSON.stringify(profile))
         profile.editProfile()
         try {
@@ -23,7 +23,7 @@ export function updateProfile(spec, tableName, profileName, newObject) {
                 profile.commitProfile()
             }
         }
-        if (debug)
+        //if (debug)
             console.log("after", JSON.stringify(profile))
     }
 }

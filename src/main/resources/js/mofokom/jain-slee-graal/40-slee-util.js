@@ -32,6 +32,9 @@ export function createProfileTable(spec, tableName, profileName) {
             console.log("found ", tableName)
         }
 
+/**FIXME: 
+ * error getting info TypeError: invokeMember (getMBeanInfo) on org.jboss.remotingjmx.protocol.v2.ClientConnection$TheConnection@2b5825fa failed due to: Cannot convert '[]'(language: JavaScript, type: Array) to Java type 'javax.management.ObjectName': Unsupported target type.
+
         if (debug) {
             try {
                 var profile = profileProvMBean.getProfiles(tableName) //deprecated
@@ -46,6 +49,7 @@ export function createProfileTable(spec, tableName, profileName) {
             }
         }
 
+*/
         try {
             profile = profileProvMBean.getProfile(tableName, profileName)
         } catch (e) {
@@ -56,8 +60,9 @@ export function createProfileTable(spec, tableName, profileName) {
             try {
                 profile = profileProvMBean.createProfile(tableName, profileName);
             } catch (e) {
+                console.log("error ", e)
                 console.log("error creating profile in table ", tableName, profileName, e);
-                console.log(e.StackTrace());
+                console.log(e.stack);
                 throw e;
             }
         }
@@ -94,7 +99,7 @@ export function createProfileTable(spec, tableName, profileName) {
 }
 
 export function toString(a) {
-    if(!Arrays.isArray(a))
+    if(!a instanceof Array)
         return a;
 
     var k = "[";
@@ -113,11 +118,18 @@ export function toArray(collection) {
     if (collection instanceof Array) {
         return collection;
     }
-    var itr = collection.iterator();
     var array = new Array();
-    while (itr.hasNext()) {
-        array[array.length] = itr.next();
+    try {
+        var itr = collection.iterator();
+        while (itr.hasNext()) {
+            array.push(itr.next());
+        }
+    }catch(e) { 
+        for (var i = 0; i < collection.length; i++) {
+            array.push(collection[i]);
+        }
     }
+
     return array;
 }
 

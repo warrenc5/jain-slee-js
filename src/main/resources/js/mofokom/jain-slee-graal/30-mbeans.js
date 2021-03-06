@@ -16,6 +16,7 @@ var _resourceAdaptorMBean
 var _profileProvMBean
 var _serviceMBean
 var _traceMBean
+
 export const debug = js_debug || false
 export const trace = js_trace || false
 

@@ -51,7 +51,6 @@ public class RunScript {
     public static void init() {
         ScriptEngineManager scriptEngineManager;
         scriptEngineManager = new ScriptEngineManager();
-
         if (debug) {
 
             System.err.println("available " + scriptEngineManager.getEngineFactories().stream().map(f -> f.getLanguageName() + " " + f.getEngineName() + " " + f.getEngineVersion()).collect(toList()).toString());
@@ -157,6 +156,7 @@ public class RunScript {
         InputStream fin = null;
         debug = debug || Boolean.getBoolean("js.debug");
 
+        init();
         String newName = null;
         if (System.in.available() > 0) {
             if (debug) {

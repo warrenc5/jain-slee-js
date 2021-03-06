@@ -39,12 +39,14 @@ function updateHniProfile(newObject) {
 }
 //removeServiceProfile()
 
+console.log(js.profileProvMBean)
+
 try {
     js.profileProvMBean.removeProfileTable('HNI Profile Table')
 } catch (e) {
     console.log(e)
 }
 
-load('data.json');
+//load('data.js');
 updateServiceProfile(service)
 data.forEach((item)=>updateHniProfile(item))

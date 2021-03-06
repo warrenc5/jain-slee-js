@@ -19,7 +19,7 @@ var sbbs = js.sbbMBean.retrieveAllSbbEntities();
 
 console.log(Array.isArray(sbbs));
 
-js.objectArray(sbbs).forEach((item) => {
+js.toArray(sbbs).forEach((item) => {
     console.log(item)
 })
 

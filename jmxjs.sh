@@ -4,6 +4,9 @@ BASE=`dirname $0`
 CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*
 
 CLASSPATH=$BASE/src/main/js:$BASE/src/test/js:$BASE/target/classes/:$BASE/target/test-classes/:$CLASSPATH
+
+CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT-shade.jar
+
 #JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
 let native=0 
 
