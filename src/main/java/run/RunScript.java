@@ -1,5 +1,6 @@
 package run;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import static java.util.stream.Collectors.toList;
 import javax.script.ScriptEngine;
@@ -46,6 +48,7 @@ public class RunScript {
     static boolean debug;
     static boolean trace;
 
+    static final int BUFFER_SIZE = 2048;
     static List<File> files = null;
 
     public static void init() {
@@ -153,7 +156,7 @@ public class RunScript {
             }
         }
 
-        InputStream fin = null;
+        BufferedInputStream fin = null;
         debug = debug || Boolean.getBoolean("js.debug");
 
         init();
@@ -164,13 +167,13 @@ public class RunScript {
             }
             newName = "stdin";
 
-            fin = System.in;
+            fin = new BufferedInputStream(System.in, BUFFER_SIZE);
         }
         if (System.inheritedChannel() != null) {
             if (debug) {
                 System.err.println("got stream");
             }
-            newName = "stdin";
+            newName = "stdin-inherited";
         }
 
         if (files.isEmpty() && fin == null) {
@@ -212,21 +215,21 @@ public class RunScript {
                     }
                 }
 
-                String mime = "application/javascript";
+                String mime = null;
                 if (fin != null) {
+                    mime = detectMimeType(fin);
                     newName = "stdin";
 
                     processSource(newName, fin, context, mime);
                 }
 
                 for (File f2 : files) {
-                    mime = Source.findMimeType(f2);
-
                     newName = f2.getAbsolutePath();
                     if (debug) {
                         System.err.println(newName);
                     }
-                    fin = new FileInputStream(f2);
+                    fin = new BufferedInputStream(new FileInputStream(f2), BUFFER_SIZE);
+                    mime = detectMimeType(fin);
                     processSource(newName, fin, context, mime);
                 }
 
@@ -272,9 +275,19 @@ public class RunScript {
             }
         }
 
-
         if (trace) {
             System.err.println("bindings " + context.getBindings("js").getMemberKeys().toString());
         }
+    }
+
+    private static String detectMimeType(BufferedInputStream fin) throws IOException {
+        fin.mark(BUFFER_SIZE);
+        Scanner scanner = new Scanner(fin);
+        String mime = "application/javascript";
+        if (null != scanner.findWithinHorizon("^\\w*import", BUFFER_SIZE / 2)) {
+            mime = Source.findMimeType(new File("test.mjs"));
+        }
+        fin.reset();
+        return mime;
     }
 }
