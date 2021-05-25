@@ -1,12 +1,13 @@
 package run;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectStreamClass;
+import java.io.Reader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -177,7 +178,7 @@ public class RunScript {
         }
 
         if (files.isEmpty() && fin == null) {
-            System.err.println("no input file\nusage jslee-js --debug --trace --username=wozza --password=wozza --url=service:jmx:remote+http://localhost:9990 somefile.js < myfile.js");
+            System.err.println("no input file\nusage jmxjs --debug --trace --username=wozza --password=wozza [--url=service:jmx:remote+http://localhost:9990] [--host=localhost] [--port=9990] somefile.js < myfile.js");
 
         } else {
             FileSystem delegate = new MyFileSystem();
@@ -217,10 +218,11 @@ public class RunScript {
 
                 String mime = null;
                 if (fin != null) {
-                    mime = detectMimeType(fin);
+                    BufferedReader fr = new BufferedReader(new InputStreamReader(fin));
+                    mime = detectMimeType(fr);
                     newName = "stdin";
 
-                    processSource(newName, fin, context, mime);
+                    processSource(newName, fr, context, mime);
                 }
 
                 for (File f2 : files) {
@@ -228,9 +230,9 @@ public class RunScript {
                     if (debug) {
                         System.err.println(newName);
                     }
-                    fin = new BufferedInputStream(new FileInputStream(f2), BUFFER_SIZE);
-                    mime = detectMimeType(fin);
-                    processSource(newName, fin, context, mime);
+                    BufferedReader fr = new BufferedReader(new FileReader(f2), BUFFER_SIZE * 2);
+                    mime = detectMimeType(fr);
+                    processSource(newName, fr, context, mime);
                 }
 
             } catch (PolyglotException x) {
@@ -257,8 +259,8 @@ public class RunScript {
         return System.getProperty(name);
     }
 
-    private static void processSource(String newName, InputStream fin, Context context, String mime) throws IOException {
-        Source source = Source.newBuilder("js", new InputStreamReader(fin), newName).mimeType(mime).name(newName).cached(true).build();
+    private static void processSource(String newName, Reader fin, Context context, String mime) throws IOException {
+        Source source = Source.newBuilder("js", fin, newName).mimeType(mime).name(newName).cached(true).build();
 
         if (debug) {
             System.err.println("loaded source" + source.toString());
@@ -280,11 +282,14 @@ public class RunScript {
         }
     }
 
-    private static String detectMimeType(BufferedInputStream fin) throws IOException {
+    private static String detectMimeType(BufferedReader fin) throws IOException {
+        String mime = "application/javascript";
+        if (!fin.markSupported()) {
+            return mime;
+        }
         fin.mark(BUFFER_SIZE);
         Scanner scanner = new Scanner(fin);
-        String mime = "application/javascript";
-        if (null != scanner.findWithinHorizon("^\\w*import", BUFFER_SIZE / 2)) {
+        if (null != scanner.findWithinHorizon("^\\w*import", BUFFER_SIZE / 3)) {
             mime = Source.findMimeType(new File("test.mjs"));
         }
         fin.reset();

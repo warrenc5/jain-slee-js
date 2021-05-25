@@ -467,7 +467,7 @@ export function arrayToStringShort(o) {
     var result = "[";
     for (var s = 0; s < o.length; s++) {
         result += o[s].getClass()
-        if (s < o.length - 1)
+        if (s < o.length -1)
             result += ","
     }
     result = "]";

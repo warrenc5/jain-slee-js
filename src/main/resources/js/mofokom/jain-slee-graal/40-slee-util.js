@@ -29,7 +29,8 @@ export function createProfileTable(spec, tableName, profileName) {
                 throw e;
             }
         } else {
-            console.log("found ", tableName)
+            if(debug)
+                console.log("found table", tableName)
         }
 
 /**FIXME: 

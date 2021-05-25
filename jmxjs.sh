@@ -1,11 +1,12 @@
-#!/bin/bash  -x
+#!/bin/bash -x
 BASE=`dirname $0`
 
 CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*
 
 CLASSPATH=$BASE/src/main/js:$BASE/src/test/js:$BASE/target/classes/:$BASE/target/test-classes/:$CLASSPATH
 
-CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT-shade.jar
+#CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT-shade.jar
+CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.Final/jslee-js-1.0.Final-shade.jar
 
 #JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
 let native=0 
@@ -13,6 +14,8 @@ let native=0
 ARGV=""
 ARG=""
 NATIVEBASE=""
+IFS='\= ' read -r -a - <<< "$@"
+echo $@
 while [[ $# > 0 ]] ; do
   case "$1" in
     --host)
@@ -84,13 +87,11 @@ NATIVEBASE="."
 fi 
 
 ARGV="$ARGV --username=${js_username} --password=${js_password} --url=${js_url}"
-
-echo $NATIVEBASE $native 
 if [ $native -eq 0 ] ; then
-echo "java"
 java $JAVA_OPTS -classpath $CLASSPATH run.RunScript $ARGV $ARG
 fi
 if [ $native -eq 1 ] ; then
 echo "native"
+echo $NATIVEBASE $native 
 ${NATIVEBASE}/jslee-js $ARGV $ARG
 fi

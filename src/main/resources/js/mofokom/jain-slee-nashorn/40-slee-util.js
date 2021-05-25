@@ -6,7 +6,7 @@ function createProfileTable(spec, tableName, profileName) {
     try {
         profile = profileMBean.getProfile(tableName, profileName);
     } catch (e) {
-        print("profile does not exist ", e, profile);
+        print("quick check - profile does not exist ", e, profile);
     }
 
     if (profile === undefined || profile == null) {

@@ -116,6 +116,11 @@
             <version>7.5.1-45a</version>
         </dependency>
         <dependency>
+            <groupId>org.mobicents.protocols.sctp</groupId>
+            <artifactId>sctp-api</artifactId>
+            <version>1.8.15</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>

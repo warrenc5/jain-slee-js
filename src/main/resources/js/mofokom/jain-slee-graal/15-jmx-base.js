@@ -228,18 +228,16 @@ function invokeMBean(objName, operation, params, signature) {
     try {
 
         if (debug) {
-            console.log(objName, operation, params, util.arrayToStringShort(params), util.arrayToStringShort(signature), " > ");
+            console.log(objName, operation, params, signature, " > ");
         }
 
         res = mbeanConnection().invoke(objName, operation, params, signature);
         if (debug)
-            console.log(objName, operation, util.arrayToStringShort(params), " => result:", res);
+            console.log(objName, operation, params, " => result:", res);
 
     } catch (x) {
         if (debug) {
-            console.log(x, objName, operation, " < ");
-            util.arrayToString(params);
-            util.arrayToString(signature);
+            console.log(x, objName, operation, " < ", params, signature);
         }
         console.log(x, typeof x)
 
@@ -272,7 +270,7 @@ function Info(objName) {
             console.log("attrs ", attrs);
 
         for (var index in attrs) {
-            if (debug)
+            if (trace)
                 console.log("  attr " + attrs[index].getName());
 
             Java.type(stripArray(attrs[index].getType()))
@@ -462,7 +460,7 @@ export function mbean(objNameString, async) {
                         }
                         r += "]";
 
-                        if (debug)
+                        if (trace)
                             console.log("call " + name + " " + r);
 
                         //TODO move out of proxy - like toString
@@ -493,7 +491,7 @@ export function mbean(objNameString, async) {
                                     console.log("      " + target().info.operMapNames[k]);
                             }
                         } else if (target().info.isOperation(name)) {
-                            if (debug)
+                            if (trace)
                                 console.log("operation " + name);
 
                             //var params = util.objectArray(args);

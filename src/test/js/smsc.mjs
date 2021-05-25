@@ -10,7 +10,7 @@ function endAllActivities() {
 
     for (var i in contexts) {
         try {
-            js.activityMBean.endActivity(contexts[i][0]);
+            //js.activityMBean.endActivity(contexts[i][0]);
         } catch (e) {
             console.log(e);
         }
@@ -28,12 +28,12 @@ function showAllEntities() {
 }
 
 try { 
-endAllActivities();
+    endAllActivities();
+} catch (e) {
+    console.log(e.stack);
+}
 
-        } catch (e) {
-            console.log(e.stack);
-        }
-//showAllEntities();
+showAllEntities();
 
 var smsc = js.mbean("org.mobicents.smsc:layer=SmscStats,name=SmscManagement")
 

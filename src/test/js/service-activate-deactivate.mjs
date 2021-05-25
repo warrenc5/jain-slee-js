@@ -112,13 +112,14 @@ if ('serviceMBean' in js) {
 }
 exit 
 if ('resourceAdaptorMBean' in js) {
-//var ralinks = java.lang.reflect.Array.newInstance(java.lang.String, 100);
     try {
         var ralinks = js.resourceAdaptorMBean.getLinkNames();
         console.log("ra links", util.toString(ralinks));
+/*
         for (s in ralinks) {
             js.resourceAdaptorMBean.unbindLinkName(s);
         }
+*/
     } catch (e) {
         console.log("10. " + e);
     }
