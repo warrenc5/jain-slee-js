@@ -10,6 +10,10 @@ Automate or schedule common usage scenarios.
 * Activate/Deactivate services 
 * Create and manage Profiles Tables and Profiles
 
+Launch scripts from the command line
+
+usage jmxjs --debug --trace --username=wozza --password=wozza [--url=service:jmx:remote+http://localhost:9990] [--host=localhost] [--port=9990] somefile.js < myfile.js
+
 Use Javascript to manage JAIN SLEE Servers with JMX
 
 
