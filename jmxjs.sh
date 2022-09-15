@@ -1,15 +1,24 @@
 #!/bin/bash -x
 BASE=`dirname $0`
 
-CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*
+
+if [ -d target ] ; then 
 
 CLASSPATH=$BASE/src/main/js:$BASE/src/test/js:$BASE/target/classes/:$BASE/target/test-classes/:$CLASSPATH
+CLASSPATH=$BASE/target/jslee-js-1.0.Final.jar:$BASE/target/jmxjs-1.0.Final-shaded.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*
 
-#CLASSPATH=$BASE/target/jslee-js-1.0.0-SNAPSHOT-shade.jar
+else 
+
+CLASSPATH=$BASE/jmxjs-1.0.Final-shaded.jar
 CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.Final/jslee-js-1.0.Final-shade.jar
+
+fi 
 
 #JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
 let native=0 
+java $JAVA_OPTS -classpath $CLASSPATH run.RunScript $@
+
+exit
 
 ARGV=""
 ARG=""
@@ -87,6 +96,7 @@ NATIVEBASE="."
 fi 
 
 ARGV="$ARGV --username=${js_username} --password=${js_password} --url=${js_url}"
+
 if [ $native -eq 0 ] ; then
 java $JAVA_OPTS -classpath $CLASSPATH run.RunScript $ARGV $ARG
 fi

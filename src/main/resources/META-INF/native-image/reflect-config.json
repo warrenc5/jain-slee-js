@@ -1,13 +1,5 @@
 [
 {
-  "name":"java.util.Collections$UnmodifiableCollection",
-  "allDeclaredFields":true,
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true,
-  "fields":[{"name":"type", "allowUnsafeAccess":true}]
-},
-{
   "name":"boolean[]"
 },
 {
@@ -6391,7 +6383,6 @@
   "fields":[{"name":"accessOrder", "allowUnsafeAccess":true}],
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
-
 {
   "name":"java.util.LinkedHashSet",
   "allDeclaredFields":true,
@@ -6643,13 +6634,7 @@
   "name":"javax.slee.EventTypeID"
 },
 {
-  "name":"javax.slee.SbbID[]"
-},
-{
   "name":"javax.slee.SbbID"
-},
-{
-  "name":"javax.slee.ServiceID[]"
 },
 {
   "name":"javax.slee.ServiceID"

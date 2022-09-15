@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectStreamClass;
 import java.io.Reader;
+import static java.lang.String.format;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,8 +34,11 @@ public class RunScript {
 
     static {
         System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
+
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
+        javax.management.remote.JMXServiceURL.class.getClass();
+
         ObjectStreamClass.lookup(java.util.HashSet.class);
         ObjectStreamClass.lookup(javax.management.InstanceNotFoundException.class);
         ObjectStreamClass.lookup(javax.management.MBeanException.class);
@@ -44,7 +48,18 @@ public class RunScript {
         ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
         ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
         ObjectStreamClass.lookup(java.util.Collections.class);
+        ObjectStreamClass.lookup(javax.management.remote.JMXServiceURL.class);
+
+        /**
+        try {
+            ObjectStreamClass.lookup(org.jboss.remotingjmx.RemotingConnectorProvider.class);
+            org.jboss.remotingjmx.RemotingConnectorProvider p = new org.jboss.remotingjmx.RemotingConnectorProvider();
+            p.newJMXConnector(null, null);
+        } catch (Throwable t) {
+        }
+*/
     }
+
     private static ScriptEngine engine;
     static boolean debug;
     static boolean trace;
@@ -121,9 +136,23 @@ public class RunScript {
                 } else if (name.equals("trace")) {
                     trace = true;
                     value = "true";
+                } else if (name.equals("username")) {
+                    value = i.next();
+                } else if (name.equals("password")) {
+                    value = i.next();
+                } else if (name.equals("host")) {
+                    value = i.next();
+                } else if (name.equals("port")) {
+                    value = i.next();
+                } else if (name.equals("url")) {
+                    value = i.next();
                 }
 
-                System.setProperty("js." + name, value);
+                if (value == null) {
+                    System.err.println(name + "  was null");
+                } else {
+                    System.setProperty("js." + name, value);
+                }
 
                 debug = Boolean.getBoolean("js.debug");
                 trace = Boolean.getBoolean("js.trace");
@@ -155,6 +184,34 @@ public class RunScript {
                     System.exit(1);
                 }
             }
+        }
+
+        //System.setProperty("polyglot.engine.WarnInterpreterOnly","false");
+        if (System.getProperty("js.host") == null) {
+            System.setProperty("js.host", "localhost");
+        }
+
+        if (System.getProperty("js.port") == null) {
+            System.setProperty("js.port", "9990");
+        }
+
+        if (System.getProperty("js.url") == null) {
+            System.setProperty("js.url", "service:jmx:remote+http://" + System.getProperty("js.host") + ":" + System.getProperty("js.port"));
+        }
+
+        if (System.getProperty("js.username") == null) {
+            System.setProperty("js.username", "admin");
+        }
+
+        String value = null;
+        if ((value = System.getProperty("js.password")) != null && value.equals("-")) {
+            System.err.println("enter password");
+            String password = new Scanner(System.in).nextLine();
+            System.setProperty("js.password", password);
+        }
+
+        if (System.getProperty("js.password") == null) {
+            System.setProperty("js.password", "admin");
         }
 
         BufferedInputStream fin = null;
@@ -262,9 +319,14 @@ public class RunScript {
     private static void processSource(String newName, Reader fin, Context context, String mime) throws IOException {
         Source source = Source.newBuilder("js", fin, newName).mimeType(mime).name(newName).cached(true).build();
 
+        if (source == null) {
+            System.err.println(format("source built to null %s %s", newName, mime));
+        }
+
         if (debug) {
             System.err.println("loaded source" + source.toString());
         }
+
         Value result = context.eval(source);
 
         if (result.hasMembers()) {

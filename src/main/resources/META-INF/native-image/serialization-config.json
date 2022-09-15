@@ -1,25 +1,15 @@
 [
-    {
-        "name": "javax.slee.profile.UnrecognizedProfileTableNameException"
-        ,
-        "customTargetConstructorClass": "java.lang.Object"
-    },
-    {
-        "name": "javax.slee.profile.UnrecognizedProfileNameException"
-        ,
-        "customTargetConstructorClass": "java.lang.Object"
-    },
+
     {
         "name": "javax.management.InstanceNotFoundException"
         ,
         "customTargetConstructorClass": "java.lang.Object"
-    },
+    }, 
     {
         "name": "javax.management.InstanceNotFoundException"
         ,
         "customTargetConstructorClass": "javax.management.OperationsException"
-    }, 
-    {
+    },{
         "name": "javax.management.InstanceNotFoundException"
         ,
         "customTargetConstructorClass": "javax.management.JMException"
@@ -76,235 +66,55 @@
         "customTargetConstructorClass": "java.lang.Exception"
     },
     {
-        "name": "java.lang.Exception"
-        ,
-        "customTargetConstructorClass": "java.lang.Throwable"
-    },
-    {
-        "name": "java.lang.Exception"
-        ,
-        "customTargetConstructorClass": "java.lang.Object"
-    },
-    {
         "name": "java.lang.Throwable"
         ,
         "customTargetConstructorClass": "java.lang.Object"
-    },
-    {
-        "name": "javax.slee.management.SleeState"
-    },
-    {
-        "name": "javax.slee.SbbID"
-    },
-    {
-        "name": "javax.slee.ServiceID"
-    },
-    {
-        "name": "javax.management.OperationsException"
-    },
-    {
-        "name": "java.util.Collections$EmptyMap"
-    },
-    {
-        "name": "java.util.Collections$UnmodifiableSortedSet"
-    },
-    {
-        "name": "java.util.Collections$CopiesList"
-    },
-    {
-        "name": "javax.management.MBeanAttributeInfo"
-    },
-    {
-        "name": "java.util.Collections$UnmodifiableMap$UnmodifiableEntrySet"
-    },
-    {
-        "name": "java.util.Collections$UnmodifiableSortedMap"
-    },
-    {
-        "name": "java.util.Vector"
-    },
-    {
-        "name": "java.util.Collections$UnmodifiableList"
-    },
-    {
-        "name": "java.util.EnumSet"
-    },
-    {
-        "name": "java.util.IdentityHashMap"
-    },
-    {
-        "name": "java.util.EnumMap"
-    },
-    {
-        "name": "java.util.concurrent.ConcurrentHashMap"
-    },
-    {
-        "name": "javax.management.MBeanOperationInfo"
-    },
-    {
-        "name": "javax.management.ObjectName"
-    },
-    {
-        "name": "java.util.concurrent.CopyOnWriteArraySet"
-    },
-    {
-        "name": "java.util.Collections$ReverseComparator"
-    },
-    {
-        "name": "java.lang.Exception"
-    },
-    {
-        "name": "javax.management.MBeanNotificationInfo"
-    },
-    {
-        "name": "javax.management.MBeanConstructorInfo"
-    },
-    {
-        "name": "javax.management.JMException"
-    },
-    {
-        "name": "javax.management.MBeanFeatureInfo"
-    },
-    {
-        "name": "java.util.Collections$EmptySet"
-    },
-    {
-        "name": "java.util.concurrent.CopyOnWriteArrayList"
-    },
-    {
-        "name": "javax.slee.profile.UnrecognizedProfileTableNameException"
-    },
-    {
-        "name": "java.lang.Throwable"
-    },
-    {
-        "name": "javax.management.MBeanParameterInfo"
-    },
-    {
-        "name": "java.util.HashMap"
-    },
-    {
-        "name": "javax.slee.profile.ProfileSpecificationID"
-    },
-    {
-        "name": "java.util.TreeSet"
-    },
-    {
-        "name": "java.util.Stack"
-    },
-    {
-        "name": "java.util.ArrayList"
-    },
-    {
-        "name": "java.util.Collections$ReverseComparator2"
     },
     {
         "name": "java.util.HashSet"
+    },
+    {
+        "name": "javax.management.OperationsException"
+    },
+    {
+        "name": "javax.management.JMException"
+    },
+    {
+        "name": "javax.management.InstanceNotFoundException"
+    },
+    {
+        "name": "java.lang.Exception"
+        ,
+        "customTargetConstructorClass": "java.lang.Throwable"
+    },
+    {
+        "name": "java.lang.Exception"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "java.util.EnumSet"
+        ,
+        "customTargetConstructorClass": "java.lang.Object"
+    },
+    {
+        "name": "java.util.EnumSet"
         ,
         "customTargetConstructorClass": "java.util.AbstractSet"
     },
     {
-        "name": "java.util.HashSet"
+        "name": "java.util.EnumSet"
         ,
         "customTargetConstructorClass": "java.util.AbstractCollection"
     },
     {
-        "name": "java.util.HashSet"
+        "name": "java.util.AbstractSet"
         ,
         "customTargetConstructorClass": "java.lang.Object"
     },
     {
-        "name": "java.util.LinkedHashMap"
-    },
-    {
-        "name": "javax.management.Attribute"
-    },
-    {
-        "name": "javax.slee.profile.UnrecognizedProfileNameException"
-    },
-    {
-        "name": "java.lang.StackTraceElement"
-    },
-    {
-        "name": "java.util.Collections$SingletonSet"
-    },
-    {
-        "name": "java.util.LinkedList"
-    },
-    {
-        "name": "java.util.Collections$SingletonMap"
-    },
-    {
-        "name": "javax.management.InstanceNotFoundException"
-    },
-    {
-        "name": "java.util.Hashtable"
-    },
-    {
-        "name": "java.util.LinkedHashSet"
-    },
-    {
-        "name": "javax.slee.ComponentID"
-    },
-    {
-        "name": "java.util.Collections$UnmodifiableSet"
-    },
-    {
-        "name": "javax.slee.profile.ProfileID"
-    },
-    {
-        "name": "javax.management.MBeanInfo"
-    },
-    {
-        "name": "java.util.Collections$SingletonList"
-    },
-    {
-        "name": "java.util.Collections$UnmodifiableMap"
-    },
-    {
-        "name": "javax.management.MBeanException"
+        "name": "java.util.AbstractSet"
         ,
-        "customTargetConstructorClass": "javax.management.JMException"
-    },
-    {
-        "name": "javax.management.MBeanException"
-        ,
-        "customTargetConstructorClass": "java.lang.Exception"
-    },
-    {
-        "name": "javax.management.MBeanException"
-        ,
-        "customTargetConstructorClass": "java.lang.Throwable"
-    },
-    {
-        "name": "javax.management.MBeanException"
-        ,
-        "customTargetConstructorClass": "java.lang.Object"
-    }, {
-        "name": "javax.slee.InvalidArgumentException"
-        ,
-        "customTargetConstructorClass": "java.lang.Exception"
-    },
-    {
-        "name": "javax.slee.InvalidArgumentException"
-        ,
-        "customTargetConstructorClass": "java.lang.Throwable"
-    },
-    {
-        "name": "javax.slee.InvalidArgumentException"
-        ,
-        "customTargetConstructorClass": "java.lang.Object"
-    },
-    {
-        "name": "java.util.Collections$UnmodifiableCollection"
-    },
-    {
-        "name": "java.util.TreeMap"
-    },
-    {
-        "name": "java.util.Collections$EmptyList"
-    },
-    {
-        "name": "java.util.ArrayDeque"
+        "customTargetConstructorClass": "java.util.AbstractCollection"
     }
 ]
