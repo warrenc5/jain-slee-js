@@ -52,7 +52,8 @@ export function jmxConnectURL(urlPath, username, password) {
         console.log("connecting to " + url.toString());
 
     var factory = javax.management.remote.JMXConnectorFactory;
-    var jboss = new org.jboss.remotingjmx.RemotingConnectorProvider;
+    var RemotingConnectorProvider = org.jboss.remotingjmx.RemotingConnectorProvider;
+    var jboss = new RemotingConnectorProvider();
     try {
         var jmxc = jboss.newJMXConnector(url, map);
         if (debug)

@@ -8,6 +8,6 @@ cli.cmd("cd /subsystem=naming")
 result = cli.cmd(":jndi-view")
 response = result.getResponse()
 print
-print 'JNDI VIEW======================= '
+print '===================JNDI VIEW======================= '
 print response
 cli.disconnect()

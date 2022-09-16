@@ -33,12 +33,14 @@ import org.graalvm.polyglot.io.FileSystem;
 public class RunScript {
 
     static {
+        
         System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
 
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
         javax.management.remote.JMXServiceURL.class.getClass();
-
+        org.wildfly.security.sasl.util.PrivilegedSaslClientFactory.class.getClass();
+        org.wildfly.security.sasl.util.PrivilegedSaslClient.class.getClass();
         ObjectStreamClass.lookup(java.util.HashSet.class);
         ObjectStreamClass.lookup(javax.management.InstanceNotFoundException.class);
         ObjectStreamClass.lookup(javax.management.MBeanException.class);
@@ -48,7 +50,7 @@ public class RunScript {
         ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
         ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
         ObjectStreamClass.lookup(java.util.Collections.class);
-        ObjectStreamClass.lookup(javax.management.remote.JMXServiceURL.class);
+        ObjectStreamClass.lookup(org.jboss.remotingjmx.RemotingConnectorProvider.class);
 
         /**
         try {
@@ -57,7 +59,7 @@ public class RunScript {
             p.newJMXConnector(null, null);
         } catch (Throwable t) {
         }
-*/
+         */
     }
 
     private static ScriptEngine engine;

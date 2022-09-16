@@ -9,7 +9,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <graalvm.version>21.0.0.2</graalvm.version>
+        <graalvm.version>22.2.0</graalvm.version>
+        <!--
+        <graalvm.version>20.0.0</graalvm.version>
+        <graalvm.version>20.3.3</graalvm.version>
+        -->
+        <executable>/usr/local/java/graalvm/bin/java</executable>
+        <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
         <js.host>localhost</js.host>
         <js.port>9990</js.port>
         <js.url>service:jmx:remote+http://${js.host}:${js.port}</js.url>
@@ -18,6 +24,8 @@
         <js.password>admin</js.password>
         <js.debug>true</js.debug>
         <js.trace>true</js.trace>
+
+        <version.org.apache.log4j>1.2.16</version.org.apache.log4j>
     </properties>
 
     <dependencies>
@@ -51,7 +59,9 @@
             <version>2.0.1.Final</version>
             -->
             <version>3.0.4.Final</version>
+            <!--
             <scope>runtime</scope>
+            -->
         </dependency>
         <dependency>
             <groupId>org.jboss.remoting</groupId>
@@ -68,13 +78,20 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${version.org.apache.log4j}</version>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling-river</artifactId>
             <!--
             <version>1.4.11.Final</version>
             -->
             <version>2.0.9.Final</version>
+            <!--
             <scope>runtime</scope>
+            -->
         </dependency>
         <dependency>
             <groupId>org.jboss.marshalling</groupId>
@@ -85,46 +102,56 @@
             <version>2.0.9.Final</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.graalvm.truffle</groupId>
-            <artifactId>truffle-api</artifactId>
-            <version>${graalvm.version}</version>
-        </dependency>
         <!--
                 <dependency>
-                    <groupId>org.graalvm.truffle</groupId>
-                    <artifactId>truffle-api</artifactId>
-                    <version>20.1.0</version>
-                    <scope>system</scope>
-                    <systemPath>${java.home}/lib/truffle/truffle-api.jar</systemPath>
+                    <groupId>org.mobicents.protocols.ss7.map</groupId>
+                    <artifactId>map-impl</artifactId>
+                    <version>7.5.1-45</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.mobicents.protocols.ss7.sccp</groupId>
+                    <artifactId>sccp-impl</artifactId>
+                    <version>7.5.1-45</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.mobicents.protocols.sctp</groupId>
+                    <artifactId>sctp-api</artifactId>
+                    <version>1.8.15</version>
                 </dependency>
         -->
         <dependency>
-            <groupId>org.graalvm.nativeimage</groupId>
-            <artifactId>svm</artifactId>
-            <version>21.0.0</version>
-            <scope>provided</scope>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+            <version>2.44.0</version>
         </dependency>
         <dependency>
-            <groupId>org.mobicents.protocols.ss7.map</groupId>
-            <artifactId>map-impl</artifactId>
-            <version>7.5.1-45a</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mobicents.protocols.ss7.sccp</groupId>
-            <artifactId>sccp-impl</artifactId>
-            <version>7.5.1-45a</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mobicents.protocols.sctp</groupId>
-            <artifactId>sctp-api</artifactId>
-            <version>1.8.15</version>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+            <scope>test</scope>
+            <version>1.5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.truffle</groupId>
+            <artifactId>truffle-api</artifactId>
+            <version>${graalvm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.nativeimage</groupId>
+            <artifactId>svm</artifactId>
+            <version>${graalvm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
@@ -150,12 +177,14 @@
             <version>${graalvm.version}</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.graalvm.tools</groupId>
-            <artifactId>chromeinspector</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+        <!--
+                <dependency>
+                    <groupId>org.graalvm.tools</groupId>
+                    <artifactId>chromeinspector</artifactId>
+                    <version>${graalvm.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+        -->
     </dependencies> 
 
     <build>
@@ -261,7 +290,7 @@
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedArtifactId>jmxjs</shadedArtifactId>
-                            <shadedClassifierName>shade</shadedClassifierName>
+                            <shadedClassifierName>shaded</shadedClassifierName>
                             <artifactSet>
                                 <includes>
                                     <include>**</include>
@@ -271,7 +300,7 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Main-Class>run.RunScript</Main-Class>
-                                        <Build-Number>1.0</Build-Number>
+                                        <Build-Number>${project.version}</Build-Number>
                                     </manifestEntries>
                                 </transformer>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
@@ -280,6 +309,42 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!--
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-shade-plugin</artifactId>
+                            <version>2.4.3</version>
+                            <executions>
+                                <execution>
+                                    <id>server</id>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>shade</goal>
+                                    </goals>
+                                    <configuration>
+                                        <shadedArtifactAttached>true</shadedArtifactAttached>
+                                        <shadedArtifactId>jmxjs</shadedArtifactId>
+                                        <shadedClassifierName>shade</shadedClassifierName>
+                                        <artifactSet>
+                                            <includes>
+                                                <include>**</include>
+                                            </includes>
+                                        </artifactSet>
+                                        <transformers>
+                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                                <manifestEntries>
+                                                    <Main-Class>run.RunScript</Main-Class>
+                                                    <Build-Number>1.0</Build-Number>
+                                                </manifestEntries>
+                                            </transformer>
+                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        </transformers>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+            -->
 
         </plugins>
         
@@ -312,9 +377,9 @@
                             <addResourcesToClasspath>true</addResourcesToClasspath>
                             <addOutputToClasspath>true</addOutputToClasspath>
                             <cleanupDaemonThreads>false</cleanupDaemonThreads>
-                            <executable>/usr/local/java/graalvm/bin/java</executable>
+                            <executable>${executable}</executable>
                             <arguments>
-                                <argument>-agentlib:native-image-agent=config-output-dir=${basedir}/target/native/</argument>
+                                <argument>-agentlib:native-image-agent=config-output-dir=${basedir}/target/native-image/</argument>
                                 <argument>-cp</argument>
                                 <classpath/>
                                 <!-- 
@@ -345,7 +410,7 @@
             </activation>
 
             <build>
-                <defaultGoal>test</defaultGoal>
+                <defaultGoal>integration-test</defaultGoal>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -391,6 +456,7 @@
         </profile>
         <profile>
             <id>graal</id>
+            <!--use native profile below-->
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
@@ -439,7 +505,7 @@
                     <plugin>
                         <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
-                        <version>${graalvm.version}</version>
+                        <version>22.2.0</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -448,6 +514,9 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <classpath>
+                                <param>${project.build.directory}/jmxjs-${project.version}-shaded.jar</param>
+                            </classpath>
                             <buildArgs>
                                 --language:js
                                 --enable-all-security-services
@@ -487,7 +556,6 @@
 
                                 --trace-class-initialization=org.xnio.Xnio$MBeanHolder
                                 --trace-object-instantiation=java.net.Inet4Address
-
                             </buildArgs>
 
                        <![CDATA[
@@ -516,12 +584,136 @@
             </build>
         </profile>
 
+        <profile>
+            <id>native</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+            <build>
+                <defaultGoal>install</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal> 
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/svm</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>${native.maven.plugin.version}</version>
+                        <extensions>true</extensions>
+                        <executions>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>false</skip>
+                            <imageName>${imageName}</imageName>
+                            <classpath>
+                                <param>${project.build.directory}/jmxjs-${project.version}-shaded.jar</param>
+                            </classpath>
+                            <buildArgs>
+                                --no-fallback
+                                --language:js
+                                --enable-all-security-services
+                                -H:ClassInitialization=:build_time
+                                -H:+ReportExceptionStackTraces
+                                -H:-TruffleCheckBlockListMethods
+                                -Dtruffle.TruffleRuntime=com.oracle.truffle.api.impl.DefaultTruffleRuntime
+                                --no-fallback
+                                --diagnostics-mode
+                                --allow-incomplete-classpath
+                                --report-unsupported-elements-at-runtime
+
+                                -H:IncludeResources=logging.properties
+                                -H:IncludeResources=log4j.properties
+                                -H:IncludeResources=META-INF/services/java.lang.SecurityManager
+                                -H:IncludeResources=META-INF/services/java.security.Provider
+                                -H:IncludeResources=META-INF/services/javax.security.sasl.SaslClientFactory
+                                -H:IncludeResources=META-INF/services/javax.security.sasl.SaslClientFactory
+
+                                --initialize-at-build-time=org.wildfly.security.WildFlyElytronProvider
+                                --initialize-at-build-time=org.wildfly.security.sasl.util.PrivilegedSaslClientFactory
+                                --initialize-at-build-time=org.wildfly.security.sasl.util.PrivilegedSaslClient
+                                --initialize-at-build-time=org.wildfly.security.sasl.digest.DigestClientFactory
+
+                                --initialize-at-build-time=org.jboss.remotingjmx.RemotingConnectorProvider
+                                --initialize-at-build-time=com.sun.jmx.mbeanserver.JmxMBeanServer
+
+                                --initialize-at-run-time=org.xnio.Xnio
+                                --initialize-at-run-time=org.xnio.DefaultXnioWorkerHolder
+                                --initialize-at-run-time=org.xnio.Xnio$MBeanHolder
+                                --initialize-at-run-time=org.xnio.ssl.XnioSsl
+                                --initialize-at-run-time=org.xnio.nio.NioXnioProvider
+
+                                --initialize-at-run-time=org.wildfly.common.net.Inet
+                                --initialize-at-run-time=org.wildfly.common.net.CidrAddress
+
+                                --initialize-at-run-time=org.wildfly.security.auth.client.ModuleLoader
+                                --initialize-at-run-time=org.wildfly.security.ssl.DelegatingSSLContext
+                                --initialize-at-run-time=org.wildfly.client.config.ConfigurationXMLStreamReader
+                                
+                                --initialize-at-build-time=org.jboss.logging.JDKLevel
+                                --initialize-at-build-time=java.lang.ref.SoftReference
+                                --initialize-at-build-time=java.lang.invoke.MethodHandleImpl
+                                --initialize-at-build-time=org.graalvm.polyglot.Context
+
+
+                                --initialize-at-build-time=org.jboss.marshalling.reflect.SerializableClass
+                                --initialize-at-build-time=org.jboss.marshalling.reflect.SerializableClassRegistry
+                                
+                                --initialize-at-run-time=Proxy.newProxyInstance
+
+                                --initialize-at-run-time=org.jboss.remoting3.ModuleLoader
+                                --initialize-at-run-time=org.jboss.remoting3.EndpointImpl
+
+                                -H:AdditionalSecurityProviders=com.sun.security.sasl.Provider
+                                -H:+TraceSecurityServices
+                            </buildArgs>
+                       <![CDATA[
+
+
+                                --trace-object-instantiation=com.sun.jmx.mbeanserver.JmxMBeanServer
+                                --trace-object-instantiation=java.net.Inet4Address
+
+                                --trace-class-initialization=org.xnio.Xnio$MBeanHolder
+                                --trace-class-initialization=org.xnio.nio.NioXnio
+
+                                                                
+                            ]]>
+                        </configuration>
+                    </plugin> 
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
     <repositories>
         <repository>
             <id>jboss</id>
             <name>Jboss</name>
-            <url>https://repository.jboss.org/ </url>
+            <url>https://repository.jboss.org/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
@@ -531,9 +723,17 @@
                 <updatePolicy>never</updatePolicy>
             </snapshots>
         </repository>
-
+        <!--
+<repository>
+    <id>telestax.jfrog.releases</id>
+    <url>https://telestax.jfrog.io/artifactory/releases/</url>
+    <releases>
+        <enabled>true</enabled>
+    </releases>
+    <snapshots>
+        <enabled>false</enabled>
+    </snapshots>
+</repository>
+        -->
     </repositories>
 </project>
-
-
-
