@@ -10,6 +10,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <graalvm.version>22.2.0</graalvm.version>
+        <WILDFLY_HOME>/media/work/inst/telscale-slee-7.2.0-5.13-wildfly-10.1.0.Final/wildfly-10.1.0.Final</WILDFLY_HOME>
         <!--
         <graalvm.version>20.0.0</graalvm.version>
         <graalvm.version>20.3.3</graalvm.version>
@@ -632,9 +633,12 @@
                             <imageName>${imageName}</imageName>
                             <classpath>
                                 <param>${project.build.directory}/jmxjs-${project.version}-shaded.jar</param>
+                                <param>${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/modules/main/*</param>
+                                <param>${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/commons/main/*</param>
+                                <param>${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/diameter/lib/main/</param>
+                                <param>${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/smpp/bootstrap/main/*<param>
                             </classpath>
                             <buildArgs>
-                                --no-fallback
                                 --language:js
                                 --enable-all-security-services
                                 -H:ClassInitialization=:build_time
@@ -690,9 +694,13 @@
 
                                 -H:AdditionalSecurityProviders=com.sun.security.sasl.Provider
                                 -H:+TraceSecurityServices
+
+                                --force-fallback
+                                --link-at-build-time
                             </buildArgs>
                        <![CDATA[
 
+                                --no-fallback
 
                                 --trace-object-instantiation=com.sun.jmx.mbeanserver.JmxMBeanServer
                                 --trace-object-instantiation=java.net.Inet4Address

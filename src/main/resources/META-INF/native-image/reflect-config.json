@@ -1,1030 +1,1060 @@
 [
 {
-  "name":"javax.management.remote.JMXConnector",
-  "queryAllPublicConstructors":true,
-  "queryAllPublicMethods":true,
-  "allPublicMethods":true,
-  "allDeclaredFields":true
-}, 
+  "name":"[B"
+},
 {
-  "name":"org.jboss.remotingjmx.RemotingConnectorProvider",
-  "queryAllPublicConstructors":true,
-  "queryAllPublicMethods":true,
-  "allPublicMethods":true,
-  "allDeclaredFields":true
-} 
-,
+  "name":"[C"
+},
 {
-  "name":"[B"}
-,
+  "name":"[D"
+},
 {
-  "name":"[C"}
-,
+  "name":"[F"
+},
 {
-  "name":"[D"}
-,
+  "name":"[I"
+},
 {
-  "name":"[F"}
-,
+  "name":"[J"
+},
 {
-  "name":"[I"}
-,
+  "name":"[Ljava.lang.Object;"
+},
 {
-  "name":"[J"}
-,
+  "name":"[Ljava.lang.StackTraceElement;"
+},
 {
-  "name":"[Ljava.lang.Object;"}
-,
+  "name":"[Ljava.lang.String;"
+},
 {
-  "name":"[Ljava.lang.StackTraceElement;"}
-,
+  "name":"[Ljava.security.Provider;"
+},
 {
-  "name":"[Ljava.lang.String;"}
-,
+  "name":"[Ljavax.management.MBeanAttributeInfo;"
+},
 {
-  "name":"[Ljava.security.Provider;"}
-,
+  "name":"[Ljavax.management.MBeanConstructorInfo;"
+},
 {
-  "name":"[Ljavax.management.MBeanAttributeInfo;"}
-,
+  "name":"[Ljavax.management.MBeanNotificationInfo;"
+},
 {
-  "name":"[Ljavax.management.MBeanConstructorInfo;"}
-,
+  "name":"[Ljavax.management.MBeanOperationInfo;"
+},
 {
-  "name":"[Ljavax.management.MBeanNotificationInfo;"}
-,
+  "name":"[Ljavax.management.MBeanParameterInfo;"
+},
 {
-  "name":"[Ljavax.management.MBeanOperationInfo;"}
-,
+  "name":"[Ljavax.management.ObjectName;"
+},
 {
-  "name":"[Ljavax.management.MBeanParameterInfo;"}
-,
+  "name":"[Ljavax.management.openmbean.CompositeData;"
+},
 {
-  "name":"[Ljavax.management.ObjectName;"}
-,
+  "name":"[Ljavax.slee.profile.ProfileSpecificationID;"
+},
 {
-  "name":"[Ljavax.management.openmbean.CompositeData;"}
-,
+  "name":"[S"
+},
 {
-  "name":"[Ljavax.slee.SbbID;"}
-,
-{
-  "name":"[Ljavax.slee.ServiceID;"}
-,
-{
-  "name":"[Ljavax.slee.profile.ProfileSpecificationID;"}
-,
-{
-  "name":"[S"}
-,
-{
-  "name":"[Z"}
-,
+  "name":"[Z"
+},
 {
   "name":"com.sun.crypto.provider.TlsMasterSecretGenerator",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"com.sun.management.GarbageCollectorMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"com.sun.management.GcInfo",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"com.sun.management.HotSpotDiagnosticMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"com.sun.management.ThreadMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"com.sun.management.UnixOperatingSystemMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"com.sun.management.VMOption",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"com.sun.management.internal.GarbageCollectorExtImpl",
-  "queryAllPublicConstructors":true}
-,
+  "queryAllPublicConstructors":true
+},
 {
   "name":"com.sun.management.internal.HotSpotDiagnostic",
-  "queryAllPublicConstructors":true}
-,
+  "queryAllPublicConstructors":true
+},
 {
   "name":"com.sun.management.internal.HotSpotThreadImpl",
-  "queryAllPublicConstructors":true}
-,
+  "queryAllPublicConstructors":true
+},
 {
   "name":"com.sun.management.internal.OperatingSystemImpl",
-  "queryAllPublicConstructors":true}
-,
+  "queryAllPublicConstructors":true
+},
 {
-  "name":"com.sun.security.jgss.Extender"}
-,
+  "name":"com.sun.security.jgss.Extender"
+},
 {
   "name":"java.lang.Boolean",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.Byte",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.Character",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.Double",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.Exception",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.lang.Float",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.Integer",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.Long",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.Object",
   "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"java.lang.Short",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.StackTraceElement",
   "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredConstructors":true
+},
 {
-  "name":"java.lang.String"}
-,
+  "name":"java.lang.String"
+},
+{
+  "name":"java.lang.Thread",
+  "methods":[{"name":"getContextClassLoader","parameterTypes":[] }]
+},
 {
   "name":"java.lang.Throwable",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
+},
 {
   "name":"java.lang.Void",
-  "fields":[{"name":"TYPE"}]}
-,
+  "fields":[{"name":"TYPE"}]
+},
 {
   "name":"java.lang.management.BufferPoolMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.ClassLoadingMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.CompilationMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.LockInfo",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.ManagementPermission",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String"] }]
+},
 {
   "name":"java.lang.management.MemoryMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.MemoryManagerMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.MemoryPoolMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.MemoryUsage",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.MonitorInfo",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.PlatformLoggingMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.RuntimeMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.management.ThreadInfo",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
 {
   "name":"java.lang.reflect.Proxy",
-  "fields":[{"name":"h"}]}
-,
+  "fields":[{"name":"h"}]
+},
 {
-  "name":"java.math.BigDecimal"}
-,
+  "name":"java.math.BigDecimal"
+},
 {
-  "name":"java.math.BigInteger"}
-,
+  "name":"java.math.BigInteger"
+},
 {
   "name":"java.security.AccessControlContext",
-  "fields":[{"name":"context"}]}
-,
+  "fields":[{"name":"context"}]
+},
 {
-  "name":"java.security.AlgorithmParametersSpi"}
-,
+  "name":"java.security.AlgorithmParametersSpi"
+},
 {
-  "name":"java.security.KeyStoreSpi"}
-,
+  "name":"java.security.KeyStoreSpi"
+},
 {
-  "name":"java.security.MessageDigestSpi"}
-,
+  "name":"java.security.MessageDigestSpi"
+},
 {
-  "name":"java.security.SecureRandomParameters"}
-,
+  "name":"java.security.SecureRandomParameters"
+},
 {
   "name":"java.util.AbstractCollection",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.AbstractList",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.AbstractMap",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.AbstractSequentialList",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.AbstractSet",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"java.util.ArrayDeque",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.ArrayList",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$CopiesList",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$EmptyList",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$EmptyMap",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$EmptySet",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$ReverseComparator",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$ReverseComparator2",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$SingletonList",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$SingletonMap",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$SingletonSet",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$UnmodifiableCollection",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$UnmodifiableList",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"readResolve","parameterTypes":[] }]
+},
 {
   "name":"java.util.Collections$UnmodifiableMap",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$UnmodifiableMap$UnmodifiableEntrySet",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":["java.util.Set"] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$UnmodifiableRandomAccessList",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true
+},
 {
   "name":"java.util.Collections$UnmodifiableSet",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$UnmodifiableSortedMap",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Collections$UnmodifiableSortedSet",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
-  "name":"java.util.Date"}
-,
+  "name":"java.util.Date"
+},
 {
   "name":"java.util.Dictionary",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.EnumMap",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.EnumSet",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.EnumSet$SerializationProxy",
   "fields":[
     {"name":"elementType"}, 
     {"name":"elements"}
-  ]}
-,
+  ]
+},
 {
   "name":"java.util.HashMap",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.HashSet",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
+},
 {
   "name":"java.util.Hashtable",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.IdentityHashMap",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.LinkedHashMap",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.LinkedHashSet",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.LinkedList",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.PropertyPermission",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
+},
 {
   "name":"java.util.Stack",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.TreeMap",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.TreeSet",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.Vector",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.concurrent.ConcurrentHashMap",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.concurrent.CopyOnWriteArrayList",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.concurrent.CopyOnWriteArraySet",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"java.util.logging.LogManager",
-  "methods":[{"name":"getLoggingMXBean","parameterTypes":[] }]}
-,
+  "methods":[{"name":"getLoggingMXBean","parameterTypes":[] }]
+},
 {
   "name":"java.util.logging.LoggingMXBean",
-  "queryAllPublicMethods":true}
-,
+  "queryAllPublicMethods":true
+},
+{
+  "name":"javax.management.Attribute",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.InstanceNotFoundException",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.JMException",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.MBeanAttributeInfo",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.MBeanConstructorInfo",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.MBeanException",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.MBeanFeatureInfo",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
+},
 {
   "name":"javax.management.MBeanInfo",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
+},
 {
   "name":"javax.management.MBeanNotificationInfo",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
+},
 {
   "name":"javax.management.MBeanOperationInfo",
   "allDeclaredFields":true,
-  "queryAllPublicMethods":true}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.MBeanParameterInfo",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
   "name":"javax.management.MBeanServerBuilder",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
 {
   "name":"javax.management.ObjectName",
-  "allDeclaredFields":true}
-,
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }, 
+    {"name":"writeObject","parameterTypes":["java.io.ObjectOutputStream"] }
+  ]
+},
 {
   "name":"javax.management.OperationsException",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
-  "name":"javax.management.openmbean.CompositeData"}
-,
+  "name":"javax.management.openmbean.CompositeData"
+},
 {
-  "name":"javax.management.openmbean.OpenMBeanOperationInfoSupport"}
-,
+  "name":"javax.management.openmbean.OpenMBeanOperationInfoSupport"
+},
 {
-  "name":"javax.management.openmbean.TabularData"}
-,
+  "name":"javax.management.openmbean.TabularData"
+},
 {
   "name":"javax.security.auth.x500.X500Principal",
   "fields":[{"name":"thisX500Name"}],
-  "queriedMethods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]}
-,
+  "queriedMethods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
+},
 {
   "name":"javax.slee.ComponentID",
-  "allDeclaredFields":true}
-,
-{
-  "name":"javax.slee.InvalidArgumentException",
   "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
 {
-  "name":"javax.slee.SbbID",
-  "allDeclaredFields":true}
-,
-{
-  "name":"javax.slee.ServiceID",
-  "allDeclaredFields":true}
-,
-{
-  "name":"javax.slee.management.AbstractNotificationSource",
-  "allDeclaredFields":true,
-  "queriedMethods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"javax.slee.management.SbbNotification",
-  "allDeclaredFields":true}
-,
+  "name":"javax.slee.ServiceID"
+},
 {
   "name":"javax.slee.profile.ProfileSpecificationID",
-  "allDeclaredFields":true}
-,
-{
-  "name":"javax.slee.resource.ResourceAdaptorID"}
-,
-{
-  "name":"jdk.management.jfr.ConfigurationInfo",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"jdk.management.jfr.EventTypeInfo",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"jdk.management.jfr.FlightRecorderMXBean",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"jdk.management.jfr.FlightRecorderMXBeanImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"jdk.management.jfr.RecordingInfo",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"jdk.management.jfr.SettingDescriptorInfo",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"org.graalvm.polyglot.Engine",
-  "methods":[{"name":"getImpl","parameterTypes":[] }]}
-,
-{
-  "name":"org.jboss.remoting3.EndpointImpl$1",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"org.jboss.remoting3.EndpointMXBean",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"org.jboss.remoting3._private.Messages_$logger",
-  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]}
-,
-{
-  "name":"org.jboss.remoting3.remote.RemoteConnectionProvider$1",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"org.jboss.remoting3.remote.RemoteConnectionProviderMXBean",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"org.jboss.remotingjmx.RemotingConnectorProvider",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"org.jboss.remotingjmx.RemotingMBeanServerConnection",
-  "allPublicMethods":true
-},
-{
-  "name":"org.jboss.remotingjmx.protocol.v2.ClientConnection$TheConnection",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"org.wildfly.security._private.ElytronMessages_$logger",
-  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]}
-,
-{
-  "name":"org.wildfly.security.http.impl.ServerMechanismFactoryImpl",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.anonymous.AnonymousClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.anonymous.AnonymousServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.digest.DigestClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["java.security.Provider"] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.digest.DigestServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.entity.EntitySaslClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.entity.EntitySaslServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.external.ExternalSaslClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.external.ExternalSaslServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.gs2.Gs2SaslClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.gs2.Gs2SaslServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.gssapi.GssapiClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.gssapi.GssapiServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.localuser.LocalUserClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.localuser.LocalUserServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.oauth2.OAuth2SaslClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.oauth2.OAuth2SaslServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.otp.OTPSaslClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.otp.OTPSaslServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.plain.PlainSaslClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.plain.PlainSaslServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.wildfly.security.sasl.scram.ScramSaslClientFactory",
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["java.security.Provider"] }]}
-,
-{
-  "name":"org.wildfly.security.sasl.scram.ScramSaslServerFactory",
-  "queryAllDeclaredConstructors":true}
-,
-{
-  "name":"org.xnio._private.Messages_$logger",
-  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]}
-,
-{
-  "name":"org.xnio.management.XnioProviderMXBean",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"org.xnio.management.XnioWorkerMXBean",
-  "queryAllPublicMethods":true}
-,
-{
-  "name":"org.xnio.nio.Log_$logger",
-  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]}
-,
-{
-  "name":"org.xnio.nio.NioXnio$3",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"org.xnio.nio.NioXnioWorker$NioWorkerMetrics",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.ClassLoadingImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.CompilationImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.ManagementFactoryHelper$1",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.ManagementFactoryHelper$PlatformLoggingImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.MemoryImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.MemoryManagerImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.MemoryPoolImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.management.RuntimeImpl",
-  "queryAllPublicConstructors":true}
-,
-{
-  "name":"sun.misc.Unsafe",
-  "fields":[{"name":"theUnsafe"}]}
-,
-{
-  "name":"sun.nio.ch.EPollSelectorProvider",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.nio.ch.PollSelectorProvider",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.pkcs12.PKCS12KeyStore",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.pkcs12.PKCS12KeyStore$DualFormatPKCS12",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.provider.JavaKeyStore$JKS",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.provider.MD5",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.provider.NativePRNG",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.provider.SHA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.provider.SHA2$SHA256",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.provider.X509Factory",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.rsa.RSAKeyFactory$Legacy",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.ssl.KeyManagerFactoryImpl$SunX509",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.ssl.SSLContextImpl$DefaultSSLContext",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.ssl.TrustManagerFactoryImpl$PKIXFactory",
-  "methods":[{"name":"<init>","parameterTypes":[] }]}
-,
-{
-  "name":"sun.security.x509.AuthorityInfoAccessExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.AuthorityKeyIdentifierExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.BasicConstraintsExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.CRLDistributionPointsExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.CertificatePoliciesExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.ExtendedKeyUsageExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.IssuerAlternativeNameExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.KeyUsageExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.NetscapeCertTypeExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.PrivateKeyUsageExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.SubjectAlternativeNameExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,
-{
-  "name":"sun.security.x509.SubjectKeyIdentifierExtension",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]}
-,{
-  "name":"javax.slee.ComponentID",
   "allDeclaredFields":true,
-  "fields":[
-    {"name":"componentType", "allowUnsafeAccess":true}, 
-    {"name":"hash", "allowUnsafeAccess":true}, 
-    {"name":"name", "allowUnsafeAccess":true}, 
-    {"name":"vendor", "allowUnsafeAccess":true}, 
-    {"name":"version", "allowUnsafeAccess":true}
-  ]
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
 },
 {
-  "name":"javax.slee.EventTypeID"
-},
-{
-  "name":"javax.slee.InvalidStateException",
+  "name":"javax.slee.profile.UnrecognizedProfileNameException",
   "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
 },
 {
-  "name":"javax.slee.SbbID",
+  "name":"javax.slee.profile.UnrecognizedProfileTableNameException",
   "allDeclaredFields":true,
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"javax.slee.ServiceID",
-  "allDeclaredFields":true,
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"javax.slee.ServiceID[]",
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true
-},
-{
-  "name":"javax.slee.UnrecognizedComponentException",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"javax.slee.facilities.Level"
-},
-{
-  "name":"javax.slee.facilities.TraceLevel"
-},
-{
-  "name":"javax.slee.management.DeployableUnitID",
-  "allDeclaredFields":true,
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true,
-  "fields":[{"name":"url", "allowUnsafeAccess":true}]
-},
-{
-  "name":"javax.slee.management.DeployableUnitID[]"
-},
-{
-  "name":"javax.slee.management.LibraryID"
-},
-{
-  "name":"javax.slee.management.NotificationSource"
-},
-{
-  "name":"javax.slee.management.ResourceAdaptorEntityState"
-},
-{
-  "name":"javax.slee.management.ServiceState",
-  "allDeclaredFields":true,
-  "allPublicFields":true,
-  "allPublicMethods":true,
-  "allPublicConstructors":true,
-  "fields":[
-    {"name":"ACTIVE", "allowUnsafeAccess":true}, 
-    {"name":"INACTIVE", "allowUnsafeAccess":true}, 
-    {"name":"state", "allowUnsafeAccess":true}
-  ]
-},
-{
-  "name":"javax.slee.management.SleeState",
-  "allDeclaredFields":true,
-  "fields":[{"name":"state", "allowUnsafeAccess":true}]
-},
-{
-  "name":"javax.slee.management.UnrecognizedDeployableUnitException",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"javax.slee.management.UnrecognizedResourceAdaptorEntityException",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"javax.slee.profile.ProfileSpecificationID"
-},
-{
-  "name":"javax.slee.profile.query.QueryExpression"
-},
-{
-  "name":"javax.slee.resource.ConfigProperties"
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"javax.slee.resource.ResourceAdaptorID"
 },
 {
-  "name":"javax.slee.resource.ResourceAdaptorTypeID"
+  "name":"javolution.lang.Reflection"
+},
+{
+  "name":"javolution.util.FastComparator"
+},
+{
+  "name":"jdk.management.jfr.ConfigurationInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.EventTypeInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.FlightRecorderMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.FlightRecorderMXBeanImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"jdk.management.jfr.RecordingInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"jdk.management.jfr.SettingDescriptorInfo",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.apache.log4j.Category"
+},
+{
+  "name":"org.apache.log4j.CategoryKey"
+},
+{
+  "name":"org.apache.log4j.LogManager"
+},
+{
+  "name":"org.apache.log4j.Logger"
+},
+{
+  "name":"org.apache.log4j.config.PropertySetter"
+},
+{
+  "name":"org.apache.log4j.helpers.Loader"
+},
+{
+  "name":"org.graalvm.polyglot.Engine",
+  "methods":[{"name":"getImpl","parameterTypes":[] }]
+},
+{
+  "name":"org.graalvm.polyglot.management.Management"
+},
+{
+  "name":"org.jboss.remoting3.EndpointImpl$1",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"org.jboss.remoting3.EndpointMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.jboss.remoting3._private.Messages_$logger",
+  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]
+},
+{
+  "name":"org.jboss.remoting3.remote.RemoteConnectionProvider$1",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"org.jboss.remoting3.remote.RemoteConnectionProviderMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.mobicents.protocols.ss7.indicator.AddressIndicator",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.mobicents.protocols.ss7.indicator.GlobalTitleIndicator"
+},
+{
+  "name":"org.mobicents.protocols.ss7.indicator.NatureOfAddress"
+},
+{
+  "name":"org.mobicents.protocols.ss7.indicator.NumberingPlan"
+},
+{
+  "name":"org.mobicents.protocols.ss7.indicator.RoutingIndicator"
+},
+{
+  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractGlobalTitle",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractParameter",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.BCDOddEncodingScheme",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.DefaultEncodingScheme",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.GlobalTitle0100Impl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.SccpAddressImpl",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security._private.ElytronMessages_$logger",
+  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]
+},
+{
+  "name":"org.wildfly.security.http.impl.ServerMechanismFactoryImpl",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.anonymous.AnonymousClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.anonymous.AnonymousServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.digest.DigestClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.security.Provider"] }]
+},
+{
+  "name":"org.wildfly.security.sasl.digest.DigestServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.entity.EntitySaslClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.entity.EntitySaslServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.external.ExternalSaslClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.external.ExternalSaslServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.gs2.Gs2SaslClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.gs2.Gs2SaslServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.gssapi.GssapiClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.gssapi.GssapiServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.localuser.LocalUserClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.localuser.LocalUserServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.oauth2.OAuth2SaslClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.oauth2.OAuth2SaslServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.otp.OTPSaslClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.otp.OTPSaslServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.plain.PlainSaslClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.wildfly.security.sasl.plain.PlainSaslServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.wildfly.security.sasl.scram.ScramSaslClientFactory",
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["java.security.Provider"] }]
+},
+{
+  "name":"org.wildfly.security.sasl.scram.ScramSaslServerFactory",
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"org.xnio._private.Messages_$logger",
+  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]
+},
+{
+  "name":"org.xnio.management.XnioProviderMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.xnio.management.XnioWorkerMXBean",
+  "queryAllPublicMethods":true
+},
+{
+  "name":"org.xnio.nio.Log_$logger",
+  "methods":[{"name":"<init>","parameterTypes":["org.jboss.logging.Logger"] }]
+},
+{
+  "name":"org.xnio.nio.NioXnio$3",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"org.xnio.nio.NioXnioWorker$NioWorkerMetrics",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.ClassLoadingImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.CompilationImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.ManagementFactoryHelper$1",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.ManagementFactoryHelper$PlatformLoggingImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.MemoryImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.MemoryManagerImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.MemoryPoolImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.management.RuntimeImpl",
+  "queryAllPublicConstructors":true
+},
+{
+  "name":"sun.misc.Unsafe",
+  "fields":[{"name":"theUnsafe"}]
+},
+{
+  "name":"sun.nio.ch.EPollSelectorProvider",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.nio.ch.PollSelectorProvider",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.pkcs12.PKCS12KeyStore",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.pkcs12.PKCS12KeyStore$DualFormatPKCS12",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.JavaKeyStore$JKS",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.MD5",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.NativePRNG",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA2$SHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.X509Factory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSAKeyFactory$Legacy",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.KeyManagerFactoryImpl$SunX509",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.SSLContextImpl$DefaultSSLContext",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.TrustManagerFactoryImpl$PKIXFactory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.x509.AuthorityInfoAccessExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.AuthorityKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.BasicConstraintsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CRLDistributionPointsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CertificatePoliciesExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.ExtendedKeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.IssuerAlternativeNameExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.KeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.NetscapeCertTypeExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.PrivateKeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectAlternativeNameExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
 }
 ]

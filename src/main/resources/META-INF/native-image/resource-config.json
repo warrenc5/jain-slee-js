@@ -74,9 +74,6 @@
       "pattern":"\\Qjs/mofokom/jain-slee-graal/index.js\\E"
     }, 
     {
-      "pattern":"\\Qlog4j.properties\\E"
-    }, 
-    {
       "pattern":"\\Qjs/util/profile.js\\E"
     }, 
     {
@@ -93,6 +90,7 @@
     }
   ]},
   "bundles":[{
-      "name":"jdk.nashorn.internal.runtime.resources.version"
+      "name":"jdk.nashorn.internal.runtime.resources.version",
+      "locales":[""]
     }]
 }

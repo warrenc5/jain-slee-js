@@ -1,36 +1,36 @@
 [
 {
-  "name":"[Lcom.sun.management.internal.DiagnosticCommandArgumentInfo;"}
-,
+  "name":"[Lcom.sun.management.internal.DiagnosticCommandArgumentInfo;"
+},
 {
-  "name":"[Lcom.sun.management.internal.DiagnosticCommandInfo;"}
-,
+  "name":"[Lcom.sun.management.internal.DiagnosticCommandInfo;"
+},
 {
   "name":"com.sun.management.internal.DiagnosticCommandArgumentInfo",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","java.lang.String","boolean","boolean","boolean","int"] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","java.lang.String","boolean","boolean","boolean","int"] }]
+},
 {
   "name":"com.sun.management.internal.DiagnosticCommandInfo",
-  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","java.lang.String","java.lang.String","java.lang.String","boolean","java.util.List"] }]}
-,
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.lang.String","java.lang.String","java.lang.String","java.lang.String","boolean","java.util.List"] }]
+},
 {
   "name":"java.lang.Boolean",
-  "methods":[{"name":"getBoolean","parameterTypes":["java.lang.String"] }]}
-,
+  "methods":[{"name":"getBoolean","parameterTypes":["java.lang.String"] }]
+},
 {
   "name":"java.lang.ClassLoader",
   "methods":[
     {"name":"getPlatformClassLoader","parameterTypes":[] }, 
     {"name":"loadClass","parameterTypes":["java.lang.String"] }
-  ]}
-,
+  ]
+},
 {
   "name":"java.util.Arrays",
-  "methods":[{"name":"asList","parameterTypes":["java.lang.Object[]"] }]}
-,
+  "methods":[{"name":"asList","parameterTypes":["java.lang.Object[]"] }]
+},
 {
-  "name":"jdk.internal.loader.ClassLoaders$PlatformClassLoader"}
-,
+  "name":"jdk.internal.loader.ClassLoaders$PlatformClassLoader"
+},
 {
   "name":"sun.management.VMManagementImpl",
   "fields":[
@@ -42,6 +42,6 @@
     {"name":"synchronizerUsageSupport"}, 
     {"name":"threadAllocatedMemorySupport"}, 
     {"name":"threadContentionMonitoringSupport"}
-  ]}
-
+  ]
+}
 ]

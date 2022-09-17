@@ -1,23 +1,21 @@
 #!/bin/bash -x
-BASE=`dirname $0`
-
-
+BASE=$(readlink -f `dirname $0`/..)
 if [ -f src/main/resources/logging.properties ] ; then 
 LOGGING='-Djava.util.logging.config.file=src/main/resources/logging.properties'
 fi
 
 if [ -d target ] ; then 
-
 CLASSPATH=$BASE/src/main/js:$BASE/src/test/js:$BASE/target/classes/:$BASE/target/test-classes/:$CLASSPATH
-CLASSPATH=$BASE/target/jslee-js-1.0.Final.jar:$BASE/target/jmxjs-1.0.Final-shaded.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*:src/main/resources
+CLASSPATH=$BASE/target/jslee-js-1.0.Final.jar:$BASE/target/jmxjs-1.0.Final-shaded.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*:src/main/resources:$CLASSPATH
 else 
 
-CLASSPATH=$BASE/jmxjs-1.0.Final-shaded.jar
+CLASSPATH=$BASE/jmxjs-1.0.Final-shaded.jar:$CLASSPATH
 CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.Final/jslee-js-1.0.Final-shade.jar
 
 fi 
 
 #JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
+
 let native=0 
 java $LOGGING $JAVA_OPTS -classpath $CLASSPATH run.RunScript $@
 

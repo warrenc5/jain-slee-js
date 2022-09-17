@@ -35,7 +35,6 @@ public class RunScript {
     static {
         
         System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
-
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
         javax.management.remote.JMXServiceURL.class.getClass();
@@ -307,7 +306,7 @@ public class RunScript {
                 }
 
             } finally {
-
+                System.err.println("exited");
             }
         }
 
