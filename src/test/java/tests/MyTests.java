@@ -12,6 +12,7 @@ import javax.management.remote.JMXServiceURL;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -25,6 +26,7 @@ public class MyTests {
     }
 
     @Test
+    @Ignore
     public void testMapConstructor() {
         Constructor<?>[] ctors = java.util.AbstractMap.class.getConstructors();
         assertNotNull(ctors);

@@ -23,6 +23,7 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.PolyglotAccess;
 import org.graalvm.polyglot.PolyglotException;
@@ -33,7 +34,7 @@ import org.graalvm.polyglot.io.FileSystem;
 public class RunScript {
 
     static {
-        
+
         System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
         javax.management.MBeanNotificationInfo.class.getClass();
         javax.transaction.RollbackException.class.getClass();
@@ -239,9 +240,13 @@ public class RunScript {
             System.err.println("no input file\nusage jmxjs --debug --trace --username=wozza --password=wozza [--url=service:jmx:remote+http://localhost:9990] [--host=localhost] [--port=9990] somefile.js < myfile.js");
 
         } else {
+            Engine engine = Engine.newBuilder()
+                    .option("engine.WarnInterpreterOnly", "false")
+                    .build();
             FileSystem delegate = new MyFileSystem();
             //TODO use graal
             contextLocal = ThreadLocal.withInitial(() -> Context.newBuilder()
+                    .engine(engine)
                     .allowNativeAccess(true)
                     .allowAllAccess(true)
                     .allowHostClassLoading(true)
@@ -257,7 +262,7 @@ public class RunScript {
                     .fileSystem(delegate)
                     .build());
 
-            try (Context context = contextLocal.get()) {
+            try ( Context context = contextLocal.get()) {
                 Value bindings = context.getBindings("js");
                 bindings.putMember("js_username", System.getProperty("js.username"));
                 bindings.putMember("js_password", System.getProperty("js.password"));
@@ -294,7 +299,7 @@ public class RunScript {
                 }
 
             } catch (PolyglotException x) {
-                System.err.println("failed :" + x.getMessage() + " source: " + x.getSourceLocation());
+                System.err.println("failed :" + x.getMessage() + " source: [" + newName +"] " + x.getSourceLocation());
                 System.err.println(Arrays.asList(x.getPolyglotStackTrace()).toString());
                 if (trace) {
                     x.printStackTrace();

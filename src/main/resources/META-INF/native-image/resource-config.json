@@ -89,8 +89,5 @@
       "pattern":"\\Qorg/xnio/nio/Version.properties\\E"
     }
   ]},
-  "bundles":[{
-      "name":"jdk.nashorn.internal.runtime.resources.version",
-      "locales":[""]
-    }]
+  "bundles":[]
 }

@@ -51,6 +51,12 @@
   "name":"[Ljavax.management.openmbean.CompositeData;"
 },
 {
+  "name":"[Ljavax.slee.SbbID;"
+},
+{
+  "name":"[Ljavax.slee.ServiceID;"
+},
+{
   "name":"[Ljavax.slee.profile.ProfileSpecificationID;"
 },
 {
@@ -282,8 +288,7 @@
   "name":"java.util.AbstractSet",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"java.util.ArrayDeque",
@@ -436,8 +441,7 @@
   "name":"java.util.HashSet",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"readObject","parameterTypes":["java.io.ObjectInputStream"] }]
+  "queryAllDeclaredConstructors":true
 },
 {
   "name":"java.util.Hashtable",
@@ -522,12 +526,6 @@
 {
   "name":"java.util.logging.LoggingMXBean",
   "queryAllPublicMethods":true
-},
-{
-  "name":"javax.management.Attribute",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
 },
 {
   "name":"javax.management.InstanceNotFoundException",
@@ -634,22 +632,53 @@
   "queryAllDeclaredConstructors":true
 },
 {
-  "name":"javax.slee.ServiceID"
+  "name":"javax.slee.EventTypeID"
+},
+{
+  "name":"javax.slee.InvalidArgumentException",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"javax.slee.SbbID",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"javax.slee.ServiceID",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"javax.slee.management.AbstractNotificationSource",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"javax.slee.management.SbbNotification",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"javax.slee.management.ServiceState",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"javax.slee.management.SleeState",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"readResolve","parameterTypes":[] }]
 },
 {
   "name":"javax.slee.profile.ProfileSpecificationID",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"javax.slee.profile.UnrecognizedProfileNameException",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"javax.slee.profile.UnrecognizedProfileTableNameException",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true
@@ -731,60 +760,6 @@
 {
   "name":"org.jboss.remoting3.remote.RemoteConnectionProviderMXBean",
   "queryAllPublicMethods":true
-},
-{
-  "name":"org.mobicents.protocols.ss7.indicator.AddressIndicator",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"org.mobicents.protocols.ss7.indicator.GlobalTitleIndicator"
-},
-{
-  "name":"org.mobicents.protocols.ss7.indicator.NatureOfAddress"
-},
-{
-  "name":"org.mobicents.protocols.ss7.indicator.NumberingPlan"
-},
-{
-  "name":"org.mobicents.protocols.ss7.indicator.RoutingIndicator"
-},
-{
-  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractGlobalTitle",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractParameter",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.BCDOddEncodingScheme",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.DefaultEncodingScheme",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.GlobalTitle0100Impl",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
-},
-{
-  "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.SccpAddressImpl",
-  "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true,
-  "queryAllDeclaredConstructors":true
 },
 {
   "name":"org.wildfly.security._private.ElytronMessages_$logger",
@@ -983,10 +958,6 @@
 },
 {
   "name":"sun.security.provider.SHA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.security.provider.SHA2$SHA256",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {

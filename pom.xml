@@ -636,7 +636,7 @@
                                 <param>${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/modules/main/*</param>
                                 <param>${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/commons/main/*</param>
                                 <param>${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/diameter/lib/main/</param>
-                                <param>${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/smpp/bootstrap/main/*<param>
+                                <param>${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/smpp/bootstrap/main/*</param>
                             </classpath>
                             <buildArgs>
                                 --language:js
@@ -647,7 +647,6 @@
                                 -Dtruffle.TruffleRuntime=com.oracle.truffle.api.impl.DefaultTruffleRuntime
                                 --no-fallback
                                 --diagnostics-mode
-                                --allow-incomplete-classpath
                                 --report-unsupported-elements-at-runtime
 
                                 -H:IncludeResources=logging.properties

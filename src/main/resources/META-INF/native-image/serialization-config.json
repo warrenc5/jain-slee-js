@@ -436,13 +436,6 @@
       "customTargetConstructorClass":"java.util.AbstractSet"
     },
     {
-      "name":"javax.management.Attribute"
-    },
-    {
-      "name":"javax.management.Attribute",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
       "name":"javax.management.InstanceNotFoundException"
     },
     {
@@ -585,13 +578,65 @@
       "name":"javax.slee.InvalidArgumentException"
     },
     {
+      "name":"javax.slee.InvalidArgumentException",
+      "customTargetConstructorClass":"java.lang.Exception"
+    },
+    {
+      "name":"javax.slee.InvalidArgumentException",
+      "customTargetConstructorClass":"java.lang.Object"
+    },
+    {
+      "name":"javax.slee.InvalidArgumentException",
+      "customTargetConstructorClass":"java.lang.Throwable"
+    },
+    {
+      "name":"javax.slee.SbbID"
+    },
+    {
+      "name":"javax.slee.SbbID",
+      "customTargetConstructorClass":"java.lang.Object"
+    },
+    {
       "name":"javax.slee.ServiceID"
+    },
+    {
+      "name":"javax.slee.ServiceID",
+      "customTargetConstructorClass":"java.lang.Object"
     },
     {
       "name":"javax.slee.ServiceID[]"
     },
     {
+      "name":"javax.slee.management.AbstractNotificationSource"
+    },
+    {
+      "name":"javax.slee.management.AbstractNotificationSource",
+      "customTargetConstructorClass":"java.lang.Object"
+    },
+    {
+      "name":"javax.slee.management.SbbNotification"
+    },
+    {
+      "name":"javax.slee.management.SbbNotification",
+      "customTargetConstructorClass":"java.lang.Object"
+    },
+    {
+      "name":"javax.slee.management.SbbNotification",
+      "customTargetConstructorClass":"javax.slee.management.AbstractNotificationSource"
+    },
+    {
+      "name":"javax.slee.management.ServiceState"
+    },
+    {
+      "name":"javax.slee.management.ServiceState",
+      "customTargetConstructorClass":"java.lang.Object"
+    },
+    {
       "name":"javax.slee.management.SleeState"
+    },
+    {
+      "name":"javax.slee.management.SleeState",
+      "customTargetConstructorClass":"java.lang.Object"
     },
     {
       "name":"javax.slee.profile.ProfileSpecificationID"
@@ -601,103 +646,7 @@
       "customTargetConstructorClass":"java.lang.Object"
     },
     {
-      "name":"javax.slee.profile.UnrecognizedProfileNameException"
-    },
-    {
-      "name":"javax.slee.profile.UnrecognizedProfileNameException",
-      "customTargetConstructorClass":"java.lang.Exception"
-    },
-    {
-      "name":"javax.slee.profile.UnrecognizedProfileNameException",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"javax.slee.profile.UnrecognizedProfileNameException",
-      "customTargetConstructorClass":"java.lang.Throwable"
-    },
-    {
       "name":"javax.slee.profile.UnrecognizedProfileTableNameException"
-    },
-    {
-      "name":"javax.slee.profile.UnrecognizedProfileTableNameException",
-      "customTargetConstructorClass":"java.lang.Exception"
-    },
-    {
-      "name":"javax.slee.profile.UnrecognizedProfileTableNameException",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"javax.slee.profile.UnrecognizedProfileTableNameException",
-      "customTargetConstructorClass":"java.lang.Throwable"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.indicator.AddressIndicator"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.indicator.AddressIndicator",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractGlobalTitle"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractGlobalTitle",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractGlobalTitle",
-      "customTargetConstructorClass":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractParameter"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractParameter"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractParameter",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.BCDOddEncodingScheme"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.BCDOddEncodingScheme",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.BCDOddEncodingScheme",
-      "customTargetConstructorClass":"org.mobicents.protocols.ss7.sccp.impl.parameter.DefaultEncodingScheme"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.DefaultEncodingScheme"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.DefaultEncodingScheme",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.GlobalTitle0100Impl"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.GlobalTitle0100Impl",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.GlobalTitle0100Impl",
-      "customTargetConstructorClass":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractGlobalTitle"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.GlobalTitle0100Impl",
-      "customTargetConstructorClass":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractParameter"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.SccpAddressImpl"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.SccpAddressImpl",
-      "customTargetConstructorClass":"java.lang.Object"
-    },
-    {
-      "name":"org.mobicents.protocols.ss7.sccp.impl.parameter.SccpAddressImpl",
-      "customTargetConstructorClass":"org.mobicents.protocols.ss7.sccp.impl.parameter.AbstractParameter"
     }
   ],
   "lambdaCapturingTypes":[
