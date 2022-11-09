@@ -65,6 +65,7 @@ public class RunScript {
     private static ScriptEngine engine;
     static boolean debug;
     static boolean trace;
+    static boolean nostdin;
 
     static final int BUFFER_SIZE = 2048;
     static List<File> files = null;
@@ -148,6 +149,8 @@ public class RunScript {
                     value = i.next();
                 } else if (name.equals("url")) {
                     value = i.next();
+                } else if (name.equals("nostdin")) {
+                    nostdin = true;
                 }
 
                 if (value == null) {
@@ -173,6 +176,11 @@ public class RunScript {
                 String u = arg.substring("classpath:".length());
                 System.err.println("looking in classpath for " + u);
                 URL url = RunScript.class.getResource(u);
+                if(url == null) {
+                    System.err.println("classpth resource not exists: " + u);
+                    System.exit(1);
+                }
+
                 f = new File(url.toURI());
                 files.add(f);
             } else {
@@ -181,7 +189,7 @@ public class RunScript {
                 if (debug) {
                     System.err.println("using file " + f.getAbsolutePath() + " exists: " + f.exists());
                 }
-                if (!f.exists()) {
+                if (!f.exists() || RunScript.class.getResource(f.getCanonicalPath()) == null) {
                     System.err.println("file not exists: " + f.getAbsolutePath());
                     System.exit(1);
                 }
@@ -221,9 +229,9 @@ public class RunScript {
 
         init();
         String newName = null;
-        if (System.in.available() > 0) {
+        if (!nostdin && System.in.available() > 0) {
             if (debug) {
-                System.err.println("got old stream");
+                System.err.println("got stdin stream");
             }
             newName = "stdin";
 
@@ -231,13 +239,13 @@ public class RunScript {
         }
         if (System.inheritedChannel() != null) {
             if (debug) {
-                System.err.println("got stream");
+                System.err.println("got inherited channel stream");
             }
             newName = "stdin-inherited";
         }
 
         if (files.isEmpty() && fin == null) {
-            System.err.println("no input file\nusage jmxjs --debug --trace --username=wozza --password=wozza [--url=service:jmx:remote+http://localhost:9990] [--host=localhost] [--port=9990] somefile.js < myfile.js");
+            System.err.println("no input file\nusage jmxjs --nostdin --debug --trace --username=wozza --password=wozza [--url=service:jmx:remote+http://localhost:9990] [--host=localhost] [--port=9990] [ somefile.js | classpath:some-class-loader-resource.js] < myfile.js");
 
         } else {
             Engine engine = Engine.newBuilder()
@@ -299,7 +307,9 @@ public class RunScript {
                 }
 
             } catch (PolyglotException x) {
-                System.err.println("failed :" + x.getMessage() + " source: [" + newName +"] " + x.getSourceLocation());
+                System.err.println("failed :\"" + x.getMessage() + "\" (" + x.getClass().getName() + ") source: [" + newName +"] " + x.getSourceLocation() +
+                        ", caused by: "+ x.getCause());
+
                 System.err.println(Arrays.asList(x.getPolyglotStackTrace()).toString());
                 if (trace) {
                     x.printStackTrace();

@@ -1,21 +1,26 @@
 #!/bin/bash -x
+SCRIPT_DIR=$(readlink -f `dirname $0`)
 BASE=$(readlink -f `dirname $0`/..)
 if [ -f src/main/resources/logging.properties ] ; then 
 LOGGING='-Djava.util.logging.config.file=src/main/resources/logging.properties'
 fi
 
 if [ -d target ] ; then 
-CLASSPATH=$BASE/src/main/js:$BASE/src/test/js:$BASE/target/classes/:$BASE/target/test-classes/:$CLASSPATH
-CLASSPATH=$BASE/target/jslee-js-1.0.Final.jar:$BASE/target/jmxjs-1.0.Final-shaded.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*:src/main/resources:$CLASSPATH
+
+CLASSPATH=$BASE/target/jslee-js-1.0.Final.jar:$BASE/target/jmxjs-1.0.Final-shaded.jar:$BASE/target/dependency/runtime/*:$BASE/target/dependency/compile/*
+
+CLASSPATH=$BASE/src/main/js:$BASE/src/test/js:$BASE/target/classes/:$BASE/target/test-classes/:$CLASSPATH:$BASE/src/main/resources:
 else 
 
 CLASSPATH=$BASE/jmxjs-1.0.Final-shaded.jar:$CLASSPATH
 CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.Final/jslee-js-1.0.Final-shade.jar
-
 fi 
 
-#JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
+WILDFLY_HOME=/media/work/inst/telscale-slee-7.2.0-5.13-wildfly-10.1.0.Final/wildfly-10.1.0.Final
+ CLASSPATH=$CLASSPATH:${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/modules/main/*:${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/commons/main/*:${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/diameter/lib/main/:${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/smpp/bootstrap/main/*
 
+#JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
+JAVA_OPTS="-Djava.security.manager -Djava.security.policy=$SCRIPT_DIR/java.policy"
 let native=0 
 java $LOGGING $JAVA_OPTS -classpath $CLASSPATH run.RunScript $@
 

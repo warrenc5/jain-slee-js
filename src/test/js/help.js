@@ -1,4 +1,4 @@
-load('resource:jain-slee.js');
+import * as js from '/resource:js/jain-slee.js';
 
 try {
     resourceAdaptorMBean.help();

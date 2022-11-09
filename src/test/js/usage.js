@@ -38,6 +38,18 @@ for (var s in services) {
             var sbbUsageMBean = js.mbean(serviceUsageMBean.getSbbUsageMBean(sbb))
             //sbbUsageMBean.help()
             console.log(JSON.stringify(sbbUsageMBean, null,2))
+            //console.log(sbbUsageMBean.info)
+            for (const o of sbbUsageMBean.info.getOperations()) {
+                if(o.getReturnType() =="javax.slee.usage.SampleStatistics")
+                    console.log(o.getName(), sbbUsageMBean[o.getName()](false))
+            }
+                     /**
+            sbbUsageMBean.info.getOperations().filter((o)=>o.getReturnType() =="javax.slee.usage.SampleStatistics")
+                    .forEach(
+                        (o)=>console.log(o.getName(), sbbUsageMBean[o.getName()](false))
+                    )*/
+                     
+            //console.log(sbbUsageMBean.getMapRestoreDataResponseOKStats(false));
         } catch (e) {
             console.log(e)
         }

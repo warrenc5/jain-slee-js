@@ -2,41 +2,18 @@ import * as js from '/resource:js/jain-slee.js';
 console.log("test connection script")
 var state = js.sleeMBean.State;
 
-console.log(state)
-
-/*
 var isup = js.mbean("org.mobicents.ss7:service=ISUPSS7Service");
 var cap = js.mbean("org.mobicents.ss7:service=CAPSS7Service");
 var map = js.mbean("org.mobicents.ss7:service=MAPSS7Service");
 var tcapservice = js.mbean("org.mobicents.ss7:service=TCAPSS7Service");
-*/
 
-
-var alarm = js.mbean("org.mobicents.ss7:layer=ALARM,type=Management,name=AlarmHost");
 
 var sccp = js.mbean("org.mobicents.ss7:layer=SCCP,type=Management,name=SccpStack");
 var mtp = js.mbean("org.mobicents.ss7:layer=M3UA,type=Management,name=Mtp3UserPart");
 var sctp = js.mbean("org.mobicents.ss7:layer=SCTP,type=Management,name=SCTPManagement");
+var tcap = js.mbean("org.mobicents.ss7:layer=TCAP,type=Management,name=TcapStack");
 
-//var tcap = js.mbean("org.mobicents.ss7:layer=TCAP,type=Management,name=TcapStack");
-
-//var mbeans = [isup,cap,map,tcapservice,tcap,sccp,sctp,mtp];
-
-//alarm.help()
-try { 
-    var alarmMessageList = alarm.CurrentAlarmList
-    alarmMessageList.getCurrentAlarmList()
-        .filter(alarmMessage=>alarmMessage.getObjectName().startsWith("AS:"))
-        .filter(alarmMessage=>alarmMessage.getProblemName().includes("not active"))
-        .forEach(alarmMessage=>console.log(alarmMessage))
-
-} catch (e) {
-    console.log(e)
-    throw e
-}
-
-
-/**
+var mbeans = [isup,cap,map,tcapservice,tcap,sccp,sctp,mtp];
 mbeans.forEach(m => {
 console.log(m)
 try {
@@ -64,4 +41,3 @@ m.start();
 console.log(e)
 }
 });
-**/
