@@ -3,8 +3,10 @@ package run;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectStreamClass;
 import java.io.Reader;
@@ -24,14 +26,18 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
+import org.graalvm.polyglot.EnvironmentAccess;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.PolyglotAccess;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.FileSystem;
+import org.jboss.vfs.VirtualFile;
 
 public class RunScript {
+
+    private static boolean noexit;
 
     static {
 
@@ -51,6 +57,7 @@ public class RunScript {
         ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
         ObjectStreamClass.lookup(java.util.Collections.class);
         ObjectStreamClass.lookup(org.jboss.remotingjmx.RemotingConnectorProvider.class);
+        ObjectStreamClass.lookup(org.jboss.marshalling.river.RiverMarshaller.class);
 
         /**
         try {
@@ -69,6 +76,9 @@ public class RunScript {
 
     static final int BUFFER_SIZE = 2048;
     static List<File> files = null;
+
+    private static BufferedInputStream fin = null;
+    private static String newName = null;
 
     public static void init() {
         ScriptEngineManager scriptEngineManager;
@@ -107,8 +117,6 @@ public class RunScript {
     }
 
     public static void main(String[] args) throws ScriptException, IOException, URISyntaxException {
-
-        //TestThis.main(args);
         eval(args);
     }
 
@@ -120,12 +128,17 @@ public class RunScript {
             System.err.println(Arrays.asList(args).toString());
         }
 
+        System.err.println(Arrays.asList(args).toString());
         Iterator<String> i = Arrays.asList(args).iterator();
         files = new ArrayList<>();
         File f = null;
         while (i.hasNext()) {
             //TODO: add help
             String arg = i.next().trim();
+            if (arg.trim().length() == 0) {
+                System.err.println("skipping empty arg");
+                continue;
+            }
 
             if (arg.startsWith("--")) {
                 String[] c = arg.substring(2).split("=");
@@ -151,10 +164,14 @@ public class RunScript {
                     value = i.next();
                 } else if (name.equals("nostdin")) {
                     nostdin = true;
+                    continue;
+                } else if (name.equals("noexit")) {
+                    noexit = true;
+                    continue;
                 }
 
                 if (value == null) {
-                    System.err.println(name + "  was null");
+                    System.err.println(name + " was null");
                 } else {
                     System.setProperty("js." + name, value);
                 }
@@ -176,12 +193,32 @@ public class RunScript {
                 String u = arg.substring("classpath:".length());
                 System.err.println("looking in classpath for " + u);
                 URL url = RunScript.class.getResource(u);
-                if(url == null) {
+                if (url == null) {
                     System.err.println("classpth resource not exists: " + u);
-                    System.exit(1);
+                    if (noexit) {
+                        throw new IllegalArgumentException("classpth resource not exists: " + u);
+                    } else {
+                        System.exit(1);
+                    }
                 }
+                System.err.println("found " + url.toURI());
+                if (url.getProtocol().equals("vfs")) {
+                    f = File.createTempFile(url.getPath() + "-", ".js");
+                    System.err.println("rewriting vfs to " + f.toString());
 
-                f = new File(url.toURI());
+                    VirtualFile vf = (VirtualFile) url.getContent();
+                    InputStream is = vf.openStream();
+                    FileOutputStream fos = new FileOutputStream(f);
+                    while (is.available() > 0) {
+                        fos.write(is.read());
+                    }
+                    fos.flush();
+                    fos.close();
+                    is.close();
+                } else {
+                    f = new File(url.toURI());
+                }
+                System.err.println("adding " + f.getAbsolutePath());
                 files.add(f);
             } else {
                 f = new File(arg);
@@ -189,9 +226,13 @@ public class RunScript {
                 if (debug) {
                     System.err.println("using file " + f.getAbsolutePath() + " exists: " + f.exists());
                 }
-                if (!f.exists() || RunScript.class.getResource(f.getCanonicalPath()) == null) {
+                if (!f.exists() && RunScript.class.getResource(f.getCanonicalPath()) == null) {
                     System.err.println("file not exists: " + f.getAbsolutePath());
-                    System.exit(1);
+                    if (noexit) {
+                        return;
+                    } else {
+                        System.exit(1);
+                    }
                 }
             }
         }
@@ -224,11 +265,9 @@ public class RunScript {
             System.setProperty("js.password", "admin");
         }
 
-        BufferedInputStream fin = null;
         debug = debug || Boolean.getBoolean("js.debug");
 
         init();
-        String newName = null;
         if (!nostdin && System.in.available() > 0) {
             if (debug) {
                 System.err.println("got stdin stream");
@@ -248,81 +287,88 @@ public class RunScript {
             System.err.println("no input file\nusage jmxjs --nostdin --debug --trace --username=wozza --password=wozza [--url=service:jmx:remote+http://localhost:9990] [--host=localhost] [--port=9990] [ somefile.js | classpath:some-class-loader-resource.js] < myfile.js");
 
         } else {
-            Engine engine = Engine.newBuilder()
-                    .option("engine.WarnInterpreterOnly", "false")
-                    .build();
-            FileSystem delegate = new MyFileSystem();
-            //TODO use graal
-            contextLocal = ThreadLocal.withInitial(() -> Context.newBuilder()
-                    .engine(engine)
-                    .allowNativeAccess(true)
-                    .allowAllAccess(true)
-                    .allowHostClassLoading(true)
-                    .allowHostClassLookup(s -> true)
-                    .allowHostAccess(HostAccess.ALL)
-                    .allowIO(true)
-                    .allowExperimentalOptions(true)
-                    .allowPolyglotAccess(PolyglotAccess.ALL)
-                    //.option("js.nashorn-compat", "true")
-                    .logHandler(System.out)
-                    //.currentWorkingDirectory(Paths.get(System.getProperty("js.dir", ".")).toAbsolutePath())
-                    .err(System.err)
-                    .fileSystem(delegate)
-                    .build());
+            processFiles(files);
+        }
+    }
 
-            try ( Context context = contextLocal.get()) {
-                Value bindings = context.getBindings("js");
-                bindings.putMember("js_username", System.getProperty("js.username"));
-                bindings.putMember("js_password", System.getProperty("js.password"));
-                bindings.putMember("js_url", System.getProperty("js.url"));
-                bindings.putMember("js_debug", Boolean.getBoolean("js.debug"));
-                bindings.putMember("js_trace", Boolean.getBoolean("js.trace"));
+    public static void processFiles(List<File> files) {
 
-                Value eval = context.eval("js", "Java.type('javax.management.ObjectName')");
-                if (eval.isNull()) {
-                    throw new Exception("failed eval objectName");
-                } else {
-                    if (debug) {
-                        System.err.println("have ObjectName " + eval.asHostObject());
-                    }
-                }
+        Engine engine = Engine.newBuilder()
+                //JDK11.option("engine.WarnInterpreterOnly", "false")
+                .build();
+        FileSystem delegate = new MyFileSystem();
+        //TODO use graal
+        contextLocal = ThreadLocal.withInitial(() -> Context.newBuilder()
+                .engine(engine)
+                .allowNativeAccess(true)
+                .allowAllAccess(true)
+                .allowHostClassLoading(true)
+                .allowHostClassLookup(s -> true)
+                .allowHostAccess(HostAccess.ALL)
+                .allowCreateThread(true)
+                .allowIO(true)
+                .allowExperimentalOptions(true)
+                .allowPolyglotAccess(PolyglotAccess.ALL)
+                .allowEnvironmentAccess(EnvironmentAccess.INHERIT)
+                //.option("js.nashorn-compat", "true")
+                .logHandler(System.out)
+                //.currentWorkingDirectory(Paths.get(System.getProperty("js.dir", ".")).toAbsolutePath())
+                .err(System.err)
+                .fileSystem(delegate)
+                .build());
 
-                String mime = null;
-                if (fin != null) {
-                    BufferedReader fr = new BufferedReader(new InputStreamReader(fin));
-                    mime = detectMimeType(fr);
-                    newName = "stdin";
+        try ( Context context = contextLocal.get()) {
+            Value bindings = context.getBindings("js");
+            bindings.putMember("js_username", System.getProperty("js.username"));
+            bindings.putMember("js_password", System.getProperty("js.password"));
+            bindings.putMember("js_url", System.getProperty("js.url"));
+            bindings.putMember("js_debug", debug || Boolean.getBoolean("js.debug"));
+            bindings.putMember("js_trace", trace || Boolean.getBoolean("js.trace"));
 
-                    processSource(newName, fr, context, mime);
-                }
-
-                for (File f2 : files) {
-                    newName = f2.getAbsolutePath();
-                    if (debug) {
-                        System.err.println(newName);
-                    }
-                    BufferedReader fr = new BufferedReader(new FileReader(f2), BUFFER_SIZE * 2);
-                    mime = detectMimeType(fr);
-                    processSource(newName, fr, context, mime);
-                }
-
-            } catch (PolyglotException x) {
-                System.err.println("failed :\"" + x.getMessage() + "\" (" + x.getClass().getName() + ") source: [" + newName +"] " + x.getSourceLocation() +
-                        ", caused by: "+ x.getCause());
-
-                System.err.println(Arrays.asList(x.getPolyglotStackTrace()).toString());
-                if (trace) {
-                    x.printStackTrace();
-                }
-            } catch (Exception x) {
-                System.err.println(x.getMessage());
+            Value eval = context.eval("js", "Java.type('javax.management.ObjectName')");
+            if (eval.isNull()) {
+                throw new Exception("failed eval objectName");
+            } else {
                 if (debug) {
-                    x.printStackTrace();
+                    System.err.println("have ObjectName " + eval.asHostObject());
                 }
-
-            } finally {
-                System.err.println("exited");
             }
+
+            String mime = null;
+            if (fin != null) {
+                BufferedReader fr = new BufferedReader(new InputStreamReader(fin));
+                mime = detectMimeType(fr);
+                newName = "stdin";
+
+                processSource(newName, fr, context, mime);
+            }
+
+            for (File f2 : files) {
+                newName = f2.getAbsolutePath();
+                if (debug) {
+                    System.err.println(newName);
+                }
+                BufferedReader fr = new BufferedReader(new FileReader(f2), BUFFER_SIZE * 2);
+                mime = detectMimeType(fr);
+                processSource(newName, fr, context, mime);
+            }
+
+        } catch (PolyglotException x) {
+            System.err.println("failed :\"" + x.getMessage() + "\" (" + x.getClass().getName() + ") source: [" + newName + "] " + x.getSourceLocation()
+                    + ", caused by: " + x.getCause());
+
+            System.err.println(Arrays.asList(x.getPolyglotStackTrace()).toString());
+            if (trace) {
+                x.printStackTrace();
+            }
+        } catch (Exception x) {
+            System.err.println(x.getMessage());
+            if (debug) {
+                x.printStackTrace();
+            }
+
+        } finally {
+            System.err.println("exited");
         }
 
     }

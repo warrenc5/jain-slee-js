@@ -4,15 +4,15 @@
     <groupId>mobi.mofokom</groupId>
     <artifactId>jslee-js</artifactId>
     <version>1.0.Final</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <graalvm.version>22.2.0</graalvm.version>
+        <graalvm.version>20.3.3</graalvm.version>
         <WILDFLY_HOME>/media/work/inst/telscale-slee-7.2.0-5.13-wildfly-10.1.0.Final/wildfly-10.1.0.Final</WILDFLY_HOME>
         <!--
-        <graalvm.version>20.0.0</graalvm.version>
+        <graalvm.version>22.2.0</graalvm.version>
         <graalvm.version>20.3.3</graalvm.version>
         -->
         <executable>/usr/local/java/graalvm/bin/java</executable>
@@ -34,7 +34,7 @@
             <groupId>javax.slee</groupId>
             <artifactId>jainslee-api</artifactId>
             <version>1.1</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>javax.resource</groupId>
@@ -63,6 +63,7 @@
             <!--
             <scope>runtime</scope>
             -->
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.remoting</groupId>
@@ -71,12 +72,21 @@
             <version>4.0.21.Final</version>
             -->
             <version>5.0.18.Final</version>
+            
+            <!--
+            JDK11
+            -->
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging</artifactId>
             <version>3.3.0.Final</version>
+            <!--
+            JDK11
             <scope>runtime</scope>
+            -->
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -89,7 +99,11 @@
             <!--
             <version>1.4.11.Final</version>
             -->
+            <!--JDK11
             <version>2.0.9.Final</version>
+            -->
+            <version>1.4.11.Final</version>
+            <scope>provided</scope>
             <!--
             <scope>runtime</scope>
             -->
@@ -101,7 +115,7 @@
             <version>1.4.11.Final</version>
             -->
             <version>2.0.9.Final</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <!--
                 <dependency>
@@ -121,26 +135,47 @@
                 </dependency>
         -->
         <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron</artifactId>
+            <version>1.1.0.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron-sasl</artifactId>
+            <version>1.16.1.Final</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-vfs</artifactId>
+            <version>3.2.12.Final</version>
+            <scope>provided</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.truffle</groupId>
             <artifactId>truffle-api</artifactId>
             <version>${graalvm.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.nativeimage</groupId>
             <artifactId>svm</artifactId>
             <version>${graalvm.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
             <version>${graalvm.version}</version>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
@@ -158,6 +193,12 @@
             <groupId>org.graalvm.tools</groupId>
             <artifactId>profiler</artifactId>
             <version>${graalvm.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.heliosapm.jmxlocal</groupId>
+            <artifactId>jmxlocal</artifactId>
+            <version>1.0</version>
             <scope>runtime</scope>
         </dependency>
         <!--
@@ -195,12 +236,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>util</id>
+                        <goals><goal>jar</goal></goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
                 <configuration>
+                    <classifier>util</classifier>
+                    <excludes>
+                        <exclude>web/**</exclude>
+                    </excludes>
                     <archive>
                         <manifest>
                             <addClasspath>false</addClasspath>
                             <mainClass>run.RunScript</mainClass>
                         </manifest>
+                        <manifestEntries>
+                            <Launcher-Agent-Class>run.Agent</Launcher-Agent-Class>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -232,6 +288,7 @@
                     <!--
                         <skip>true</skip>
                     -->
+                    
                 </configuration>
             </plugin>
             <!--
@@ -269,11 +326,14 @@
                 <executions>
                     <execution>
                         <id>server</id>
-                        <phase>package</phase>
+                        <phase>none</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <!--
+                                                    <skip>true</skip>
+                            -->
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedArtifactId>jmxjs</shadedArtifactId>
                             <shadedClassifierName>shaded</shadedClassifierName>
@@ -295,44 +355,49 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
 
-            <!--
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-shade-plugin</artifactId>
-                            <version>2.4.3</version>
-                            <executions>
-                                <execution>
-                                    <id>server</id>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>shade</goal>
-                                    </goals>
-                                    <configuration>
-                                        <shadedArtifactAttached>true</shadedArtifactAttached>
-                                        <shadedArtifactId>jmxjs</shadedArtifactId>
-                                        <shadedClassifierName>shade</shadedClassifierName>
-                                        <artifactSet>
-                                            <includes>
-                                                <include>**</include>
-                                            </includes>
-                                        </artifactSet>
-                                        <transformers>
-                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                                <manifestEntries>
-                                                    <Main-Class>run.RunScript</Main-Class>
-                                                    <Build-Number>1.0</Build-Number>
-                                                </manifestEntries>
-                                            </transformer>
-                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        </transformers>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-            -->
+        <!--
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>2.4.3</version>
+                        <executions>
+                            <execution>
+                                <id>server</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedArtifactId>jmxjs</shadedArtifactId>
+                                    <shadedClassifierName>shade</shadedClassifierName>
+                                    <artifactSet>
+                                        <includes>
+                                            <include>**</include>
+                                        </includes>
+                                    </artifactSet>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <manifestEntries>
+                                                <Main-Class>run.RunScript</Main-Class>
+                                                <Build-Number>1.0</Build-Number>
+                                            </manifestEntries>
+                                        </transformer>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+        -->
 
-        </plugins>
+    </plugins>
         
     </build>
 
@@ -385,6 +450,13 @@
                                 <argument>${js.script}</argument>
                             </arguments>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:jboss:service:7.0 jboss-service_7_0.xsd"
+        xmlns="urn:jboss:service:7.0">
+    <mbean code="web.RunScript" name="mofokom:type=RunScript">
+        <!--doesn't work 
+        <depends>javax.slee.management:name=SleeManagement</depends>
+                -->
+    </mbean>
+</server>

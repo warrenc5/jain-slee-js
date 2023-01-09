@@ -12,7 +12,6 @@ export function connect() {
         var password = js_password
         var url = js_url
 
-
         if (debug)
             print("connecting to " + url + " as " + username)
         if (trace)

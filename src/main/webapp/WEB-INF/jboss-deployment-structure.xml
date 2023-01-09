@@ -1,0 +1,15 @@
+<jboss-deployment-structure>
+    <deployment>
+        <dependencies>
+            <!--
+            <module name="org.mobicents.ss7.commons" export="true"/>
+            <module name="org.mobicents.ss7.modules" export="true"/>
+                        -->
+            <module name="org.telestax.slee.container.lib" export="true"/>
+            <module name="org.jboss.remoting-jmx" export="true"/>
+            <module name="org.jboss.marshalling" export="true"/>
+            <module name="org.jboss.marshalling.river" export="true" services="import"/>
+            <module name="org.wildfly.security.elytron" export="true"/>
+        </dependencies>
+    </deployment>
+</jboss-deployment-structure>

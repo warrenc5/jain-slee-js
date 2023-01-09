@@ -32,7 +32,6 @@ export function jmxConnectURL(urlPath, username, password) {
         creds.push(password);
     }
     map.put('jmx.remote.credentials', util.stringArray(creds));
-    //map.put('jmx.remote.protocol.provider.pkgs','org.jboss.remotingjmx');
 
     if (mmConnection != null) {
         // close the existing connection
@@ -52,10 +51,14 @@ export function jmxConnectURL(urlPath, username, password) {
         console.log("connecting to " + url.toString());
 
     var factory = javax.management.remote.JMXConnectorFactory;
-    var RemotingConnectorProvider = org.jboss.remotingjmx.RemotingConnectorProvider;
-    var jboss = new RemotingConnectorProvider();
+    map.put('jmx.remote.protocol.provider.pkgs','com.heliosapm.utils.jmx.protocol.local|org.jboss.remotingjmx');
+    if (urlPath.includes("remote+http")) { 
+        var RemotingConnectorProvider = org.jboss.remotingjmx.RemotingConnectorProvider;
+        factory = new RemotingConnectorProvider();
+    }
     try {
-        var jmxc = jboss.newJMXConnector(url, map);
+        var jmxc = factory.newJMXConnector(url, map);
+
         if (debug)
             console.log("provider " + jmxc);
         jmxc.connect();
