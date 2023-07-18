@@ -1,11 +1,11 @@
-load('classpath:jain-slee.js');
+import * as js from '/resource:js/jain-slee.js';
 
 //var deployBase = 'file:///tmp/';
 var deployBase = 'file:///opt/mobicents/server/default/deploy/mofokom/';
 
-var serviceID = new javax.slee.management.ServiceID('XmlRpc Service', 'MOFOKOM', '1.0');
 
-var sbbID = new javax.slee.management.SbbID('XmlRpc Sbb', 'MOFOKOM', '1.0');
+var serviceID = new javax.slee.ServiceID('XmlRpc Service', 'MOFOKOM', '1.0');
+var sbbID = new javax.slee.SbbID('XmlRpc Sbb', 'MOFOKOM', '1.0');
 
 /*
  //get sbb tracer names
@@ -29,7 +29,7 @@ var sbbID = new javax.slee.management.SbbID('XmlRpc Sbb', 'MOFOKOM', '1.0');
 var raLinkName = 'XmlRpc Resource Adaptor Entity Link';
 var raEntityName = 'xmlrpc-entity';
 
-var raID = new ResourceAdaptorID('XmlRpc Resource Adaptor', 'MOFOKOM', '1.0');
+var raID = new javax.slee.resource.ResourceAdaptorID('XmlRpc Resource Adaptor', 'MOFOKOM', '1.0');
 
 var properties = new javax.slee.resource.ConfigProperties();
 

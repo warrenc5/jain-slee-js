@@ -40,24 +40,28 @@ public class RunScript {
     private static boolean noexit;
 
     static {
-
-        System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
-        javax.management.MBeanNotificationInfo.class.getClass();
-        javax.transaction.RollbackException.class.getClass();
-        javax.management.remote.JMXServiceURL.class.getClass();
-        org.wildfly.security.sasl.util.PrivilegedSaslClientFactory.class.getClass();
-        org.wildfly.security.sasl.util.PrivilegedSaslClient.class.getClass();
-        ObjectStreamClass.lookup(java.util.HashSet.class);
-        ObjectStreamClass.lookup(javax.management.InstanceNotFoundException.class);
-        ObjectStreamClass.lookup(javax.management.MBeanException.class);
-        ObjectStreamClass.lookup(javax.slee.management.SleeState.class);
-        ObjectStreamClass.lookup(javax.slee.ServiceID.class);
-        ObjectStreamClass.lookup(javax.slee.ServiceID[].class);
-        ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
-        ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
-        ObjectStreamClass.lookup(java.util.Collections.class);
-        ObjectStreamClass.lookup(org.jboss.remotingjmx.RemotingConnectorProvider.class);
-        ObjectStreamClass.lookup(org.jboss.marshalling.river.RiverMarshaller.class);
+        try {
+            System.setProperty("jboss.threads.eqe.disable", Boolean.toString(true));
+            javax.management.MBeanNotificationInfo.class.getClass();
+            javax.transaction.RollbackException.class.getClass();
+            javax.management.remote.JMXServiceURL.class.getClass();
+            org.wildfly.security.sasl.util.PrivilegedSaslClientFactory.class.getClass();
+            org.wildfly.security.sasl.util.PrivilegedSaslClient.class.getClass();
+            ObjectStreamClass.lookup(java.util.HashSet.class);
+            ObjectStreamClass.lookup(javax.management.InstanceNotFoundException.class);
+            ObjectStreamClass.lookup(javax.management.MBeanException.class);
+            ObjectStreamClass.lookup(javax.slee.management.SleeState.class);
+            ObjectStreamClass.lookup(javax.slee.ServiceID.class);
+            ObjectStreamClass.lookup(javax.slee.ServiceID[].class);
+            ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
+            ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
+            ObjectStreamClass.lookup(java.util.Collections.class);
+            ObjectStreamClass.lookup(org.jboss.remotingjmx.RemotingConnectorProvider.class);
+            ObjectStreamClass.lookup(org.jboss.marshalling.river.RiverMarshaller.class);
+        } catch (Throwable x) {
+            x.printStackTrace();
+            throw x;
+        }
 
         /**
         try {
@@ -354,8 +358,10 @@ public class RunScript {
             }
 
         } catch (PolyglotException x) {
-            System.err.println("failed :\"" + x.getMessage() + "\" (" + x.getClass().getName() + ") source: [" + newName + "] " + x.getSourceLocation()
+            x.printStackTrace();
+            System.err.println("failed2 :\"" + x.getMessage() + "\" (" + x.getClass().getName() + ") source: [" + newName + "] " + x.getSourceLocation()
                     + ", caused by: " + x.getCause());
+            x.getCause().printStackTrace();
 
             System.err.println(Arrays.asList(x.getPolyglotStackTrace()).toString());
             if (trace) {
