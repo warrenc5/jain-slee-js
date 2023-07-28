@@ -4,12 +4,15 @@
     <groupId>mobi.mofokom</groupId>
     <artifactId>jslee-js</artifactId>
     <version>1.0.Final</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!--
         <graalvm.version>20.3.3</graalvm.version>
+        -->
+        <graalvm.version>22.2.0</graalvm.version>
         <WILDFLY_HOME>/media/work/inst/telscale-slee-7.2.0-5.13-wildfly-10.1.0.Final/wildfly-10.1.0.Final</WILDFLY_HOME>
         <!--
         <graalvm.version>22.2.0</graalvm.version>
@@ -99,10 +102,12 @@
             <!--
             <version>1.4.11.Final</version>
             -->
-            <!--JDK11
+            <!--JDK11 -->
+            <!--
+            <version>1.4.11.Final</version>
             <version>2.0.9.Final</version>
             -->
-            <version>1.4.11.Final</version>
+            <version>2.0.9.Final</version>
             <scope>provided</scope>
             <!--
             <scope>runtime</scope>
@@ -111,10 +116,11 @@
         <dependency>
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling</artifactId>
+            <version>2.0.9.Final</version>
             <!--
+            <version>2.0.9.Final</version>
             <version>1.4.11.Final</version>
             -->
-            <version>2.0.9.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--
@@ -154,6 +160,20 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>org.graalvm.compiler</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${graalvm.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        -->
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
@@ -165,6 +185,7 @@
             <version>${graalvm.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.graalvm.nativeimage</groupId>
             <artifactId>svm</artifactId>
@@ -177,6 +198,7 @@
             <version>${graalvm.version}</version>
             <scope>runtime</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
@@ -235,12 +257,26 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <!--
+                    <compilerArgs>
+                        <arg>-add-exports=java.base/jdk.vm.ci.services=ALL-UNNAMED</arg>
+                    </compilerArgs>
+                    -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <id>util</id>
-                        <goals><goal>jar</goal></goals>
+                        <id>default-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                         <phase>package</phase>
                     </execution>
                 </executions>
@@ -322,21 +358,20 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>server</id>
-                        <phase>none</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <!--
-                                                    <skip>true</skip>
-                            -->
+                            <skip>true</skip>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedArtifactId>jmxjs</shadedArtifactId>
                             <shadedClassifierName>shaded</shadedClassifierName>
+                            <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
                             <artifactSet>
                                 <includes>
                                     <include>**</include>
@@ -359,45 +394,56 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archiveClasses>true</archiveClasses>
+                </configuration>
             </plugin>
 
-        <!--
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <version>2.4.3</version>
-                        <executions>
-                            <execution>
-                                <id>server</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>shade</goal>
-                                </goals>
-                                <configuration>
-                                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                                    <shadedArtifactId>jmxjs</shadedArtifactId>
-                                    <shadedClassifierName>shade</shadedClassifierName>
-                                    <artifactSet>
-                                        <includes>
-                                            <include>**</include>
-                                        </includes>
-                                    </artifactSet>
-                                    <transformers>
-                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                            <manifestEntries>
-                                                <Main-Class>run.RunScript</Main-Class>
-                                                <Build-Number>1.0</Build-Number>
-                                            </manifestEntries>
-                                        </transformer>
-                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                    </transformers>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-        -->
+            <!--
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-shade-plugin</artifactId>
+                            <version>2.4.3</version>
+                            <executions>
+                                <execution>
+                                    <id>server</id>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>shade</goal>
+                                    </goals>
+                                    <configuration>
+                                        <shadedArtifactAttached>true</shadedArtifactAttached>
+                                        <shadedArtifactId>jmxjs</shadedArtifactId>
+                                        <shadedClassifierName>shade</shadedClassifierName>
+                                        <artifactSet>
+                                            <includes>
+                                                <include>**</include>
+                                            </includes>
+                                        </artifactSet>
+                                        <transformers>
+                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                                <manifestEntries>
+                                                    <Main-Class>run.RunScript</Main-Class>
+                                                    <Build-Number>1.0</Build-Number>
+                                                </manifestEntries>
+                                            </transformer>
+                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                        </transformers>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+            -->
 
-    </plugins>
+        </plugins>
         
     </build>
 

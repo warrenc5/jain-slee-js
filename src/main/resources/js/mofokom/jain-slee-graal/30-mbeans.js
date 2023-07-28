@@ -17,6 +17,8 @@ var _profileProvMBean
 var _serviceMBean
 var _traceMBean
 
+var _mbeans = []
+
 export const debug = js_debug || false
 export const trace = js_trace || false
 
@@ -27,10 +29,13 @@ try {
     if (connected) {
 
         _sleeMBean = jmx.mbean("javax.slee.management:name=SleeManagement", false)
+        _mbeans.push(_sleeMBean)
 //Mobicents specific
         try {
             _sbbMBean = jmx.mbean("org.mobicents.slee:name=SbbEntitiesMBean", false)
+            _mbeans.push(_sbbMBean)
             _activityMBean = jmx.mbean("org.mobicents.slee:name=ActivityManagementMBean", false)
+            _mbeans.push(_activityMBean)
         } catch (e) {
             if (debug) {
                 console.log("not mobicents")
@@ -42,11 +47,13 @@ try {
 //Opencloud Rhino specific
         try {
             _houseKeepingMBean = jmx.mbean("com.opencloud.rhino:type=Housekeeping")
+            _mbeans.push(_houseKeepingMBean)
             _node = java.lang.Integer.valueOf(101)
             if (debug) {
                 print("returned " + houseKeepingMBean)
             }
             _nodeHouseKeepingMBean = (houseKeepingMBean == null) ? null : jmx.mbean(houseKeepingMBean.getNodeHousekeeping(node))
+            _mbeans.push(_nodeHouseKeepingMBean)
         } catch (e) {
             if (debug) {
                 console.log("not opencloud")
@@ -56,11 +63,17 @@ try {
         }
 
         _alarmMBean = jmx.mbean(_sleeMBean.AlarmMBean, false)
+        _mbeans.push(_alarmMBean)
         _deploymentMBean = jmx.mbean(_sleeMBean.DeploymentMBean, false)
+        _mbeans.push(_deploymentMBean)
         _resourceAdaptorMBean = jmx.mbean(_sleeMBean.ResourceManagementMBean, false)
+        _mbeans.push(_resourceAdaptorMBean)
         _profileProvMBean = jmx.mbean(_sleeMBean.ProfileProvisioningMBean, false)
+        _mbeans.push(_profileProvMBean)
         _serviceMBean = jmx.mbean(_sleeMBean.ServiceManagementMBean, false)
+        _mbeans.push(_serviceMBean)
         _traceMBean = jmx.mbean(_sleeMBean.TraceMBean, false)
+        _mbeans.push(_traceMBean)
     } else {
         if (debug) {
             print("no mbean server connection ");
@@ -75,7 +88,7 @@ try {
 
 //print(traceMBean.getTraceLevel(new javax.slee.SbbID("name","vendor","version")))
 
-
+export const mbeans = _mbeans
 export const sleeMBean = _sleeMBean
 //sleeMBean.stop()
 //Mobicents specific
