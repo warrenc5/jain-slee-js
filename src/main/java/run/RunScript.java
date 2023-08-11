@@ -361,7 +361,9 @@ public class RunScript {
             x.printStackTrace();
             System.err.println("failed2 :\"" + x.getMessage() + "\" (" + x.getClass().getName() + ") source: [" + newName + "] " + x.getSourceLocation()
                     + ", caused by: " + x.getCause());
-            x.getCause().printStackTrace();
+            if (x.getCause() != null) {
+                x.getCause().printStackTrace();
+            }
 
             System.err.println(Arrays.asList(x.getPolyglotStackTrace()).toString());
             if (trace) {

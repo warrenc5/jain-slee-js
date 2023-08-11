@@ -107,9 +107,9 @@ for (var i in resourceAdaptors) {
                                     }
                     }
            if(reset == true) {
-           console.log("resetting")
-                   usageMBean.resetAllUsageParameters()
-                   }
+               console.log("resetting")
+               usageMBean.resetAllUsageParameters()
+           }
         } catch (e) {
             console.log(e)
         }
