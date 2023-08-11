@@ -8,7 +8,7 @@
     </parent>
     <groupId>mobi.mofokom</groupId>
     <artifactId>jslee-js</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,19 +16,26 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <!--
         <graalvm.version>20.3.3</graalvm.version>
-        -->
+        <graalvm.version>20.0.2</graalvm.version>
         <graalvm.version>22.2.0</graalvm.version>
+        -->
+        <graalvm.version>22.3.1</graalvm.version>
         <WILDFLY_HOME>/media/work/inst/telscale-slee-7.2.0-5.13-wildfly-10.1.0.Final/wildfly-10.1.0.Final</WILDFLY_HOME>
         <!--
         <graalvm.version>22.2.0</graalvm.version>
         <graalvm.version>20.3.3</graalvm.version>
         -->
+        <!--
         <executable>/usr/local/java/graalvm/bin/java</executable>
-        <native.maven.plugin.version>0.9.13</native.maven.plugin.version>
+        -->
+        <executable>java</executable>
+        <!--<native.maven.plugin.version>0.9.13</native.maven.plugin.version>
+        -->
+        <native.maven.plugin.version>0.9.23</native.maven.plugin.version>
         <js.host>localhost</js.host>
         <js.port>9990</js.port>
         <js.url>service:jmx:remote+http://${js.host}:${js.port}</js.url>
-        <js.script>src/test/js/all.js</js.script>
+        <js.script>src/test/js/simple.js</js.script>
         <js.username>admin</js.username>
         <js.password>admin</js.password>
         <js.debug>true</js.debug>
@@ -36,7 +43,6 @@
 
         <version.org.apache.log4j>1.2.16</version.org.apache.log4j>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>javax.slee</groupId>
@@ -151,24 +157,24 @@
             <version>1.1.0.Final</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.wildfly.security</groupId>
-            <artifactId>wildfly-elytron-sasl</artifactId>
-            <version>1.16.1.Final</version>
-            <scope>runtime</scope>
-        </dependency>
+        
         <dependency>
             <groupId>org.jboss</groupId>
             <artifactId>jboss-vfs</artifactId>
             <version>3.2.12.Final</version>
             <scope>provided</scope>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
             <version>1.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron-sasl</artifactId>
+            <version>1.16.1.Final</version>
+            <scope>runtime</scope>
         </dependency>
         <!--
         <dependency>
@@ -178,6 +184,12 @@
             <scope>runtime</scope>
         </dependency>
         -->
+        <dependency>
+            <groupId>org.graalvm.espresso</groupId>
+            <artifactId>polyglot</artifactId>
+            <version>${graalvm.version}</version>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
@@ -191,12 +203,7 @@
             <scope>runtime</scope>
         </dependency>
         <!--
-        <dependency>
-            <groupId>org.graalvm.nativeimage</groupId>
-            <artifactId>svm</artifactId>
-            <version>${graalvm.version}</version>
-            <scope>provided</scope>
-        </dependency>
+        
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
@@ -276,17 +283,21 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
+                <!--
+            <executions>
+                <execution>
+                    <id>default-jar</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                    <phase>package</phase>
+                </execution>
+            </executions>
+                -->
                 <configuration>
-                    <classifier>util</classifier>
+                    <!--
+            <classifier>util</classifier>
+                    -->
                     <excludes>
                         <exclude>web/**</exclude>
                     </excludes>
@@ -301,6 +312,24 @@
                     </archive>
                 </configuration>
             </plugin>
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archiveClasses>true</archiveClasses>
+                </configuration>
+            </plugin>
+            -->
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -320,17 +349,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.0</version>
-                <configuration>
-                    <!--
-                        <skip>true</skip>
-                    -->
-                    
-                </configuration>
             </plugin>
             <!--
                         <plugin>
@@ -360,94 +378,6 @@
                             </executions>
                         </plugin>
             --> 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>server</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <skip>true</skip>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedArtifactId>jmxjs</shadedArtifactId>
-                            <shadedClassifierName>shaded</shadedClassifierName>
-                            <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
-                            <artifactSet>
-                                <includes>
-                                    <include>**</include>
-                                </includes>
-                            </artifactSet>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>run.RunScript</Main-Class>
-                                        <Build-Number>${project.version}</Build-Number>
-                                    </manifestEntries>
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>war</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <archiveClasses>true</archiveClasses>
-                </configuration>
-            </plugin>
-
-            <!--
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-shade-plugin</artifactId>
-                            <version>2.4.3</version>
-                            <executions>
-                                <execution>
-                                    <id>server</id>
-                                    <phase>package</phase>
-                                    <goals>
-                                        <goal>shade</goal>
-                                    </goals>
-                                    <configuration>
-                                        <shadedArtifactAttached>true</shadedArtifactAttached>
-                                        <shadedArtifactId>jmxjs</shadedArtifactId>
-                                        <shadedClassifierName>shade</shadedClassifierName>
-                                        <artifactSet>
-                                            <includes>
-                                                <include>**</include>
-                                            </includes>
-                                        </artifactSet>
-                                        <transformers>
-                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                                <manifestEntries>
-                                                    <Main-Class>run.RunScript</Main-Class>
-                                                    <Build-Number>1.0</Build-Number>
-                                                </manifestEntries>
-                                            </transformer>
-                                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                        </transformers>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-            -->
-
         </plugins>
         
     </build>
@@ -460,7 +390,11 @@
             </activation>
 
             
+            <properties>
+                <maven.test.skip>false</maven.test.skip>
+            </properties>
             <build>
+
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -483,7 +417,7 @@
                             <arguments>
                                 <argument>-agentlib:native-image-agent=config-output-dir=${basedir}/target/native-image/</argument>
                                 <argument>-cp</argument>
-                                <classpath/>
+                                <classpath />
                                 <!-- 
                                 <argument>
                                     -illegal-access=warn
@@ -521,6 +455,14 @@
             <build>
                 <defaultGoal>integration-test</defaultGoal>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.22.0</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
@@ -564,143 +506,10 @@
             </build>
         </profile>
         <profile>
-            <id>graal</id>
-            <!--use native profile below-->
+            <id>shade</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <skipTests>true</skipTests>
-            </properties>
-            <build>
-                <defaultGoal>install</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>3.0.0-M2</version>
-                        <executions>
-                            <execution>
-                                <id>enforce-versions</id>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                                <configuration>
-                                    <rules>
-                                        <bannedPlugins>
-                                            <!-- will only display a warning but does not fail the build. -->
-                                            <level>WARN</level>
-                                            <excludes>
-                                                <exclude>org.apache.maven.plugins:maven-verifier-plugin</exclude>
-                                            </excludes>
-                                            <message>Please consider using the maven-invoker-plugin
-                                                (http://maven.apache.org/plugins/maven-invoker-plugin/)!</message>
-                                        </bannedPlugins>
-                                        <requireMavenVersion>
-                                            <version>2.0.6</version>
-                                        </requireMavenVersion>
-                                        <requireJavaVersion>
-                                            <version>1.8</version>
-                                        </requireJavaVersion>
-                                        <!-- <requireOS> <family>unix</family> </requireOS> -->
-                                    </rules>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!--
-                        
-                    -->
-                    <plugin>
-                        <groupId>org.graalvm.nativeimage</groupId>
-                        <artifactId>native-image-maven-plugin</artifactId>
-                        <version>22.2.0</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>native-image</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <classpath>
-                                <param>${project.build.directory}/jmxjs-${project.version}-shaded.jar</param>
-                            </classpath>
-                            <buildArgs>
-                                --language:js
-                                --enable-all-security-services
-                                --allow-incomplete-classpath
-                                -H:ClassInitialization=:build_time
-                                -H:+ReportExceptionStackTraces
-
-                                --trace-object-instantiation=com.sun.jmx.mbeanserver.JmxMBeanServer
-
-                                --initialize-at-build-time=org.jboss.logging.JDKLevel
-                                --initialize-at-build-time=java.lang.ref.SoftReference
-                                --initialize-at-build-time=java.lang.invoke.MethodHandleImpl
-                                --initialize-at-build-time=org.graalvm.polyglot.Context
-                                --initialize-at-run-time=Proxy.newProxyInstance
-                                --initialize-at-run-time=org.wildfly.security.ssl.DelegatingSSLContext
-                                --initialize-at-build-time=org.jboss.marshalling.reflect.SerializableClass
-                                --initialize-at-build-time=org.jboss.marshalling.reflect.SerializableClassRegistry
-                                
-                                --initialize-at-run-time=org.jboss.remoting3.ModuleLoader
-                                --initialize-at-run-time=org.xnio.Xnio
-                                --initialize-at-run-time=org.xnio.Xnio$MBeanHolder
-                                --initialize-at-run-time=org.xnio.nio.NioXnioProvider
-                                --initialize-at-run-time=org.xnio.nio.WorkerThread
-                                --initialize-at-run-time=org.xnio.DefaultXnioWorkerHolder
-
-                                --initialize-at-run-time=org.wildfly.client.config.ConfigurationXMLStreamReader
-
-                                --initialize-at-run-time=org.jboss.remoting3.EndpointImpl
-                                --initialize-at-run-time=org.xnio.ssl.XnioSsl
-                                --initialize-at-run-time=org.wildfly.common.net.Inet
-                                --report-unsupported-elements-at-runtime
-                                --no-fallback
-                                --initialize-at-run-time=org.wildfly.common.net.CidrAddress
-                                --initialize-at-run-time=org.wildfly.security.auth.client.ModuleLoader
-                                --trace-class-initialization=org.xnio.nio.NioXnio
-                                
-
-                                --trace-class-initialization=org.xnio.Xnio$MBeanHolder
-                                --trace-object-instantiation=java.net.Inet4Address
-                            </buildArgs>
-
-                       <![CDATA[
-                                -initialize-at-run-time=java.io.FilePermission
-                               
---initialize-at-build-time=org.jboss.logging.JDKLevel
-                                --initialize-at-build-time=java.lang.ref.SoftReference
-                                --initialize-at-build-time=java.lang.invoke.MethodHandleImpl
-                                --initialize-at-build-time=org.graalvm.polyglot.Context
-                                --initialize-at-run-time=Proxy.newProxyInstance
-                                --initialize-at-run-time=org.wildfly.security.ssl.DelegatingSSLContext
-                                --initialize-at-build-time=org.jboss.marshalling.reflect.SerializableClass
-                                --initialize-at-build-time=org.jboss.marshalling.reflect.SerializableClassRegistry
-
-                                -serialization-input
-                            -->
-                            ]]>
-                            <imageName>${artifactId}</imageName>
-                        </configuration>
-                        
-                        <dependencies>
-                        </dependencies>
-                    </plugin>
-                    
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>native</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <skipTests>true</skipTests>
-            </properties>
             <build>
                 <defaultGoal>install</defaultGoal>
                 <plugins>
@@ -723,6 +532,163 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-shade-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <executions>
+                            <execution>
+                                <id>util</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shade</goal>
+                                </goals>
+                                <configuration>
+                                    <shadedArtifactAttached>true</shadedArtifactAttached>
+                                    <shadedClassifierName>shade</shadedClassifierName>
+                                    <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+                                    <artifactSet>
+                                        <includes>
+                                            <include>**</include>
+                                        </includes>
+                                        <excludes>
+                                            <exclude>*web*</exclude>
+                                        </excludes>
+                                    </artifactSet>
+                                    <transformers>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                            <manifestEntries>
+                                                <Main-Class>run.RunScript</Main-Class>
+                                                <Build-Number>1.0</Build-Number>
+                                            </manifestEntries>
+                                        </transformer>
+                                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                    </transformers>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.22.0</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.graalvm.nativeimage</groupId>
+                    <artifactId>svm</artifactId>
+                    <version>${graalvm.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>javax.slee</groupId>
+                    <artifactId>jainslee-api</artifactId>
+                    <version>1.1</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>javax.resource</groupId>
+                            <artifactId>connector</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>javax.transaction</groupId>
+                            <artifactId>jta</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.remotingjmx</groupId>
+                    <artifactId>remoting-jmx</artifactId>
+                    <version>3.0.4.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.remoting</groupId>
+                    <artifactId>jboss-remoting</artifactId>
+                    <version>5.0.18.Final</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                    <version>3.3.0.Final</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.marshalling</groupId>
+                    <artifactId>jboss-marshalling-river</artifactId>
+                    <version>2.0.9.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.marshalling</groupId>
+                    <artifactId>jboss-marshalling</artifactId>
+                    <version>2.0.9.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.wildfly.security</groupId>
+                    <artifactId>wildfly-elytron</artifactId>
+                    <version>1.1.0.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>jta</artifactId>
+                    <version>1.1</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jboss-vfs</artifactId>
+                    <version>3.2.12.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>native</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+            <build>
+                <defaultGoal>install</defaultGoal>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-source</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal> 
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/svm</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.22.0</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>org.graalvm.buildtools</groupId>
                         <artifactId>native-maven-plugin</artifactId>
                         <version>${native.maven.plugin.version}</version>
@@ -731,7 +697,7 @@
                             <execution>
                                 <id>build-native</id>
                                 <goals>
-                                    <goal>build</goal>
+                                    <goal>compile-no-fork</goal>
                                 </goals>
                                 <phase>package</phase>
                             </execution>
@@ -740,7 +706,7 @@
                             <skip>false</skip>
                             <imageName>${imageName}</imageName>
                             <classpath>
-                                <param>${project.build.directory}/jmxjs-${project.version}-shaded.jar</param>
+                                <param>${project.build.directory}/${project.artifactId}-${project.version}-shade.jar</param>
                                 <param>${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/modules/main/*</param>
                                 <param>${WILDFLY_HOME}/modules/system/layers/base/org/mobicents/ss7/commons/main/*</param>
                                 <param>${WILDFLY_HOME}/modules/system/layers/base/org/restcomm/diameter/lib/main/</param>
@@ -753,7 +719,6 @@
                                 -H:+ReportExceptionStackTraces
                                 -H:-TruffleCheckBlockListMethods
                                 -Dtruffle.TruffleRuntime=com.oracle.truffle.api.impl.DefaultTruffleRuntime
-                                --no-fallback
                                 --diagnostics-mode
                                 --report-unsupported-elements-at-runtime
 
@@ -796,18 +761,16 @@
                                 
                                 --initialize-at-run-time=Proxy.newProxyInstance
 
-                                --initialize-at-run-time=org.jboss.remoting3.ModuleLoader
-                                --initialize-at-run-time=org.jboss.remoting3.EndpointImpl
+                                --initialize-at-build-time=org.jboss.remoting3.ModuleLoader
+                                --initialize-at-build-time=org.jboss.remoting3.EndpointImpl
 
                                 -H:AdditionalSecurityProviders=com.sun.security.sasl.Provider
                                 -H:+TraceSecurityServices
 
-                                --force-fallback
-                                --link-at-build-time
+                                --no-fallback
                             </buildArgs>
                        <![CDATA[
-
-                                --no-fallback
+                                --force-fallback
 
                                 --trace-object-instantiation=com.sun.jmx.mbeanserver.JmxMBeanServer
                                 --trace-object-instantiation=java.net.Inet4Address
@@ -821,6 +784,78 @@
                     </plugin> 
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.graalvm.nativeimage</groupId>
+                    <artifactId>svm</artifactId>
+                    <version>${graalvm.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>javax.slee</groupId>
+                    <artifactId>jainslee-api</artifactId>
+                    <version>1.1</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>javax.resource</groupId>
+                            <artifactId>connector</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>javax.transaction</groupId>
+                            <artifactId>jta</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.remotingjmx</groupId>
+                    <artifactId>remoting-jmx</artifactId>
+                    <version>3.0.4.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.remoting</groupId>
+                    <artifactId>jboss-remoting</artifactId>
+                    <version>5.0.18.Final</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                    <version>3.3.0.Final</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.marshalling</groupId>
+                    <artifactId>jboss-marshalling-river</artifactId>
+                    <version>2.0.9.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.marshalling</groupId>
+                    <artifactId>jboss-marshalling</artifactId>
+                    <version>2.0.9.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.wildfly.security</groupId>
+                    <artifactId>wildfly-elytron</artifactId>
+                    <version>1.1.0.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>javax.transaction</groupId>
+                    <artifactId>jta</artifactId>
+                    <version>1.1</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jboss-vfs</artifactId>
+                    <version>3.2.12.Final</version>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
         </profile>
 
     </profiles>
@@ -851,4 +886,8 @@
 </repository>
         -->
     </repositories>
+
+    <scm>
+        <tag>jslee-js-1.0.0</tag>
+    </scm>
 </project>
