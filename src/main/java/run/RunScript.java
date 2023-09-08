@@ -1,5 +1,6 @@
 package run;
 
+import com.oracle.truffle.espresso.polyglot.GuestTypeConversion;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,8 +16,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import static java.util.stream.Collectors.toList;
@@ -28,6 +32,7 @@ import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.EnvironmentAccess;
 import org.graalvm.polyglot.HostAccess;
+import org.graalvm.polyglot.HostAccess.TargetMappingPrecedence;
 import org.graalvm.polyglot.PolyglotAccess;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
@@ -52,6 +57,7 @@ public class RunScript {
             ObjectStreamClass.lookup(javax.management.MBeanException.class);
             ObjectStreamClass.lookup(javax.slee.management.SleeState.class);
             ObjectStreamClass.lookup(javax.slee.ServiceID.class);
+            ObjectStreamClass.lookup(javax.slee.usage.SampleStatistics.class);
             ObjectStreamClass.lookup(javax.slee.ServiceID[].class);
             ObjectStreamClass.lookup(javax.slee.profile.UnrecognizedProfileTableNameException.class);
             ObjectStreamClass.lookup(javax.slee.InvalidArgumentException.class);
@@ -76,7 +82,9 @@ public class RunScript {
     private static ScriptEngine engine;
     static boolean debug;
     static boolean trace;
+
     static boolean nostdin;
+    static boolean retry;
 
     static final int BUFFER_SIZE = 2048;
     static List<File> files = null;
@@ -150,6 +158,9 @@ public class RunScript {
                 String value = null;
                 if (c.length > 1) {
                     value = c[1].trim();
+                } else if (name.equals("retry")) {
+                    retry = true;
+                    value = "true";
                 } else if (name.equals("debug")) {
                     debug = true;
                     value = "true";
@@ -182,6 +193,7 @@ public class RunScript {
 
                 debug = Boolean.getBoolean("js.debug");
                 trace = Boolean.getBoolean("js.trace");
+                retry = Boolean.getBoolean("js.retry");
 
                 if (!name.equals("password")) {
 
@@ -295,11 +307,15 @@ public class RunScript {
         }
     }
 
-    public static void processFiles(List<File> files) {
+    public static void processFiles(List<File> files) throws IOException {
 
         Engine engine = Engine.newBuilder()
                 //JDK11.option("engine.WarnInterpreterOnly", "false")
+                .option("log.file", File.createTempFile("jslee-js-truffle-", ".log").getAbsolutePath())
+                .option("engine.WarnInterpreterOnly", Boolean.toString(false))
+                //.option("java.PolyglotInterfaceMappings", getInterfaceMappings())
                 .build();
+        //FIXME typemappings
         FileSystem delegate = new MyFileSystem();
         //TODO use graal
         contextLocal = ThreadLocal.withInitial(() -> Context.newBuilder()
@@ -308,7 +324,37 @@ public class RunScript {
                 .allowAllAccess(true)
                 .allowHostClassLoading(true)
                 .allowHostClassLookup(s -> true)
-                .allowHostAccess(HostAccess.ALL)
+                .allowHostAccess(HostAccess.newBuilder()
+                        .allowPublicAccess(true)
+                        .allowAllImplementations(true)
+                        .allowAllClassImplementations(true)
+                        .allowArrayAccess(true)
+                        .allowListAccess(true)
+                        /**
+                        .allowAllClassImplementations(true)
+                        .allowMapAccess(true)
+                        .allowListAccess(true)
+                        .allowPublicAccess(true)
+                        .allowIterableAccess(true)
+                        .allowIteratorAccess(true)
+                        .allowBufferAccess(true)
+                        .allowAccessInheritance(true)
+                        .allowAllImplementations(true)
+                        .targetTypeMapping(Value.class, Object.class, (v) -> v.hasArrayElements(), (v) -> transformArray(v))
+                        .targetTypeMapping(Value.class, List.class, (v) -> v.hasArrayElements(), (v) -> transformArray(v))
+                        //.targetTypeMapping(Value.class, Collection.class, (v) -> v.hasArrayElements(), (v) -> transformArray(v))
+                        //.targetTypeMapping(Value.class, Map.class, (v) -> v.hasMembers(), (v) -> transformMembers(v)).targetTypeMapping(Value.class, Iterable.class, (v) -> v.hasArrayElements(), (v) -> transformArray(v))
+                         */
+                        //.targetTypeMapping(Value.class, String.class, v -> !v.isNull(), v -> v + "", TargetMappingPrecedence.LOWEST)
+                        //.targetTypeMapping(Number.class, Integer.class, n -> true, n -> n.intValue(), TargetMappingPrecedence.LOWEST)
+                        //.targetTypeMapping(Number.class, Double.class, n -> true, n -> n.doubleValue(), TargetMappingPrecedence.LOWEST)
+                        .targetTypeMapping(Number.class, Object.class, n -> true, n -> n.longValue(), TargetMappingPrecedence.LOWEST)
+                        //.targetTypeMapping(Number.class, Long.class, n -> true, n -> n.longValue(), TargetMappingPrecedence.LOWEST)
+                        //.targetTypeMapping(Number.class, Boolean.class, n -> true, n -> n.doubleValue() != 0, TargetMappingPrecedence.LOWEST)
+                        //.targetTypeMapping(String.class, Boolean.class, n -> true, n -> !n.isEmpty(), TargetMappingPrecedence.LOWEST)
+                        //.targetTypeMapping(Double.class, Float.class, null, v -> v.floatValue(), HostAccess.TargetMappingPrecedence.HIGHEST)
+                        .build())
+                .allowHostAccess(HostAccess.ALL) //override the above
                 .allowCreateThread(true)
                 .allowIO(true)
                 .allowExperimentalOptions(true)
@@ -321,13 +367,17 @@ public class RunScript {
                 .fileSystem(delegate)
                 .build());
 
-        try ( Context context = contextLocal.get()) {
+        try (Context context = contextLocal.get()) {
             Value bindings = context.getBindings("js");
             bindings.putMember("js_username", System.getProperty("js.username"));
             bindings.putMember("js_password", System.getProperty("js.password"));
             bindings.putMember("js_url", System.getProperty("js.url"));
             bindings.putMember("js_debug", debug || Boolean.getBoolean("js.debug"));
             bindings.putMember("js_trace", trace || Boolean.getBoolean("js.trace"));
+            bindings.putMember("js_retry", retry || Boolean.getBoolean("js.retry"));
+            bindings.putMember("debug", debug || Boolean.getBoolean("js.debug"));
+            bindings.putMember("trace", trace || Boolean.getBoolean("js.trace"));
+            bindings.putMember("retry", retry || Boolean.getBoolean("js.retry"));
 
             Value eval = context.eval("js", "Java.type('javax.management.ObjectName')");
             if (eval.isNull()) {
@@ -382,6 +432,11 @@ public class RunScript {
     }
 
     @HostAccess.Export
+    public static Long toLong(int i) {
+        return Long.valueOf(Integer.toString(i));
+    }
+
+    @HostAccess.Export
     public static String getProperty(String name) {
         return System.getProperty(name);
     }
@@ -427,4 +482,49 @@ public class RunScript {
         fin.reset();
         return mime;
     }
+
+    private static Map transformMembers(Value v) {
+        Map map = new HashMap();
+        for (String key : v.getMemberKeys()) {
+            Value member = v.getMember(key);
+            if (member.hasArrayElements() && !member.isHostObject()) {
+                map.put(key, transformArray(member));
+            } else if (member.hasMembers() && !member.isHostObject()) {
+                map.put(key, transformMembers(member));
+            } else {
+                map.put(key, valueToObject(member));
+            }
+        }
+        return map;
+    }
+
+    private static List transformArray(Value v) {
+        List list = new ArrayList();
+        for (int i = 0; i < v.getArraySize(); ++i) {
+            Value element = v.getArrayElement(i);
+            if (element.hasArrayElements() && !element.isHostObject()) {
+                list.add(transformArray(element));
+            } else if (element.hasMembers() && !element.isHostObject()) {
+                list.add(transformMembers(element));
+            } else {
+                list.add(valueToObject(element));
+            }
+        }
+        return list;
+    }
+
+    private static String getInterfaceMappings() {
+        return "java.lang.Iterable;"
+                + "java.util.Collection;"
+                + "java.util.List;"
+                + "java.util.Set;"
+                + "java.util.Map;"
+                + "java.util.Iterator;"
+                + "java.util.Spliterator;";
+    }
+
+    private static Object valueToObject(Value member) {
+        return member.as(java.lang.Object.class);
+    }
+
 }

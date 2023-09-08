@@ -28,7 +28,20 @@ try {
         print("is connected", connected)
     if (connected) {
 
-        _sleeMBean = jmx.mbean("javax.slee.management:name=SleeManagement", false)
+        while(_sleeMBean == null) { 
+            LOOP: 
+            try {
+                _sleeMBean = jmx.retryable(()=>jmx.mbean("javax.slee.management:name=SleeManagement", false))
+            } catch (x) { 
+                console.log(x)
+                if (retry) { 
+                    java.lang.Thread.sleep(2000);
+                    break LOOP
+                } else {
+                    throw x
+                }
+            }
+        }
         _mbeans.push(_sleeMBean)
 //Mobicents specific
         try {
@@ -83,9 +96,8 @@ try {
 
 } catch (e) {
     print("error loading mbeans")
-    throw e
+   throw e
 }
-
 //print(traceMBean.getTraceLevel(new javax.slee.SbbID("name","vendor","version")))
 
 export const mbeans = _mbeans

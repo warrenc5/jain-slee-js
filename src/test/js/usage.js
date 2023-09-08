@@ -1,7 +1,7 @@
 import * as js from '/resource:js/jain-slee.js'
 //js.sleeMBean.help()
 var subsystems = js.sleeMBean.Subsystems
-var reset = false
+var reset = true
 
 for (var k in subsystems) {
     console.log(subsystems[k])
@@ -54,8 +54,6 @@ for (var s in services) {
                     )*/
                      
             //console.log(sbbUsageMBean.getMapRestoreDataResponseOKStats(false));
-           if(reset == true)
-           sbbUsageMBean.resetAllUsageParameters()
         } catch (e) {
             //console.log(e)
         }
@@ -69,6 +67,10 @@ for (var s in services) {
             }
         } catch (e) {
             //console.log(e)
+        }
+
+        if(reset == true) {
+            sbbUsageMBean.resetAllUsageParameters()
         }
     }
 
@@ -100,6 +102,7 @@ for (var i in resourceAdaptors) {
                     for (const o of usageMBean.info.getOperations()) {
 
                       if(o.getName().startsWith("get")) {
+                        console.log(o.getName())
                             if(o.getReturnType() =="javax.slee.usage.SampleStatistics")
                                     console.log(o.getName(), usageMBean[o.getName()](false))
                             else if(o.getReturnType() =="long")

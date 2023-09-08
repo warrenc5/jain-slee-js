@@ -14,10 +14,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <shade.skip>false</shade.skip>
         <!--
         <graalvm.version>20.3.3</graalvm.version>
-        <graalvm.version>20.0.2</graalvm.version>
         <graalvm.version>22.2.0</graalvm.version>
+        <graalvm.version>20.0.2</graalvm.version>
         -->
         <graalvm.version>22.3.1</graalvm.version>
         <WILDFLY_HOME>/media/work/inst/telscale-slee-7.2.0-5.13-wildfly-10.1.0.Final/wildfly-10.1.0.Final</WILDFLY_HOME>
@@ -102,11 +103,13 @@
             -->
             <scope>provided</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${version.org.apache.log4j}</version>
         </dependency>
+    -->
         <dependency>
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling-river</artifactId>
@@ -394,7 +397,6 @@
                 <maven.test.skip>false</maven.test.skip>
             </properties>
             <build>
-
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -415,7 +417,10 @@
                             <cleanupDaemonThreads>false</cleanupDaemonThreads>
                             <executable>${executable}</executable>
                             <arguments>
-                                <argument>-agentlib:native-image-agent=config-output-dir=${basedir}/target/native-image/</argument>
+                                <argument>-agentlib:native-image-agent=config-output-dir=${basedir}/target/native-image</argument>
+                                <!--
+                                    .${maven.build.timestamp}/
+                                    -->
                                 <argument>-cp</argument>
                                 <classpath />
                                 <!-- 
@@ -546,6 +551,7 @@
                                     <shadedArtifactAttached>true</shadedArtifactAttached>
                                     <shadedClassifierName>shade</shadedClassifierName>
                                     <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+                                    <skip>${shade.skip}</skip>
                                     <artifactSet>
                                         <includes>
                                             <include>**</include>
@@ -572,7 +578,9 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>2.22.0</version>
                         <configuration>
+                            <!--
                             <skip>true</skip>
+                        -->
                         </configuration>
                     </plugin>
                 </plugins>

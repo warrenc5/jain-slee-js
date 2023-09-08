@@ -2,11 +2,14 @@ import * as util from '/resource:js/mofokom/jain-slee-graal/40-slee-util.js'
 
 export const debug = js_debug || false
 export const trace = js_trace || false
+export const retry = js_retry || false
 
 if (debug)
     console.log("debug enabled")
 if (trace)
     console.log("trace enabled")
+if (retry)
+    console.log("retry enabled")
 
 var mmConnection;
 export function jmxConnect(hostport, name, username, password) {
@@ -24,7 +27,7 @@ export function jmxConnect(hostport, name, username, password) {
 
 export function jmxConnectURL(urlPath, username, password) {
     const HashMap = Java.type('java.util.HashMap');
-    var map = new HashMap();
+    map = new HashMap();
     var creds = new Array();
     if (username) {
         creds.push(username);
@@ -42,47 +45,91 @@ export function jmxConnectURL(urlPath, username, password) {
             console.log(e);
         }
     }
-    var JMXServiceURL = javax.management.remote.JMXServiceURL;
+    var JMXServiceURL = Java.type('javax.management.remote.JMXServiceURL');
 
     if (urlPath == null)
         throw new Error("no url specified");
 
-    var url = new JMXServiceURL(urlPath);
+    url = new JMXServiceURL(urlPath);
+
+    return jmxConnectServiceURL(url)
+}
+
+var map
+var url 
+
+function jmxConnectServiceURL(url) {
+
     if (debug)
         console.log("connecting to " + url.toString());
 
     var factory = javax.management.remote.JMXConnectorFactory;
     map.put('jmx.remote.protocol.provider.pkgs', 'com.heliosapm.utils.jmx.protocol.local|org.jboss.remotingjmx');
-    if (urlPath.startsWith("remote+http")) {
-        var RemotingConnectorProvider = org.jboss.remotingjmx.RemotingConnectorProvider;
+
+    if (url.toString().startsWith("remote+http")) {
+        var RemotingConnectorProvider = Java.type('org.jboss.remotingjmx.RemotingConnectorProvider');
         factory = new RemotingConnectorProvider();
     }
-    try {
-        var jmxc = factory.newJMXConnector(url, map);
 
-        if (debug)
-            console.log("provider " + jmxc);
-        jmxc.connect();
-        // note that the "mmConnection" is a global variable!
-        mmConnection = jmxc.getMBeanServerConnection();
-        if (debug)
-            console.log("connection is " + mmConnection);
-        return mmConnection;
+    var jmxc = factory.newJMXConnector(url, map);
+
+    var p = new Promise((resolve, reject) => {
+        while (mmConnection == null) {
+            LOOP:
+                    try {
+                        if (debug)
+                            console.log("provider " + jmxc);
+                        jmxc.connect();
+                        // note that the "mmConnection" is a global variable!
+                        mmConnection = jmxc.getMBeanServerConnection();
+                        if (debug)
+                            console.log("connection is " + mmConnection);
+                        resolve(mmConnection);
+                    } catch (x) {
+                if (retry) {
+                    console.log("retrying error connecting " + x);
+                    java.lang.Thread.sleep(2000);
+                    break LOOP
+                }
+                console.log("error connecting " + x);
+                reject(x)
+            }
+        }
+    })
+    return p.then()
+}
+
+jmxConnect.docString = "connects to the given host, port (specified as name:port)";
+export function retryable(f) {
+    try {
+        return f()
     } catch (x) {
-        console.log("error connecting " + x);
+        var xIO = Java.type('java.io.IOException')
+        // 'org.jboss.remoting3.NotOpenException':
+
+        if (x instanceof xIO) {
+            console.log("retryable resetting connection", x)
+            mmConnection = null
+        }
         throw x
     }
 }
 
-jmxConnect.docString = "connects to the given host, port (specified as name:port)";
-
 function mbeanConnection() {
+
+
     if (mmConnection == null) {
-        throw "Not connected to MBeanServer yet!";
+
+        if (retry) {
+            jmxConnectServiceURL(url)
+        } else {
+            throw "Not connected to MBeanServer yet!";
+        }
     }
 
     return mmConnection;
 }
+
 mbeanConnection.docString = "returns the current MBeanServer connection"
 
 /**
@@ -101,6 +148,7 @@ function objectName(objName) {
     if (typeof objName == "string") {
         var on = Java.type("javax.management.ObjectName")
         return new on(objName);
+
     } else {
         return objName;
     }
@@ -127,8 +175,9 @@ attribute.docString = "returns a new JMX Attribute using name and value given";
 function mbeanInfo(objName) {
 
     objName = objectName(objName);
-    return mbeanConnection().getMBeanInfo(objName);
+    return retryable(() => mbeanConnection().getMBeanInfo(objName))
 }
+
 mbeanInfo.docString = "returns MBeanInfo of a given ObjectName";
 
 /**
@@ -136,7 +185,7 @@ mbeanInfo.docString = "returns MBeanInfo of a given ObjectName";
  */
 function objectInstance(objName) {
     objName = objectName(objName);
-    return mbeanConnection().objectInstance(objectName);
+    return retryable(()=>mbeanConnection().objectInstance(objectName));
 }
 objectInstance.docString = "returns ObjectInstance for a given ObjectName";
 
@@ -150,7 +199,7 @@ function queryNames(objName, query) {
     objName = objectName(objName);
     if (query == undefined)
         query = null;
-    return mbeanConnection().queryNames(objName, query);
+    return retryable(()=>mbeanConnection().queryNames(objName, query));
 }
 queryNames.docString = "returns QueryNames using given ObjectName and optional query";
 
@@ -165,7 +214,7 @@ function queryMBeans(objName, query) {
     objName = objectName(objName);
     if (query == undefined)
         query = null;
-    return mbeanConnection().queryMBeans(objName, query);
+    return retryable(()=>mbeanConnection().queryMBeans(objName, query));
 }
 queryMBeans.docString = "return MBeans using given ObjectName and optional query";
 
@@ -187,14 +236,15 @@ function toAttrList(array) {
 // gets MBean attributes
 function getMBeanAttributes(objName, attributeNames) {
     objName = objectName(objName);
-    return mbeanConnection().getAttributes(objName, util.stringArray(attributeNames));
+    return retryable(()=>mbeanConnection().getAttributes(objName, util.stringArray(attributeNames)))
 }
+
 getMBeanAttributes.docString = "returns specified Attributes of given ObjectName";
 
 // gets MBean attribute
 function getMBeanAttribute(objName, attrName) {
     objName = objectName(objName);
-    return mbeanConnection().getAttribute(objName, attrName);
+    return retryable(()=>mbeanConnection().getAttribute(objName, attrName));
 }
 getMBeanAttribute.docString = "returns a single Attribute of given ObjectName";
 
@@ -202,7 +252,7 @@ getMBeanAttribute.docString = "returns a single Attribute of given ObjectName";
 function setMBeanAttributes(objName, attrList) {
     objName = objectName(objName);
     attrList = toAttrList(attrList);
-    return mbeanConnection().setAttributes(objName, attrList);
+    return retryable(()=>mbeanConnection().setAttributes(objName, attrList));
 }
 setMBeanAttributes.docString = "sets specified Attributes of given ObjectName";
 
@@ -213,7 +263,7 @@ function setMBeanAttribute(objName, attrName, attrValue) {
     if (debug)
         console.log(objName, attrName, attrValue)
     try {
-        mbeanConnection().setAttribute(objName, new Attribute(attrName, attrValue));
+        retryable(()=>mbeanConnection().setAttribute(objName, new Attribute(attrName, attrValue)));
     } catch (e) {
         if (trace)
             console.log("failed set", objName, attrName, attrValue, e)
@@ -236,7 +286,7 @@ function invokeMBean(objName, operation, params, signature) {
             console.log(objName, operation, signature, " > ", params);
         }
 
-        res = mbeanConnection().invoke(objName, operation, params, signature);
+        res = retryable(() => mbeanConnection().invoke(objName, operation, params, signature))
 
         if (debug)
             console.log(objName, operation, params, " => result:", res);
@@ -281,8 +331,8 @@ function Info(objName) {
 
             try {
                 Java.type(stripArray(attrs[index].getType()))
-            } catch(e){ 
-                console.log("warn",e)
+            } catch (e) {
+                console.log("warn", e)
             }
             this.attrMap[attrs[index].getName()] = attrs[index].getName();
         }
@@ -436,7 +486,7 @@ export function mbean(objNameString, async) {
 
                                 return o;
                             } catch (e) {
-                                console.log("toJSON error",e)
+                                console.log("toJSON error", e)
                             }
                         } else if (name === "help") {
                             console.log("help: " + objName);
@@ -457,7 +507,7 @@ export function mbean(objNameString, async) {
                             return invokeOper.call(target().info, name, args)
                         } else {
                             if (debug)
-                                console.log(name," not found");
+                                console.log(name, " not found");
                             return undefined;
                         }
                     }
@@ -489,8 +539,18 @@ export function mbean(objNameString, async) {
 }
 
 function allArgs(args, sig) {
-    for (var s = 0;
-    s < args.length; s++) {
+    if (trace) {
+        console.log("args: ", args, "sig: ", sig)
+    }
+    if (args.length == 0 && sig.length == 0) {
+        return true
+    }
+    if (args.length != sig.length) {
+        return false
+    }
+
+    for (var s = 0; s < args.length; s++) {
+        var argType = typeof args[s]
         var sigType = sig[s].getType()
         var sigArray = sigType.startsWith("[L") && sigType.endsWith(";")
         var isArray = Array.isArray(args[s])
@@ -503,7 +563,7 @@ function allArgs(args, sig) {
             }
         } else {
 
-            if (typeof args[s] === "object") {
+            if (argType === "object") {
                 var type = args[s].getClass();
                 if (type.isArray() && sigArray) {
                     if (trace)
@@ -517,9 +577,18 @@ function allArgs(args, sig) {
                         return false
                     }
                 }
-            } else {
-                if (trace)
-                    console.log("here")
+            } else if (argType === "string") {
+                if (sigType !== "java.lang.String") {
+                    return false
+                }
+            } else if (argType === "boolean") {
+                if (sigType !== "java.lang.Boolean" && sigType !== "boolean") {  //FIXME:
+                    return false
+                }
+            } else if (argType === "number") {
+                if (sigType !== "java.lang.String") { //FIXME: instanceof Number?
+                    return false
+                }
             }
 
         }
@@ -529,11 +598,13 @@ function allArgs(args, sig) {
 
 function invokeOper(name, args) {
 
-    var oper = this.opers.filter(o => name == o.getName() && args.length == o.getSignature().length
-                && allArgs(args, o.getSignature()))
+    var oper = this.opers.filter(o => name == o.getName()
+                && allArgs(args, o.getSignature())
+    )
 
     if (debug)
         console.log("calling", oper[0]);
+
     var sigNames = oper[0].getSignature().map(s => s.getType())
 
 

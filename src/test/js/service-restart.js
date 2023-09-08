@@ -14,9 +14,12 @@ try {
 }
 
 var services = [];
+var _services = []
+_services = js.deploymentMBean.Services
 if ('serviceMBean' in js) {
     try {
         var services = js.serviceMBean.getServices(Java.type('javax.slee.management.ServiceState').ACTIVE);
+
         console.log("active services", util.toString(services));
         for (var s = 0; s < services.length; s++) {
             js.serviceMBean.deactivate(services);
@@ -25,7 +28,19 @@ if ('serviceMBean' in js) {
     } catch (e) {
         console.log(e);
     }
-    
+
+    OUTER:
+    while (true) { 
+    INNER:
+            for (var s in _services) {
+              var state = js.serviceMBean.getState(_services[s])
+              console.log(_services[s], state, javax.slee.management.ServiceState.INACTIVE)
+              if(state == javax.slee.management.ServiceState.INACTIVE) { 
+                break OUTER
+              }
+            }
+    }
+
     try {
         services = js.serviceMBean.getServices(javax.slee.management.ServiceState.INACTIVE);
         if (services !== null) {
@@ -38,4 +53,6 @@ if ('serviceMBean' in js) {
     } catch (e) {
         console.log(e);
     }
+
+    
 }

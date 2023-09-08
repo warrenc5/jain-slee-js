@@ -2,6 +2,7 @@ import {mbean} from '/resource:js/mofokom/jain-slee-graal/15-jmx-base.js'
 
 export const debug = js_debug || false
 export const trace = js_trace || false
+export const retry = js_retry || false
 
 export function toString(a) {
     if(!a instanceof Array)

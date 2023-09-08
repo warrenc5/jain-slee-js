@@ -1,4 +1,5 @@
 #!/bin/bash -x
+JAVA_OPTS="--illegal-access=warn"
 SCRIPT_DIR=$(readlink -f `dirname $0`)
 
 BASE=$(readlink -f `dirname $0`/..)
@@ -17,8 +18,8 @@ CLASSPATH+=":$BASE/target/jslee-js-1.0.Final.jar:$BASE/target/dependency/runtime
 
 else 
 
-CLASSPATH=$BASE/jslee-js-1.0.Final-shaded.jar:$CLASSPATH
-CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.Final/jslee-js-1.0.Final-shade.jar
+CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.1-SNAPSHOT/jslee-js-1.0.1-SNAPSHOT-shade.jar
+CLASSPATH=$BASE/jslee-js-1.0.1-SNAPSHOT-shade.jar:$CLASSPATH
 
 fi 
 
@@ -31,7 +32,7 @@ CLASSPATH+=:${JBOSS_HOME}/modules/system/layers/base/org/mobicents/ss7/modules/m
 echo ========= $CLASSPATH ==============
 
 #JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8000"
-JAVA_OPTS="--add-opens=jdk.internal.vm.ci/jdk.vm.ci.services=ALL-UNNAMED \
+JAVA_OPTS="$JAVA_OPTS --add-opens=jdk.internal.vm.ci/jdk.vm.ci.services=ALL-UNNAMED \
 --add-opens=jdk.internal.vm.ci/jdk.vm.ci.hotspot=ALL-UNNAMED 
 --add-opens=jdk.internal.vm.ci/jdk.vm.ci.runtime=ALL-UNNAMED 
 --add-opens=jdk.internal.vm.ci/jdk.vm.ci.code=ALL-UNNAMED 
@@ -48,7 +49,6 @@ JAVA=java
 if [ -n "$JAVA_HOME" ] ; then
   JAVA=${JAVA_HOME}/bin/java
 fi
-
 $JAVA $LOGGING $JAVA_OPTS -classpath $CLASSPATH run.RunScript $@
 
 exit
