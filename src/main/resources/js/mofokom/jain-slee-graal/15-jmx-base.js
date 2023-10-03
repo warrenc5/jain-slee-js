@@ -56,7 +56,7 @@ export function jmxConnectURL(urlPath, username, password) {
 }
 
 var map
-var url 
+var url
 
 function jmxConnectServiceURL(url) {
 
@@ -73,26 +73,36 @@ function jmxConnectServiceURL(url) {
 
     var jmxc = factory.newJMXConnector(url, map);
 
+    var retryCount = 0
     var p = new Promise((resolve, reject) => {
-        while (mmConnection == null) {
+        OUTER:
+                while (mmConnection == null) {
             LOOP:
                     try {
-                        if (debug)
+                        if (debug) {
                             console.log("provider " + jmxc);
+                        }
                         jmxc.connect();
                         // note that the "mmConnection" is a global variable!
                         mmConnection = jmxc.getMBeanServerConnection();
-                        if (debug)
+                        if (debug) {
                             console.log("connection is " + mmConnection);
+                        }
                         resolve(mmConnection);
                     } catch (x) {
-                if (retry) {
+
+                if (retryCount == 0) {
+                    x.printStackTrace();
+                }
+                if (retry && retryCount++ < 10) {
                     console.log("retrying error connecting " + x);
                     java.lang.Thread.sleep(2000);
                     break LOOP
+                } else {
+                    console.log("error connecting " + x);
+                    reject(x)
+                    break OUTER;
                 }
-                console.log("error connecting " + x);
-                reject(x)
             }
         }
     })
@@ -185,7 +195,7 @@ mbeanInfo.docString = "returns MBeanInfo of a given ObjectName";
  */
 function objectInstance(objName) {
     objName = objectName(objName);
-    return retryable(()=>mbeanConnection().objectInstance(objectName));
+    return retryable(() => mbeanConnection().objectInstance(objectName));
 }
 objectInstance.docString = "returns ObjectInstance for a given ObjectName";
 
@@ -199,7 +209,7 @@ function queryNames(objName, query) {
     objName = objectName(objName);
     if (query == undefined)
         query = null;
-    return retryable(()=>mbeanConnection().queryNames(objName, query));
+    return retryable(() => mbeanConnection().queryNames(objName, query));
 }
 queryNames.docString = "returns QueryNames using given ObjectName and optional query";
 
@@ -214,7 +224,7 @@ function queryMBeans(objName, query) {
     objName = objectName(objName);
     if (query == undefined)
         query = null;
-    return retryable(()=>mbeanConnection().queryMBeans(objName, query));
+    return retryable(() => mbeanConnection().queryMBeans(objName, query));
 }
 queryMBeans.docString = "return MBeans using given ObjectName and optional query";
 
@@ -236,7 +246,7 @@ function toAttrList(array) {
 // gets MBean attributes
 function getMBeanAttributes(objName, attributeNames) {
     objName = objectName(objName);
-    return retryable(()=>mbeanConnection().getAttributes(objName, util.stringArray(attributeNames)))
+    return retryable(() => mbeanConnection().getAttributes(objName, util.stringArray(attributeNames)))
 }
 
 getMBeanAttributes.docString = "returns specified Attributes of given ObjectName";
@@ -244,7 +254,7 @@ getMBeanAttributes.docString = "returns specified Attributes of given ObjectName
 // gets MBean attribute
 function getMBeanAttribute(objName, attrName) {
     objName = objectName(objName);
-    return retryable(()=>mbeanConnection().getAttribute(objName, attrName));
+    return retryable(() => mbeanConnection().getAttribute(objName, attrName));
 }
 getMBeanAttribute.docString = "returns a single Attribute of given ObjectName";
 
@@ -252,7 +262,7 @@ getMBeanAttribute.docString = "returns a single Attribute of given ObjectName";
 function setMBeanAttributes(objName, attrList) {
     objName = objectName(objName);
     attrList = toAttrList(attrList);
-    return retryable(()=>mbeanConnection().setAttributes(objName, attrList));
+    return retryable(() => mbeanConnection().setAttributes(objName, attrList));
 }
 setMBeanAttributes.docString = "sets specified Attributes of given ObjectName";
 
@@ -263,7 +273,7 @@ function setMBeanAttribute(objName, attrName, attrValue) {
     if (debug)
         console.log(objName, attrName, attrValue)
     try {
-        retryable(()=>mbeanConnection().setAttribute(objName, new Attribute(attrName, attrValue)));
+        retryable(() => mbeanConnection().setAttribute(objName, new Attribute(attrName, attrValue)));
     } catch (e) {
         if (trace)
             console.log("failed set", objName, attrName, attrValue, e)
@@ -549,7 +559,8 @@ function allArgs(args, sig) {
         return false
     }
 
-    for (var s = 0; s < args.length; s++) {
+    for (var s = 0;
+    s < args.length; s++) {
         var argType = typeof args[s]
         var sigType = sig[s].getType()
         var sigArray = sigType.startsWith("[L") && sigType.endsWith(";")

@@ -1,6 +1,5 @@
 package run;
 
-import com.oracle.truffle.espresso.polyglot.GuestTypeConversion;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,13 +15,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.UUID;
 import static java.util.stream.Collectors.toList;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
@@ -98,6 +97,7 @@ public class RunScript {
         if (debug) {
 
             System.err.println("available " + scriptEngineManager.getEngineFactories().stream().map(f -> f.getLanguageName() + " " + f.getEngineName() + " " + f.getEngineVersion()).collect(toList()).toString());
+            System.err.println(UUID.randomUUID().toString());
         }
 
         engine = scriptEngineManager.getEngineByName("Graal.js");

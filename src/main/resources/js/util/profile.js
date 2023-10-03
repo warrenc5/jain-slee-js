@@ -1,5 +1,6 @@
 import {deploymentMBean, profileProvMBean} from '/resource:js/mofokom/jain-slee-graal/30-mbeans.js'
 import {mbean} from '/resource:js/mofokom/jain-slee-graal/15-jmx-base.js'
+import * as util from '/resource:js/mofokom/jain-slee-graal/40-slee-util.js'
 
 var debug = js_debug
 
@@ -15,8 +16,7 @@ export function listProfiles() {
 export function updateProfile(spec, tableName, profileName, newObject) {
     var profile = createProfileTable(spec, tableName, profileName);
     if (profile) {
-        if (debug)
-            console.log("before", JSON.stringify(profile));
+        console.log("before", JSON.stringify(profile));
         profile.editProfile();
         try {
             if (profile.isProfileWriteable) {
@@ -27,11 +27,9 @@ export function updateProfile(spec, tableName, profileName, newObject) {
                 profile.commitProfile();
             }
         }
-        if (debug)
-            console.log("after", JSON.stringify(profile));
+        console.log("after", JSON.stringify(profile));
     }
 }
-
 export function createProfileTable(spec, tableName, profileName) {
 
     var profile = null;
@@ -47,7 +45,7 @@ export function createProfileTable(spec, tableName, profileName) {
         var profileTables = profileProvMBean.ProfileTables;
         if (debug)
             console.log("profileTables:", profileTables);
-        if(!toArray(profileTables).includes(tableName)) {
+        if(!util.toArray(profileTables).includes(tableName)) {
             console.log("creating " + tableName + " " + spec.toString());
             try {
                 profileProvMBean.createProfileTable(spec, tableName);
@@ -69,7 +67,7 @@ export function createProfileTable(spec, tableName, profileName) {
                 var profile = profileProvMBean.getProfiles(tableName) //deprecated
                 console.log('profiles ', profile);
 
-                profile = toArray(profile).filter(function (p) {
+                profile = util.toArray(profile).filter(function (p) {
                     return p.getProfileName() == profileName;
                 });
 

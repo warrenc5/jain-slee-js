@@ -8,7 +8,7 @@
     </parent>
     <groupId>mobi.mofokom</groupId>
     <artifactId>jslee-js</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -103,13 +103,12 @@
             -->
             <scope>provided</scope>
         </dependency>
-        <!--
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${version.org.apache.log4j}</version>
+            <scope>provided</scope>
         </dependency>
-    -->
         <dependency>
             <groupId>org.jboss.marshalling</groupId>
             <artifactId>jboss-marshalling-river</artifactId>

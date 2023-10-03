@@ -1,12 +1,12 @@
 import * as js from '/resource:js/jain-slee.js'
 
-        js.profileProvMBean.help()
+//js.profileProvMBean.help()
 var profileSpecs = js.deploymentMBean.ProfileSpecifications
 console.log(profileSpecs)
 for (var k in profileSpecs) {
-    console.log(profileSpecs[k])
+    console.log("spec", profileSpecs[k])
     var tables = js.profileProvMBean.getProfileTables(profileSpecs[k]);
-    console.log(tables)
+    console.log("tables: ", tables)
     var ta = Array.from(tables)
     for (var t in ta) {
         console.log(t, ta[t])

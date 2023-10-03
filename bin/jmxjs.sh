@@ -18,8 +18,8 @@ CLASSPATH+=":$BASE/target/jslee-js-1.0.Final.jar:$BASE/target/dependency/runtime
 
 else 
 
-CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.1-SNAPSHOT/jslee-js-1.0.1-SNAPSHOT-shade.jar
-CLASSPATH=$BASE/jslee-js-1.0.1-SNAPSHOT-shade.jar:$CLASSPATH
+CLASSPATH=$CLASSPATH:/media/work/.m2/repository/mobi/mofokom/jslee-js/1.0.2-SNAPSHOT/jslee-js-1.0.2-SNAPSHOT-shade.jar
+CLASSPATH=$BASE/jslee-js-1.0.2-SNAPSHOT-shade.jar:$CLASSPATH
 
 fi 
 
